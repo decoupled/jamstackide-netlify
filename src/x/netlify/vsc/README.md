@@ -1,0 +1,8 @@
+- Validate netlify.toml
+- Netlify Tree View
+  - account
+  - this project
+  - publish
+  - show some logs?
+- Netlify commands
+  - Netlify dev
