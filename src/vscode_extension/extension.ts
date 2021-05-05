@@ -4,6 +4,10 @@ import { headers_file_vsc } from "src/x/netlify/headers_file/headers_file_vsc"
 import { netlify_toml_validator_vsc } from "src/x/toml/netlify_toml_validator_vsc"
 import vscode from "vscode"
 import merge from "webpack-merge"
+import {
+  commands_create_function,
+  commands_create_function_contributes,
+} from "./commands/create_function"
 import icon from "./static/netlify_logomark.svg"
 import {
   treeview_docs_activate,
@@ -37,7 +41,7 @@ function main() {
     activate(ctx: vscode.ExtensionContext) {
       treeview_docs_activate(ctx)
       netlify_toml_validator_vsc(ctx)
-      headers_file_vsc(ctx)
+      headers_file_vsc(ctx), commands_create_function(ctx)
     },
     deactivate() {},
   }
@@ -47,6 +51,7 @@ function contributes() {
   return merge([
     // commands_contributes().contributes,
     // treeview_workflow_contributes().contributes,
+    commands_create_function_contributes().contributes,
     treeview_docs_contributes().contributes,
     {
       viewsContainers: {

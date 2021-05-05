@@ -4,7 +4,6 @@
   "license": "MIT",
   "scripts": {
     "tsc-w-noemit": "tsc -w -noemit",
-    "task1": "lambdragon src/build.ts#task1",
     "format": "prettier --write \"./src/**/*.{js,json,md,ts,tsx}\""
   },
   "dependencies": {

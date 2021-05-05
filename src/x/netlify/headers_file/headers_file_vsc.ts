@@ -7,6 +7,7 @@ import {
   vscode_TextEditor_setDecorations_pivot_Item,
 } from "src/x/vscode/vscode_TextEditor_setDecorations_pivot"
 import * as vscode from "vscode"
+import { headers_file_autocomplete } from "./headers_file_autocomplete"
 import {
   HeaderFileDecoration_is,
   headers_file_parser,
@@ -14,6 +15,7 @@ import {
 
 export async function headers_file_vsc(ctx: vscode.ExtensionContext) {
   new DecManager(ctx).start()
+  headers_file_autocomplete(ctx)
 }
 
 class DecManager {

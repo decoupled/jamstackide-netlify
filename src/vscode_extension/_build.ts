@@ -5,7 +5,6 @@ import { netlify_vscode_extension } from "./extension"
 
 {
   // openExtensionOn("git@github.com:redwoodjs/example-blog.git")
-
   netlify_vscode_extension.dev.buildAndOpen({
     openOnFolder: "/Users/aldo/com.github/redwoodjs/example-blog",
     disableOtherExtensions: true,

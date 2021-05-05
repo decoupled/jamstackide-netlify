@@ -38,7 +38,7 @@ export function headers_file_parser(src: string) {
   return new HeadersFile(src).render_all
 }
 
-class HeadersFile {
+export class HeadersFile {
   constructor(public src: string) {}
   @lazy() get lines() {
     return this.src.split("\n").map((l, i) => new Line(this, i, l))
@@ -52,7 +52,7 @@ class HeadersFile {
   }
 }
 
-class Line {
+export class Line {
   constructor(
     public parent: HeadersFile,
     public lineNumber: number,
@@ -102,7 +102,7 @@ class Line {
   }
 }
 
-class Comment {
+export class Comment {
   constructor(public parent: Line) {}
   *render() {
     yield {
@@ -113,7 +113,7 @@ class Comment {
   }
 }
 
-class Path {
+export class Path {
   constructor(public parent: Line) {}
   *render() {
     yield {
@@ -124,7 +124,7 @@ class Path {
   }
 }
 
-class Header {
+export class Header {
   constructor(public parent: Line) {}
   *render() {
     yield {
@@ -155,11 +155,11 @@ class Header {
   }
 
   @lazy() get headerValueTrimmedText(): string | undefined {
-    const parts = this.parent.str.split(":")
-    if (parts.length === 1) return undefined
-    const rest = parts.join(":").trim()
-    if (rest.length === 0) return undefined
-    return rest
+    const ioc = this.indexOfColon
+    if (ioc === -1) return
+    const r = this.parent.str.substr(ioc + 1).trim()
+    if (r.length === 0) return
+    return r
   }
 
   @lazy() get indexOfColon() {
@@ -176,11 +176,11 @@ class Header {
   }
 }
 
-class HeaderName {
+export class HeaderName {
   constructor(public parent: Header) {}
 }
 
-class HeaderValue {
+export class HeaderValue {
   constructor(public parent: Header) {}
 }
 
