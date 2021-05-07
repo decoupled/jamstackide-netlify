@@ -2,7 +2,11 @@ import { values } from "lodash"
 import { join } from "path"
 import { memo } from "src/x/decorators"
 import { netlify_events_meta } from "src/x/netlify/events/netlify_events_meta"
+import { vscode_window_createTerminal_andRun } from "src/x/vscode/vscode_window_createTerminal_andRun"
 import vscode from "vscode"
+import execa from "execa"
+import { vscode_QuickPick_await } from "src/x/vscode/vscode_QuickPick_await"
+import { miniserver_port } from "../miniserver"
 
 export function commands_create_function(ctx: vscode.ExtensionContext) {
   vscode.commands.registerCommand(
@@ -23,6 +27,8 @@ export function commands_create_function(ctx: vscode.ExtensionContext) {
   )
 }
 
+type FunctionType = "sync" | "background" | "event" | "template"
+
 // functions context menu: show log
 // https://docs.netlify.com/functions/logs/
 
@@ -31,16 +37,71 @@ class CreateFunctionWizard {
   constructor() {}
   async start() {
     try {
-      const name = await this.functionName()
-      const functionsDir = await this.functionsDir()
-      const ff = join(functionsDir, name)
-      const newFiles = new Map<string, string>([[ff, "function foo(){}"]])
-      vscode.window.showInformationMessage(`create function ${name}`)
+      const ss = await vscode.window.showQuickPick([
+        {
+          label: "create new serverless function",
+          next: async () => {
+            const name = await this.functionName()
+            vscode.window.showInformationMessage(`create function ${name}`)
+          },
+        },
+        {
+          label: "create from template URL",
+          next: async () => {
+            const url = breakIfNull(
+              await vscode.window.showInputBox({ prompt: "URL" })
+            )
+            // TOOD: validate
+            /*
+const validateRepoURL = function (_url) {
+  // TODO: use `url.URL()` instead
+  // eslint-disable-next-line node/no-deprecated-api
+  const URL = url.parse(_url)
+  if (URL.host !== 'github.com') return null
+  // other validation logic here
+  return GITHUB
+}
+            */
+            const name = breakIfNull(await this.functionName())
+            await this.runn(`--name=${name} --url=${url}`)
+          },
+        },
+        {
+          label: "pick from a list of templates",
+          next: async () => {
+            const tpl = breakIfNull(await this.pickTemplate()).index
+            const name = breakIfNull(await this.functionName())
+            await this.runn(`--name=${name} --ide_template=${tpl}`)
+          },
+        },
+      ])
+      if (ss) await ss.next()
     } catch (e) {
       if (e !== breakIfNull_Error) throw e
     }
   }
+
+  @memo() async runn(args: string) {
+    // we don't use the functionsDir directly
+    // but we verify that it exists
+    breakIfNull(await this.functionsDir())
+    const cmd = `${clipath} functions:create ${args}`
+    vscode_window_createTerminal_andRun({
+      cmd,
+      name: "netlify functions:create",
+      cwd: "/Users/aldo/com.github/decoupled/netlify-test-site",
+      env: {
+        NETLIFY_VSCODE_RPC: miniserver_port(),
+      },
+    })
+  }
+
+  @memo() async getFunctionTemplatesFromCLI() {
+    return await cli_functions_create_list_templates()
+  }
+  private lang?: string
   @memo() async functionLanguage(): Promise<string | undefined> {
+    if (this.lang) return this.lang
     return (
       await vscode.window.showQuickPick(
         [
@@ -52,7 +113,9 @@ class CreateFunctionWizard {
       )
     ).value
   }
+  private type?: FunctionType
   @memo() async functionType(): Promise<string | undefined> {
+    if (this.type) return this.type
     return (
       await vscode.window.showQuickPick(
         [
@@ -90,7 +153,6 @@ class CreateFunctionWizard {
   @memo() async functionName(): Promise<string | undefined> {
     const lang = breakIfNull(await this.functionLanguage())
     let postfix = `.${lang}`
-
     const functionType = breakIfNull(await this.functionType())
     if (functionType === "event") {
       // event triggers have a fixed name
@@ -131,21 +193,35 @@ class CreateFunctionWizard {
   @memo() async functionsDir(): Promise<string> {
     return "/tmp/foo"
   }
-}
-
-function createTypeScriptFunction() {
-  const ccc = `
-  import { Handler } from "@netlify/functions";
-
-  const handler: Handler = async (event, context) => {
-    return {
-      statusCode: 200,
-      body: JSON.stringify({ message: "Hello World" }),
-    };
-  };
-  
-  export { handler };  
-  `
+  @memo() async pickTemplate() {
+    const self = this
+    const q = vscode.window.createQuickPick<FuncTemplateItem>()
+    q.show()
+    q.title = "loading function templates..."
+    q.busy = true
+    q.items = await getItems()
+    q.busy = false
+    q.title = "pick a function template"
+    const r = await vscode_QuickPick_await(q)
+    const ttt = breakIfNull(r)
+    this.lang = ttt.data.lang
+    this.type = "template"
+    return ttt
+    async function getItems() {
+      return (await self.getFunctionTemplatesFromCLI()).map((x, i) => {
+        return {
+          label: x.name,
+          detail: x.description,
+          index: i,
+          data: x,
+        } as FuncTemplateItem
+      })
+    }
+    interface FuncTemplateItem extends vscode.QuickPickItem {
+      index: number
+      data: FuncTemplateData
+    }
+  }
 }
 
 const commands = {
@@ -194,4 +270,31 @@ export function eventTypeItems() {
       value: id,
       detail: netlify_events_meta[id].doc,
     }))
+}
+
+const clipath = `/Users/aldo/com.github/decoupled/netlify-cli/bin/run`
+
+async function cli_functions_create_list_templates() {
+  const res = await execa(clipath, ["functions:create", "--ide_templates"])
+  return JSON.parse(res.stdout) as FuncTemplateData[]
+}
+
+interface FuncTemplateData {
+  name: string
+  priority: number
+  description: string
+  lang: string
+}
+/*
+[
+  {
+    "name": "hello-world",
+    "priority": 1,
+    "description": "Basic function that shows async/await usage, and response formatting",
+    "lang": "js"
+  },
+*/
+
+{
+  cli_functions_create_list_templates()
 }

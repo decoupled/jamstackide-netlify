@@ -8,11 +8,16 @@ import {
   commands_create_function,
   commands_create_function_contributes,
 } from "./commands/create_function"
+import { miniserver_init } from "./miniserver"
 import icon from "./static/netlify_logomark.svg"
 import {
   treeview_docs_activate,
   treeview_docs_contributes,
 } from "./treeview/docs/treeview_docs"
+import {
+  treeview_etc_activate,
+  treeview_etc_contributes,
+} from "./treeview/etc/treeview_etc"
 
 /**
  * we'll publish under a codename for now
@@ -39,9 +44,12 @@ export const netlify_vscode_extension = new VSCodeExtension({
 function main() {
   return {
     activate(ctx: vscode.ExtensionContext) {
+      miniserver_init(ctx)
       treeview_docs_activate(ctx)
+      treeview_etc_activate(ctx)
       netlify_toml_validator_vsc(ctx)
-      headers_file_vsc(ctx), commands_create_function(ctx)
+      headers_file_vsc(ctx)
+      commands_create_function(ctx)
     },
     deactivate() {},
   }
@@ -53,6 +61,7 @@ function contributes() {
     // treeview_workflow_contributes().contributes,
     commands_create_function_contributes().contributes,
     treeview_docs_contributes().contributes,
+    treeview_etc_contributes().contributes,
     {
       viewsContainers: {
         activitybar: [
