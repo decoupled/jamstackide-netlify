@@ -1,11 +1,10 @@
+import execa from "execa"
 import { values } from "lodash"
-import { join } from "path"
 import { memo } from "src/x/decorators"
 import { netlify_events_meta } from "src/x/netlify/events/netlify_events_meta"
+import { vscode_QuickPick_await } from "src/x/vscode/vscode_QuickPick_await"
 import { vscode_window_createTerminal_andRun } from "src/x/vscode/vscode_window_createTerminal_andRun"
 import vscode from "vscode"
-import execa from "execa"
-import { vscode_QuickPick_await } from "src/x/vscode/vscode_QuickPick_await"
 import { miniserver_port } from "../miniserver"
 
 export function commands_create_function(ctx: vscode.ExtensionContext) {

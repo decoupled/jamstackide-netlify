@@ -8,6 +8,7 @@ import { netlify_vscode_extension } from "./extension"
   netlify_vscode_extension.dev.buildAndOpen({
     openOnFolder: "/Users/aldo/com.github/redwoodjs/example-blog",
     disableOtherExtensions: true,
+    watchAndReloadLanguageServer: true,
   })
 }
 

@@ -1,5 +1,9 @@
-import { lazy, memo } from "src/x/decorators"
+import { lazy } from "src/x/decorators"
 import * as lsp from "vscode-languageserver-types"
+import {
+  DecorationData_make as dec,
+  DecorationType,
+} from "../etc/DecorationData"
 
 // https://github.com/netlify/cli/blob/c9530e8d99f5be911b42d22b70925cd978dc6bc4/src/utils/headers.js
 
@@ -7,32 +11,6 @@ import * as lsp from "vscode-languageserver-types"
 
 // indentation guides?
 // https://github.com/JoeRobich/vscode-indent-guides/blob/master/src/extension.ts
-
-type DecorationType =
-  | "header_name"
-  | "header_value"
-  | "path"
-  | "comment"
-  | "punctuation"
-
-const dd = "HeaderFileDecoration"
-interface HeaderFileDecoration {
-  kind: typeof dd
-  type: DecorationType
-  range: lsp.Range
-}
-
-export function HeaderFileDecoration_is(x: unknown): x is HeaderFileDecoration {
-  try {
-    return (x as any).kind === dd
-  } catch (e) {
-    return false
-  }
-}
-
-function dec(type: DecorationType, range: lsp.Range): HeaderFileDecoration {
-  return { kind: dd, type, range }
-}
 
 export function headers_file_parser(src: string) {
   return new HeadersFile(src).render_all
@@ -94,7 +72,7 @@ export class Line {
     }
     for (const idx of getAllPunctuationIndexes(this.contentText)) {
       const line = this.lineNumber
-      yield dec("punctuation", {
+      yield dec(DecorationType.headers__punctuation, {
         start: { line, character: idx },
         end: { line, character: idx + 1 },
       })
@@ -109,7 +87,7 @@ export class Comment {
       contents: "this is a comment " + this.parent.contentTextTrimmed,
       range: this.parent.contentRange,
     } as lsp.Hover
-    yield dec("comment", this.parent.contentRange!)
+    yield dec(DecorationType.headers__comment, this.parent.contentRange!)
   }
 }
 
@@ -120,7 +98,7 @@ export class Path {
       contents: "this is a path " + this.parent.contentTextTrimmed,
       range: this.parent.contentRange,
     } as lsp.Hover
-    yield dec("path", this.parent.contentRange!)
+    yield dec(DecorationType.headers__path, this.parent.contentRange!)
   }
 }
 
@@ -131,11 +109,11 @@ export class Header {
       contents: "this is a header " + this.parent.contentTextTrimmed,
       range: this.parent.contentRange,
     } as lsp.Hover
-    yield dec("header_name", this.headerNameRange)
+    yield dec(DecorationType.headers__header_name, this.headerNameRange)
     if (this.indexOfColon !== -1) {
       const line = this.parent.lineNumber
       const idx = this.indexOfColon
-      yield dec("punctuation", {
+      yield dec(DecorationType.headers__punctuation, {
         start: { line, character: idx },
         end: { line, character: idx + 1 },
       })

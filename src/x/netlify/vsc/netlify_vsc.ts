@@ -1,6 +1,4 @@
 import * as vscode from "vscode"
-import { netlifytoml_vsc } from "../../../marco/netlify_toml_validator"
-import { develop_locally_command_activate } from "../../jamstackide/vsc/dev/develop_locally_command_activate"
 import { wait } from "../../Promise/wait"
 import { netlify_vsc_commands } from "./netlify_vsc_commands"
 import { netlify_vsc_command_deploy_activate } from "./netlify_vsc_command_deploy"
@@ -17,12 +15,12 @@ export function ___buildmeta___() {
 }
 
 export function netlify_vsc(ctx: vscode.ExtensionContext) {
-  netlifytoml_vsc()
+  // netlifytoml_vsc()
   //netlify_vsc_treeview_activate(ctx)
   netlify_vsc_oauth(ctx)
   netlify_vsc_command_deploy_activate(ctx)
   netlify_vsc_treeview_react_activate(ctx)
-  develop_locally_command_activate(ctx)
+  // develop_locally_command_activate(ctx)
   netlify_vsc_filesystemprovider(ctx)
   netlify_vsc_statusbar(ctx)
 

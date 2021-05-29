@@ -1,7 +1,6 @@
 import express from "express"
 import { memo } from "src/x/decorators"
 import { AddressInfo_cast_getPort_orThrow } from "src/x/net/AddressInfo"
-import { vscode_extensions_getExtensionID } from "src/x/vscode/vscode_extensions_getExtensionID"
 import { vscode_Uri_smartParse } from "src/x/vscode/vscode_Uri_smartParse"
 import vscode from "vscode"
 
@@ -63,6 +62,10 @@ class MiniServer {
       this.progressss[args[0]]()
       this.progressss[args[0]] = null
     }
+    if (method === "command") {
+      const [cmd, ...rest] = args
+      return await vscode.commands.executeCommand(cmd, ...rest)
+    }
   }
 
   progressss: any[] = []
@@ -71,6 +74,4 @@ class MiniServer {
     return AddressInfo_cast_getPort_orThrow(this.server().address())
   }
   static instance?: MiniServer
-}
-{
 }

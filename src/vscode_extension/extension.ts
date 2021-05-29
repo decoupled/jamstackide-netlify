@@ -1,6 +1,8 @@
 import { VSCodeExtension } from "lambdragon"
 import { join } from "path"
+import { language_server_build_target } from "src/language_server/language_server"
 import { headers_file_vsc } from "src/x/netlify/headers_file/headers_file_vsc"
+import { redirects_file_vsc } from "src/x/netlify/redirects_file/redirects_file_vsc"
 import { netlify_toml_validator_vsc } from "src/x/toml/netlify_toml_validator_vsc"
 import vscode from "vscode"
 import merge from "webpack-merge"
@@ -8,6 +10,7 @@ import {
   commands_create_function,
   commands_create_function_contributes,
 } from "./commands/create_function"
+import { NetlifyLSPClientManager } from "./lsp_client/NetlifyLSPClientManager"
 import { miniserver_init } from "./miniserver"
 import icon from "./static/netlify_logomark.svg"
 import {
@@ -37,6 +40,7 @@ export const netlify_vscode_extension = new VSCodeExtension({
   icon,
   contributes: contributes() as any,
   engines: { vscode: "^1.53.0" },
+  deps: [language_server_build_target],
   staticDir: join(__dirname, "static"),
 })
 
@@ -49,7 +53,9 @@ function main() {
       treeview_etc_activate(ctx)
       netlify_toml_validator_vsc(ctx)
       headers_file_vsc(ctx)
+      redirects_file_vsc(ctx)
       commands_create_function(ctx)
+      new NetlifyLSPClientManager(ctx)
     },
     deactivate() {},
   }
@@ -72,6 +78,22 @@ function contributes() {
           },
         ],
       },
+      languages: [
+        {
+          id: "netlifyredirects",
+          // "extensions": [".py"],
+          aliases: ["Netlify Redirects File"],
+          filenames: ["_redirects"],
+          // "configuration": "./language-configuration.json"
+        },
+        {
+          id: "netlifyheaders",
+          // "extensions": [".py"],
+          aliases: ["Netlify Headers File"],
+          filenames: ["_headers"],
+          // "configuration": "./language-configuration.json"
+        },
+      ],
     },
   ])
 }
