@@ -12,7 +12,7 @@ export class HeadersFile extends FileNode {
     const d: ExtendedDiagnostic = {
       uri: this.uri,
       diagnostic: {
-        message: "hello world",
+        message: "hello world 33",
         range: {
           start: { line: 1, character: 1 },
           end: { line: 2, character: 6 },

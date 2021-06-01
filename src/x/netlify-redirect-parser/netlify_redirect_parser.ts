@@ -1,6 +1,7 @@
 import { outputFile } from "fs-extra"
 import * as nrp from "netlify-redirect-parser"
 import * as tmp from "tmp"
+// import { worker } from "lambdragon"
 
 export interface NetlifyRedirectParserResult {
   success: Redirect[]

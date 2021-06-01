@@ -3,7 +3,7 @@ import { join } from "path"
 import { language_server_build_target } from "src/language_server/language_server"
 import { headers_file_vsc } from "src/x/netlify/headers_file/headers_file_vsc"
 import { redirects_file_vsc } from "src/x/netlify/redirects_file/redirects_file_vsc"
-import { netlify_toml_validator_vsc } from "src/x/toml/netlify_toml_validator_vsc"
+// import { netlify_toml_validator_vsc } from "src/x/toml/netlify_toml_validator_vsc"
 import vscode from "vscode"
 import merge from "webpack-merge"
 import {
@@ -28,7 +28,7 @@ import {
 const CODENAME = "n2021"
 
 // the build target for the extension
-export const netlify_vscode_extension = new VSCodeExtension({
+export const netlify_vscode_extension_build_target = new VSCodeExtension({
   main,
   activationEvents: ["*"],
   publisher: "decoupled",
@@ -51,11 +51,13 @@ function main() {
       miniserver_init(ctx)
       treeview_docs_activate(ctx)
       treeview_etc_activate(ctx)
-      netlify_toml_validator_vsc(ctx)
+      // netlify_toml_validator_vsc(ctx)
       headers_file_vsc(ctx)
       redirects_file_vsc(ctx)
       commands_create_function(ctx)
       new NetlifyLSPClientManager(ctx)
+      const hello = "hello"
+      console.log(hello + " Marco")
     },
     deactivate() {},
   }

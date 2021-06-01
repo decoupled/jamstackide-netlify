@@ -7,7 +7,10 @@
     "format": "prettier --write \"./src/**/*.{js,json,md,ts,tsx}\""
   },
   "dependencies": {
-    "@netlify/config": "^6.4.2",
+    "@heroku/function-toml": "^0.0.3",
+    "@netlify/config": "^6.7.1",
+    "@taplo/lib": "^0.2.2",
+    "@taplo/lsp": "^0.1.7",
     "@types/command-exists": "^1.2.0",
     "@types/express": "^4.17.11",
     "@types/fs-extra": "^9.0.11",
