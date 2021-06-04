@@ -28,10 +28,9 @@ type UnboxerFunction = <T>(x: T) => Promise<Array<Unbox<T>>>
 
 async function unwrap(v: any) {
   // terminal cases
-  if (typeof v === "undefined") return []
-  if (v === null) return []
+  if (!isDefined(v)) return []
   if (typeof v !== "object") return [v]
-  if (Array.isArray(v)) return v
+  if (Array.isArray(v)) return v.filter(isDefined)
   // recursion
   //   --> promise
   if (typeof v.then === "function") return await unwrap(await v)
@@ -47,7 +46,9 @@ async function unwrap(v: any) {
 async function tryIterate(xs: any): Promise<Array<any> | undefined> {
   const res: any[] = []
   try {
-    for await (const x of xs) res.push(x)
+    for await (const x of xs) {
+      if (isDefined(x)) res.push(x)
+    }
     return res
   } catch (e) {}
 }
@@ -69,4 +70,10 @@ function* iter2() {
 }
 async function bloof() {
   return "bloof"
+}
+
+function isDefined(x: any): boolean {
+  if (typeof x === "undefined") return false
+  if (x === null) return false
+  return true
 }

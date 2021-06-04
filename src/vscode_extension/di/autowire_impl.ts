@@ -10,6 +10,7 @@ import { TreeviewDocsW } from "../treeview/docs/TreeviewDocsW"
 import { TextEditorDecorations } from "../TextEditorDecorations"
 import { TextEditorDecorationsProvider } from "../TextEditorDecorationsProvider"
 import { TextEditorDecorationsProviderFromLSPClient } from "../TextEditorDecorationsProviderFromLSPClient"
+import { ReactTreeviewW } from "../../x/netlify/vsc/treeview/react/ReactTreeviewW"
 
 interface __ResolutionContext {
   params: any[]
@@ -107,6 +108,10 @@ const __create_TextEditorDecorations = __memo__(
     ),
   false
 )
+const __create_ReactTreeviewW = __memo__(
+  (ctx) => new ReactTreeviewW(ctx.params[0]),
+  false
+)
 const __create_VSCodeProjectW = __memo__(
   (ctx) =>
     new VSCodeProjectW(
@@ -114,7 +119,8 @@ const __create_VSCodeProjectW = __memo__(
       __create_CreateFunctionCommand(ctx),
       __create_NetlifyLSPClientManager(ctx),
       __create_TreeviewDocsW(ctx),
-      __create_TextEditorDecorations(ctx)
+      __create_TextEditorDecorations(ctx),
+      __create_ReactTreeviewW(ctx)
     ),
   false
 )

@@ -1,5 +1,5 @@
-import { LazyGetter as lazy } from "lazy-get-decorator"
-import { Memoize as memo } from "lodash-decorators"
+import { lazy } from "x/decorators"
+import { memo } from "x/decorators"
 import moment from "moment"
 import NetlifyAPI from "netlify"
 import { NetlifyApi2 } from "../api2/netlify_api2"

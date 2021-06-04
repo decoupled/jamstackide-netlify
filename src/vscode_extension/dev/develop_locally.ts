@@ -1,6 +1,6 @@
 import { existsSync, removeSync } from "fs-extra"
 import { values } from "lodash"
-import { Memoize as memo } from "lodash-decorators"
+import { memo } from "x/decorators"
 import { join } from "path"
 import { GitURL } from "src/x/git/GitURL"
 import { npm__yarn__install_dry } from "src/x/npm__yarn/npm__yarn__install"

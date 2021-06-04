@@ -1,23 +1,21 @@
+import {
+  TreeItem,
+  TreeItem_Menu_create as TreeItemMenu_create
+} from "lambdragon"
 import { LazyGetter as lazy } from "lazy-get-decorator"
 import { Memoize as memo } from "lodash-decorators"
 import { computed, observable } from "mobx"
 import { observer } from "mobx-react"
 import React from "react"
-import vscode from "vscode"
-import { vsc_assets_icon_uri } from "./vsc_assets_icon"
-// import { develop_locally } from "../../../../jamstackide/vsc/dev/develop_locally"
-import {
-  TreeItem,
-  TreeItem_Menu_create as TreeItemMenu_create,
-} from "lambdragon"
 import { vscode_ThemeIcon_memo as icon } from "src/x/vscode/vscode_ThemeIcon_memo"
+import vscode from "vscode"
 import {
   NetlifyAPIWrapper,
   NetlifySite,
   NetlifySiteDeploy,
   NetlifySiteForm,
   NetlifySiteSnippet,
-  PaymentMethod,
+  PaymentMethod
 } from "../../../api/netlify_api"
 import { netlify_vsc_oauth_manager } from "../../netlify_vsc_oauth_manager"
 import { LinkUI } from "./LinkUI"
@@ -29,10 +27,16 @@ import {
   menu_def_logged_in,
   menu_def_site,
   menu_def_sites,
-  menu_def_snippet,
+  menu_def_snippet
 } from "./menus"
+import { vsc_assets_icon_uri } from "./vsc_assets_icon"
 
-const { Collapsed, Expanded, None } = vscode.TreeItemCollapsibleState
+// lambdragon doesn't support top-level destructuring (yet)
+// once we fix that, we can write this in a nicer way
+const Expanded = vscode.TreeItemCollapsibleState.Expanded
+const Collapsed = vscode.TreeItemCollapsibleState.Collapsed
+const None = vscode.TreeItemCollapsibleState.None
+
 @observer
 export class NetlifyUI extends React.Component<{
   ctx: vscode.ExtensionContext

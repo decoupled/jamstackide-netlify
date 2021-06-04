@@ -142,7 +142,7 @@ export const menu_def_forms = def({
   },
 })
 
-export function ___buildmeta___() {
+export function menus_contributes() {
   const defs = [
     //menu_def_logged_out,
     menu_def_authenticating,
@@ -156,6 +156,10 @@ export function ___buildmeta___() {
     menu_def_forms,
     menu_def_snippet,
   ]
-  const pjson = merge(...defs.map(TreeItem_Menu_to_json))
-  return { pjson }
+  return merge({}, ...defs.map(TreeItem_Menu_to_json))
+}
+
+{
+  TreeItem_Menu_to_json(menu_def_forms)
+  menus_contributes()
 }

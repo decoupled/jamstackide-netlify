@@ -1,5 +1,5 @@
 import fetch from "isomorphic-fetch"
-import { Memoize as memo } from "lodash-decorators"
+import { memo } from "x/decorators"
 import { observable, when, computed } from "mobx"
 import { Promise_withTimeout } from "src/x/Promise/Promise_withTimeout"
 

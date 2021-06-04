@@ -7,7 +7,7 @@ import { netlify_vscode_extension_build_target } from "./extension"
   // openExtensionOn("git@github.com:redwoodjs/example-blog.git")
   netlify_vscode_extension_build_target.dev.buildAndOpen({
     openOnFolder: "/Users/aldo/com.github/redwoodjs/example-blog",
-    disableOtherExtensions: true,
+    disableOtherExtensions: false,
     watchAndReloadLanguageServer: true,
   })
 }
@@ -16,7 +16,8 @@ import { netlify_vscode_extension_build_target } from "./extension"
   // openExtensionOn("git@github.com:redwoodjs/example-blog.git")
   netlify_vscode_extension_build_target.dev.buildAndOpen({
     openOnFolder: "/Users/aldo/com.github/decoupled/netlify-test-site",
-    disableOtherExtensions: true,
+    disableOtherExtensions: false,
+    watchAndReloadLanguageServer: true,
   })
 }
 

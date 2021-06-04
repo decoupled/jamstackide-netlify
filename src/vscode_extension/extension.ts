@@ -4,6 +4,7 @@ import { language_server_build_target } from "src/language_server/language_serve
 // import { netlify_toml_validator_vsc } from "src/x/toml/netlify_toml_validator_vsc"
 import vscode from "vscode"
 import merge from "webpack-merge"
+import { netlify_vsc_treeview_react_contributes } from "x/netlify/vsc/treeview/react/netlify_vsc_treeview_react_contributes"
 import { commands_create_function_contributes } from "./commands/CreateFunctionCommand"
 import { autowire } from "./di/autowire"
 import { VSCodeProjectW } from "./di/VSCodeProjectW"
@@ -32,6 +33,7 @@ export const netlify_vscode_extension_build_target = new VSCodeExtension({
   engines: { vscode: "^1.53.0" },
   deps: [language_server_build_target],
   staticDir: join(__dirname, "static"),
+  extensionDependencies: ["auchenberg.vscode-browser-preview"],
 })
 
 // the entrypoint
@@ -48,8 +50,6 @@ function main() {
         )
         return // TODO: support more workspaces
       }
-      // treeview_docs_activate(ctx)
-      // treeview_etc_activate(ctx)
       // netlify_toml_validator_vsc(ctx)
     },
     deactivate() {},
@@ -62,14 +62,15 @@ function contributes() {
     // treeview_workflow_contributes().contributes,
     commands_create_function_contributes().contributes,
     treeview_docs_contributes().contributes,
-    treeview_etc_contributes().contributes,
+    netlify_vsc_treeview_react_contributes().contributes,
+    // treeview_etc_contributes().contributes,
     {
       viewsContainers: {
         activitybar: [
           {
             id: "netlify",
             title: "Netlify",
-            icon: "assets/icons2/netlify.svg",
+            icon: "netlify_logomark.svg",
           },
         ],
       },

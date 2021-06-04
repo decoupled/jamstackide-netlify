@@ -11,6 +11,7 @@
     "jsx": "react",
     "allowUmdGlobalAccess": true,
     "paths": {
+      "x/*": ["./src/x/*"],
       "src/*": ["./src/*"]
     },
     "typeRoots": ["./node_modules/@types"]

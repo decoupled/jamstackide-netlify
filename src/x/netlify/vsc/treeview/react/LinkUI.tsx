@@ -3,8 +3,6 @@ import vscode from "vscode"
 import { TreeItem } from "lambdragon"
 import { vscode_ThemeIcon_memo as icon } from "src/x/vscode/vscode_ThemeIcon_memo"
 
-const { Collapsed, Expanded, None } = vscode.TreeItemCollapsibleState
-
 export const LinkUI = (props: {
   label: string
   url: string
@@ -24,7 +22,7 @@ export const LinkUI = (props: {
       iconPath={icon("link-external")}
       tooltip={props.url}
       select={cb}
-      collapsibleState={None}
+      collapsibleState={vscode.TreeItemCollapsibleState.None}
     />
   )
 }

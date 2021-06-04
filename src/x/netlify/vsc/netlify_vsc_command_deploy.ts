@@ -1,6 +1,6 @@
-import { LazyGetter as lazy } from "lazy-get-decorator"
+import { lazy } from "x/decorators"
 import { values } from "lodash"
-import { Memoize as memo } from "lodash-decorators"
+import { memo } from "x/decorators"
 import { basename, join } from "path"
 import vscode from "vscode"
 import { iter } from "src/x/Iterable/iter"

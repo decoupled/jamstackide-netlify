@@ -1,4 +1,4 @@
-import { LazyGetter as lazy } from "lazy-get-decorator"
+import { lazy } from "x/decorators"
 import { isEqual } from "lodash"
 import { join } from "path"
 import { readJSONSync, outputJSONSync } from "fs-extra"

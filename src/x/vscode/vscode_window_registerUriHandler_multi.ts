@@ -1,4 +1,4 @@
-import { Memoize as memo } from "lodash-decorators"
+import { memo } from "x/decorators"
 import vscode from "vscode"
 
 /**

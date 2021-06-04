@@ -1,10 +1,10 @@
-import { LazyGetter as lazy } from "lazy-get-decorator"
+import { lazy } from "x/decorators"
 import { memoize } from "lodash"
 import { computed, observable } from "mobx"
 import { now } from "mobx-utils"
 import vscode from "vscode"
 import { NetlifyGlobalConfig } from "../NetlifyGlobalConfig"
-import { netlify_oauth_config_forExtension } from "../oauth/config/netlify_oauth_config_forExtension"
+import { netlify_oauth_config_netlifyvscode } from "../oauth/config/netlify_oauth_config_netlifyvscode"
 import { netlify_oauth_get_token } from "../oauth/netlify_oauth_get_token"
 
 const KEY = "NETLIFY_API_TOKEN_KEY"
@@ -22,7 +22,7 @@ class NetlifyTokenManager {
   //   return this._authenticating
   // }
   @lazy() get config() {
-    return netlify_oauth_config_forExtension(this.ctx)
+    return netlify_oauth_config_netlifyvscode
   }
   @observable _serial = 0
   @computed get token(): string | undefined {

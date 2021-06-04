@@ -1,8 +1,8 @@
 import express from "express"
-import { Memoize as memo } from "lodash-decorators"
 import { observable, when } from "mobx"
-import nanoid from "nanoid"
+import { nanoid } from "nanoid"
 import open from "open"
+import { memo } from "x/decorators"
 import { netlify_oauth_build_authorize_url } from "../oauth/netlify_oauth_build_authorize_url"
 import { NetlifyOAuthConfig } from "./config/types"
 
@@ -38,7 +38,7 @@ class NetlifyOAuthFlow {
       )
     })
     app.get("/cb", (req, res) => {
-      this.data = req.query
+      this.data = req.query as any
       res.send(
         "Authentication successful - you can close this browser window and return to VSCode"
       )
