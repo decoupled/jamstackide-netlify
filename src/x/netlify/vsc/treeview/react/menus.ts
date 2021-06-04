@@ -1,8 +1,5 @@
 import merge from "webpack-merge"
-import {
-  TreeItemMenu_def as def,
-  TreeItemMenu_Def_to_pjson,
-} from "../../../../vscode/treeview/react2"
+import { TreeItem_Menu_def as def, TreeItem_Menu_to_json } from "lambdragon"
 
 const base = "jamstack.netlify.treeview.menus"
 
@@ -159,6 +156,6 @@ export function ___buildmeta___() {
     menu_def_forms,
     menu_def_snippet,
   ]
-  const pjson = merge(...defs.map(TreeItemMenu_Def_to_pjson))
+  const pjson = merge(...defs.map(TreeItem_Menu_to_json))
   return { pjson }
 }

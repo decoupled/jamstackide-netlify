@@ -1,7 +1,7 @@
 import React, { useCallback } from "react"
 import vscode from "vscode"
-import { TreeItem } from "../../../../vscode/treeview/react2"
-import { vscode_ThemeIcon_memo as icon } from "../../../../vscode/vscode_ThemeIcon_memo"
+import { TreeItem } from "lambdragon"
+import { vscode_ThemeIcon_memo as icon } from "src/x/vscode/vscode_ThemeIcon_memo"
 
 const { Collapsed, Expanded, None } = vscode.TreeItemCollapsibleState
 

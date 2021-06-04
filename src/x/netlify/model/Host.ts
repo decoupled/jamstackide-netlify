@@ -1,6 +1,3 @@
-import * as fs from "fs-extra"
-import glob from "glob"
-
 /**
  * The host interface allows us to decouple the "model/*"
  * classes from access to the file system.
@@ -12,22 +9,4 @@ export interface Host {
   readdirSync(path: string): string[]
   globSync(pattern: string): string[]
   writeFileSync(path: string, contents: string): void
-}
-
-export class DefaultHost implements Host {
-  existsSync(path: string) {
-    return fs.existsSync(path)
-  }
-  readFileSync(path: string) {
-    return fs.readFileSync(path, { encoding: "utf8" }).toString()
-  }
-  readdirSync(path: string) {
-    return fs.readdirSync(path)
-  }
-  globSync(pattern: string) {
-    return glob.sync(pattern)
-  }
-  writeFileSync(path: string, contents: string) {
-    return fs.writeFileSync(path, contents)
-  }
 }

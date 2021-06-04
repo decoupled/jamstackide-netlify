@@ -1,14 +1,11 @@
-import { lazy } from "src/x/decorators"
-import * as vscode from "vscode"
 import { vscode_TextEditor_watch } from "../etc/vscode_TextEditor_watch"
+import * as vscode from "vscode"
 
-export async function redirects_file_vsc(ctx: vscode.ExtensionContext) {
-  new DecManager(ctx).start()
-}
-
-class DecManager {
-  constructor(private ctx: vscode.ExtensionContext) {}
-  start() {
+export class RedirectsFileW {
+  constructor(private ctx: vscode.ExtensionContext) {
+    this.start()
+  }
+  private start() {
     const { ctx } = this
     vscode_TextEditor_watch(ctx, "_redirects", (editor) => {
       const src = editor.document.getText()

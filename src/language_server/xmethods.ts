@@ -16,20 +16,9 @@ export class XMethodsManager {
       if (!node) return undefined
       return await node.collectIDEInfo()
     })
-    connection.onRequest(
-      xmethods.getFilePathForRoutePath,
-      (routePath: string) => {
-        return server.getProject()?.router.getFilePathForRoutePath(routePath)
-      }
-    )
-    connection.onRequest(xmethods.getRoutePathForFilePath, (uri: string) => {
-      return server.getProject()?.router.getRoutePathForFilePath(uri)
-    })
   }
 }
 
 export const xmethods = {
-  getInfo: "redwoodjs/x-getInfo",
-  getFilePathForRoutePath: "redwoodjs/x-getFilePathForRoutePath",
-  getRoutePathForFilePath: "redwoodjs/x-getRoutePathForFilePath",
+  getInfo: "netlify/x-getInfo",
 }

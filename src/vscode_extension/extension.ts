@@ -1,26 +1,16 @@
 import { VSCodeExtension } from "lambdragon"
 import { join } from "path"
 import { language_server_build_target } from "src/language_server/language_server"
-import { headers_file_vsc } from "src/x/netlify/headers_file/headers_file_vsc"
-import { redirects_file_vsc } from "src/x/netlify/redirects_file/redirects_file_vsc"
 // import { netlify_toml_validator_vsc } from "src/x/toml/netlify_toml_validator_vsc"
 import vscode from "vscode"
 import merge from "webpack-merge"
-import {
-  commands_create_function,
-  commands_create_function_contributes,
-} from "./commands/create_function"
-import { NetlifyLSPClientManager } from "./lsp_client/NetlifyLSPClientManager"
-import { miniserver_init } from "./miniserver"
+import { commands_create_function_contributes } from "./commands/CreateFunctionCommand"
+import { autowire } from "./di/autowire"
+import { VSCodeProjectW } from "./di/VSCodeProjectW"
+import { NetlifyCLIPath_createDevTime } from "./NetlifyCLIPath"
 import icon from "./static/netlify_logomark.svg"
-import {
-  treeview_docs_activate,
-  treeview_docs_contributes,
-} from "./treeview/docs/treeview_docs"
-import {
-  treeview_etc_activate,
-  treeview_etc_contributes,
-} from "./treeview/etc/treeview_etc"
+import { treeview_docs_contributes } from "./treeview/docs/TreeviewDocsW"
+import { treeview_etc_contributes } from "./treeview/etc/treeview_etc"
 
 /**
  * we'll publish under a codename for now
@@ -48,16 +38,19 @@ export const netlify_vscode_extension_build_target = new VSCodeExtension({
 function main() {
   return {
     activate(ctx: vscode.ExtensionContext) {
-      miniserver_init(ctx)
-      treeview_docs_activate(ctx)
-      treeview_etc_activate(ctx)
+      for (const workspaceFolder of vscode.workspace.workspaceFolders ?? []) {
+        // use lambdragon's "autowire" to create an instance of VSCodeProjectW
+        // it will "inject" all dependencies, transitively
+        autowire<VSCodeProjectW>(
+          ctx,
+          workspaceFolder,
+          NetlifyCLIPath_createDevTime()
+        )
+        return // TODO: support more workspaces
+      }
+      // treeview_docs_activate(ctx)
+      // treeview_etc_activate(ctx)
       // netlify_toml_validator_vsc(ctx)
-      headers_file_vsc(ctx)
-      redirects_file_vsc(ctx)
-      commands_create_function(ctx)
-      new NetlifyLSPClientManager(ctx)
-      const hello = "hello"
-      console.log(hello + " Marco")
     },
     deactivate() {},
   }

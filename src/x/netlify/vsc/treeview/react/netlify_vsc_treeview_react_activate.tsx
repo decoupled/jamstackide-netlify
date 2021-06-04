@@ -1,6 +1,6 @@
 import * as React from "react"
 import * as vscode from "vscode"
-import { render } from "../../../../vscode/treeview/react2"
+import { TreeItem_render as render } from "lambdragon"
 import { NetlifyUI } from "./netlify_vsc_treeview_react"
 
 export const treeview_id = "decoupled.studio.netlify.treeview.react"

@@ -1,40 +1,39 @@
-import execa from "execa"
 import { values } from "lodash"
 import { memo } from "src/x/decorators"
 import { netlify_events_meta } from "src/x/netlify/events/netlify_events_meta"
 import { vscode_QuickPick_await } from "src/x/vscode/vscode_QuickPick_await"
 import { vscode_window_createTerminal_andRun } from "src/x/vscode/vscode_window_createTerminal_andRun"
 import vscode from "vscode"
-import { miniserver_port } from "../miniserver"
+import { CWD } from "../di/CWD"
+import { MiniServer } from "../MiniServer"
+import { NetlifyCLIPath } from "../NetlifyCLIPath"
+import { NetlifyCLIWrapper } from "../NetlifyCLIWrapper"
 
-export function commands_create_function(ctx: vscode.ExtensionContext) {
-  vscode.commands.registerCommand(
-    commands.create_function.command,
-    () => {
-      const frb = new CreateFunctionWizard()
-      frb.start()
-      // Trigger: Command : Netlify > Add a new function
-      // Pick a function directory, if not already configured
-      // Pick a language (JavaScript, TypeScript, Go)
-      // Pick a type (synchronous, background, event)
-      // If event, pick a type and configuration
-      // If sync or background, pick from a template
-      // Provide a name
-      // Auto-populate the directory with the template file
-    },
-    ctx.subscriptions
-  )
-}
-
-type FunctionType = "sync" | "background" | "event" | "template"
-
-// functions context menu: show log
-// https://docs.netlify.com/functions/logs/
-
-// https://docs.netlify.com/functions/overview/
-class CreateFunctionWizard {
-  constructor() {}
-  async start() {
+export class CreateFunctionCommand {
+  constructor(
+    private ctx: vscode.ExtensionContext,
+    private MiniServer: MiniServer,
+    private CWD: CWD,
+    private cli: NetlifyCLIWrapper,
+    private clipath: NetlifyCLIPath
+  ) {
+    vscode.commands.registerCommand(
+      commands.create_function.command,
+      () => {
+        this.start()
+        // Trigger: Command : Netlify > Add a new function
+        // Pick a function directory, if not already configured
+        // Pick a language (JavaScript, TypeScript, Go)
+        // Pick a type (synchronous, background, event)
+        // If event, pick a type and configuration
+        // If sync or background, pick from a template
+        // Provide a name
+        // Auto-populate the directory with the template file
+      },
+      this.ctx.subscriptions
+    )
+  }
+  private async start() {
     try {
       const ss = await vscode.window.showQuickPick([
         {
@@ -84,19 +83,17 @@ const validateRepoURL = function (_url) {
     // we don't use the functionsDir directly
     // but we verify that it exists
     breakIfNull(await this.functionsDir())
-    const cmd = `${clipath} functions:create ${args}`
+    const cmd = `${this.clipath.x} functions:create ${args}`
     vscode_window_createTerminal_andRun({
       cmd,
       name: "netlify functions:create",
-      cwd: "/Users/aldo/com.github/decoupled/netlify-test-site",
-      env: {
-        NETLIFY_VSCODE_RPC: miniserver_port(),
-      },
+      cwd: this.CWD.x,
+      env: this.MiniServer.envForChildProcesses,
     })
   }
 
   @memo() async getFunctionTemplatesFromCLI() {
-    return await cli_functions_create_list_templates()
+    return await this.cli.functions_create_list_templates()
   }
   private lang?: string
   @memo() async functionLanguage(): Promise<string | undefined> {
@@ -223,6 +220,13 @@ const validateRepoURL = function (_url) {
   }
 }
 
+type FunctionType = "sync" | "background" | "event" | "template"
+
+// functions context menu: show log
+// https://docs.netlify.com/functions/logs/
+
+// https://docs.netlify.com/functions/overview/
+
 const commands = {
   create_function: {
     command: "netlify.create_function",
@@ -271,13 +275,6 @@ export function eventTypeItems() {
     }))
 }
 
-const clipath = `/Users/aldo/com.github/decoupled/netlify-cli/bin/run`
-
-async function cli_functions_create_list_templates() {
-  const res = await execa(clipath, ["functions:create", "--ide_templates"])
-  return JSON.parse(res.stdout) as FuncTemplateData[]
-}
-
 interface FuncTemplateData {
   name: string
   priority: number
@@ -293,7 +290,3 @@ interface FuncTemplateData {
     "lang": "js"
   },
 */
-
-{
-  cli_functions_create_list_templates()
-}

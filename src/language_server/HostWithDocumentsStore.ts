@@ -1,10 +1,14 @@
-import { DefaultHost, Host } from "src/x/netlify/model/Host"
+import { Host } from "src/x/netlify/model/Host"
+import { DefaultHost } from "src/x/netlify/model/DefaultHost"
 import { URL_fromFile } from "src/x/url/URL_fromFile"
 import { TextDocuments } from "vscode-languageserver"
 import { TextDocument } from "vscode-languageserver-textdocument"
 
+/**
+ * An implementation of the host interface atop an LSP TextDocuments store
+ */
 export class HostWithDocumentsStore implements Host {
-  defaultHost = new DefaultHost()
+  private defaultHost = new DefaultHost()
   constructor(public documents: TextDocuments<TextDocument>) {}
   readFileSync(path: string) {
     const uri = URL_fromFile(path)

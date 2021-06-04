@@ -18,7 +18,7 @@ export interface DecorationData {
 export function DecorationData_is(x: unknown): x is DecorationData {
   try {
     return (x as any).kind === dd
-  } catch (e) {
+  } catch {
     return false
   }
 }

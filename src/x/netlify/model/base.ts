@@ -1,4 +1,3 @@
-import { readFile, readFileSync } from "fs-extra"
 import { ArrayLike, ArrayLike_normalize } from "src/x/Array/ArrayLike"
 import { lazy, memo } from "src/x/decorators"
 import { URL_fromFile } from "src/x/url/URL_fromFile"
@@ -39,7 +38,6 @@ export abstract class FileNode extends ModelNode {
   @lazy() get uri(): DocumentUri {
     return URL_fromFile(this.filePath)
   }
-
   @memo() readFileSync(): string {
     return this.host.readFileSync(this.filePath)
   }

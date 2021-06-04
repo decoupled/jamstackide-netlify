@@ -2,6 +2,7 @@ import { ServerOptions, TransportKind } from "vscode-languageclient/node"
 
 /**
  *
+ * this should be provided by lambdragon
  * @param module path to the lsp entry point on disk
  */
 export function ServerOptions_build(module: string): ServerOptions {
@@ -10,8 +11,8 @@ export function ServerOptions_build(module: string): ServerOptions {
   const debugOptions = {
     execArgv: [
       "--nolazy",
-      "--inspect=6009",
-      //"--inspect",
+      // "--inspect=6009",
+      "--inspect",
     ],
   }
   // If the extension is launched in debug mode then the debug server options are used

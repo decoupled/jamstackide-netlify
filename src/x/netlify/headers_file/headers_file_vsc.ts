@@ -1,27 +1,21 @@
 import { lsp_Range__vscode_Range } from "src/x/lsp__vscode/lsp_Range__vscode_Range"
 import {
   vscode_TextEditor_setDecorations_pivot,
-  vscode_TextEditor_setDecorations_pivot_Item,
+  vscode_TextEditor_setDecorations_pivot_Item
 } from "src/x/vscode/vscode_TextEditor_setDecorations_pivot"
 import * as vscode from "vscode"
 import { DecorationData_is } from "../etc/DecorationData"
 import {
   vscode_decoration_types_all,
-  vscode_decoration_types_find,
+  vscode_decoration_types_find
 } from "../etc/vscode_decoration_types"
 import { vscode_TextEditor_watch } from "../etc/vscode_TextEditor_watch"
 import { headers_file_autocomplete } from "./headers_file_autocomplete"
 import { headers_file_parser } from "./headers_file_parser"
 
-export async function headers_file_vsc(ctx: vscode.ExtensionContext) {
-  new DecManager(ctx).start()
-  headers_file_autocomplete(ctx)
-}
-
-class DecManager {
-  constructor(private ctx: vscode.ExtensionContext) {}
-  start() {
-    const { ctx } = this
+export class HeadersFileW {
+  constructor(ctx: vscode.ExtensionContext) {
+    headers_file_autocomplete(ctx)
     vscode_TextEditor_watch(ctx, "_headers", (editor) => {
       const src = editor.document.getText()
       const rest = headers_file_parser(src)

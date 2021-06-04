@@ -16,7 +16,7 @@ export class OutlineManager {
       if (!p)
         return {
           async children() {
-            return [{ label: "No Redwood.js project found..." }]
+            return [{ label: "No Netlify project found..." }]
           },
         }
       const oif = new OutlineInfoResolver(p)
@@ -24,7 +24,7 @@ export class OutlineManager {
     }
 
     const tdp = new RemoteTreeDataProviderImpl(getRoot, 10000)
-    const methodPrefix = "redwoodjs/x-outline-"
+    const methodPrefix = "netlify/x-outline-"
     RemoteTreeDataProvider_publishOverLSPConnection(
       tdp,
       this.server.connection,

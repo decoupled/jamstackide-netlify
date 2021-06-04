@@ -1,4 +1,4 @@
-import { memoize } from "lodash"
+import { Singleton } from "lambdragon"
 import { userInfo } from "os"
 import { sep } from "path"
 import { lazy } from "src/x/decorators"
@@ -6,20 +6,16 @@ import { vscode_extensions_getExtensionID } from "src/x/vscode/vscode_extensions
 import vscode from "vscode"
 import TelemetryReporter from "vscode-extension-telemetry"
 
-export const telemetry_activate = memoize((ctx: vscode.ExtensionContext) => {
-  return new Reporter(ctx)
-})
-
 // most code taken from: https://github.com/Almenon/AREPL-vscode/blob/master/src/areplUtilities.ts
 
-class Reporter {
+export class Telemetry implements Singleton {
   private reporter: TelemetryReporter
   private timeActivated = 0
   private lastStackTrace = ""
 
   constructor(public ctx: vscode.ExtensionContext) {
     this.timeActivated = 0
-    const extensionId = vscode_extensions_getExtensionID(ctx)
+    const extensionId = vscode_extensions_getExtensionID(this.ctx)
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const extension = vscode.extensions.getExtension(extensionId)!
     const extensionVersion = extension.packageJSON.version

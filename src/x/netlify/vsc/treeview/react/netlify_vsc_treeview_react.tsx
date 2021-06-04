@@ -4,13 +4,13 @@ import { computed, observable } from "mobx"
 import { observer } from "mobx-react"
 import React from "react"
 import vscode from "vscode"
-import { vsc_assets_icon_uri } from "../../../../../vsc/studio_treeview/vsc_assets_icon"
-import { develop_locally } from "../../../../jamstackide/vsc/dev/develop_locally"
+import { vsc_assets_icon_uri } from "./vsc_assets_icon"
+// import { develop_locally } from "../../../../jamstackide/vsc/dev/develop_locally"
 import {
   TreeItem,
-  TreeItemMenu_create,
-} from "../../../../vscode/treeview/react2"
-import { vscode_ThemeIcon_memo as icon } from "../../../../vscode/vscode_ThemeIcon_memo"
+  TreeItem_Menu_create as TreeItemMenu_create,
+} from "lambdragon"
+import { vscode_ThemeIcon_memo as icon } from "src/x/vscode/vscode_ThemeIcon_memo"
 import {
   NetlifyAPIWrapper,
   NetlifySite,
@@ -33,7 +33,6 @@ import {
 } from "./menus"
 
 const { Collapsed, Expanded, None } = vscode.TreeItemCollapsibleState
-
 @observer
 export class NetlifyUI extends React.Component<{
   ctx: vscode.ExtensionContext
@@ -238,13 +237,13 @@ export class Site extends React.Component<{
   private develop_locally_cb = () => {
     const source = this.props.site.repo_url
     if (!source) return
-    develop_locally(
-      {
-        action: "FromNetlifyExplorer",
-        source,
-      },
-      this.props.ctx
-    )
+    // develop_locally(
+    //   {
+    //     action: "FromNetlifyExplorer",
+    //     source,
+    //   },
+    //   this.props.ctx
+    // )
   }
   private develop_locally__render() {
     const { site } = this.props
@@ -308,13 +307,13 @@ export class Site extends React.Component<{
     develop: async () => {
       const source = this.props.site.repo_url
       if (!source) return
-      develop_locally(
-        {
-          action: "FromNetlifyExplorer",
-          source,
-        },
-        this.props.ctx
-      )
+      // develop_locally(
+      //   {
+      //     action: "FromNetlifyExplorer",
+      //     source,
+      //   },
+      //   this.props.ctx
+      // )
     },
   })
 

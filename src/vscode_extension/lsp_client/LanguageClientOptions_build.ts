@@ -10,9 +10,10 @@ export function LanguageClientOptions_build(
   ctx: vscode.ExtensionContext
 ): LanguageClientOptions {
   const documentSelector = [
-    { scheme: "file", language: "toml", pattern: "netlify.toml" },
-    { scheme: "file", language: "netlifyredirects", pattern: "_redirects" },
-    { scheme: "file", language: "netlifyheaders", pattern: "_headers" },
+    // { scheme: "file", language: "toml", pattern: "netlify.toml" },
+    // { scheme: "file", language: "netlifyredirects", pattern: "_redirects" },
+    // { scheme: "file", language: "netlifyheaders", pattern: "_headers" },
+    { scheme: "file", pattern: "**/*" },
     // { scheme: "file", language: "prisma", pattern: "*.prisma" },
   ]
   // TODO: errors?

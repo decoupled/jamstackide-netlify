@@ -1,4 +1,5 @@
 import { lazy, memo } from "src/x/decorators"
+import { headers_file_parser22 } from "src/x/netlify/headers_file/headers_file_parser"
 import { Project } from "src/x/netlify/model/Project"
 import { URL_toFile } from "src/x/url/URL_fromFile"
 import { ExtendedDiagnostic_findRelevantQuickFixes } from "src/x/vscode-languageserver-types/lsp_extensions"
@@ -6,10 +7,12 @@ import { ExtendedDiagnostic_findRelevantQuickFixes } from "src/x/vscode-language
 // import { VSCodeWindowMethods_fromConnection } from "src/x/vscode"
 // import { Connection_suppressErrors } from "src/x/vscode-languageserver"
 import { TextDocument } from "vscode-languageserver-textdocument"
+import * as lsp from "vscode-languageserver-types"
 import { CodeAction } from "vscode-languageserver-types"
 import {
   createConnection,
   InitializeParams,
+  InitializeResult,
   ProposedFeatures,
   TextDocuments,
   TextDocumentSyncKind,
@@ -29,11 +32,13 @@ export class NetlifyLanguageServer {
     return c
   }
   @memo() start() {
+    process.title = "Netlify Language Server (node)"
     const { connection, documents } = this
     connection.onInitialize((params) => {
       connection.console.log(
         `Netlify Language Server onInitialize(), PID=${process.pid}`
       )
+      connection.console.log(JSON.stringify(params))
       this.initializeParams = params
       return {
         capabilities: {
@@ -44,17 +49,19 @@ export class NetlifyLanguageServer {
           // implementationProvider: true,
           // definitionProvider: true,
           // referencesProvider: true,
-          codeActionProvider: true,
+          // codeActionProvider: true,
           codeLensProvider: { resolveProvider: false },
           executeCommandProvider: this.commands.options,
+          documentSymbolProvider: { label: "Netlify", workDoneProgress: false },
+          workspaceSymbolProvider: { workDoneProgress: false },
           // documentLinkProvider: { resolveProvider: false },
-          // hoverProvider: true,
+          hoverProvider: true,
         },
-      }
+      } as InitializeResult
     })
 
     connection.onInitialized(async () => {
-      connection.console.log("Netlify Language Server onInitialized()")
+      connection.console.log("Netlify Language Server onInitialized() ALDOOO")
       const folders = await connection.workspace.getWorkspaceFolders()
       if (folders) {
         for (const folder of folders) {
@@ -89,7 +96,43 @@ export class NetlifyLanguageServer {
     })
 
     connection.onCodeLens(async ({ textDocument: { uri } }) => {
+      connection.console.log("codelens provider!" + uri)
       // return (await this.info(uri, "CodeLens")).map((i) => i.codeLens)
+      return []
+    })
+
+    connection.onDocumentSymbol(async (params, token) => {
+      if (params.textDocument.uri.includes("_headers")) {
+        const doc = this.documents.get(params.textDocument.uri)
+        const src = doc.getText()
+        try {
+          return headers_file_parser22(src).symbols
+        } catch (e) {
+          console.log(e)
+        }
+      }
+      return []
+    })
+    connection.onWorkspaceSymbol(async (params) => {
+      connection.console.log("providing workspace symbols!!!!")
+      return []
+    })
+
+    connection.onHover(async (p) => {
+      connection.console.log("hover" + p.textDocument.uri)
+      return null
+    })
+
+    connection.onRequest("xxx/decorations", async (uri: lsp.DocumentUri) => {
+      if (uri.endsWith("_headers")) {
+        const doc = this.documents.get(uri)
+        const src = doc.getText()
+        try {
+          return headers_file_parser22(src).decorations
+        } catch (e) {
+          console.log(e)
+        }
+      }
       return []
     })
 

@@ -1,15 +1,20 @@
 import { xmethods } from "src/language_server/xmethods"
 import { memo } from "src/x/decorators"
 import vscode from "vscode"
-import { LanguageClient, State } from "vscode-languageclient/node"
+import {
+  LanguageClient,
+  ServerOptions,
+  State,
+} from "vscode-languageclient/node"
 import { log } from "../log"
 import { LanguageClientOptions_build } from "./LanguageClientOptions_build"
-import { ServerOptions_build } from "./ServerOptions_build"
+import { NetlifyLSPClientBuffer } from "./NetlifyLSPClientBuffer"
 
 export class NetlifyLSPClient {
   constructor(
-    private pathToModule: string,
-    private ctx: vscode.ExtensionContext
+    private serverOptions: ServerOptions,
+    private ctx: vscode.ExtensionContext,
+    private buffer: NetlifyLSPClientBuffer
   ) {
     this.start()
   }
@@ -20,14 +25,15 @@ export class NetlifyLSPClient {
     log(msg)
     console.log(msg)
   }
+
   @memo()
   private async start() {
-    this.log(`NetlifyLSPClient(${this.pathToModule}).start()`)
+    this.log(`NetlifyLSPClient().start()`)
     // Create the language client and start the client.
     this.client = new LanguageClient(
       "netlify-language-server",
       "Netlify Language Server",
-      ServerOptions_build(this.pathToModule),
+      this.serverOptions,
       LanguageClientOptions_build(this.ctx)
     )
 
@@ -48,7 +54,8 @@ export class NetlifyLSPClient {
     // This will also launch the server
     this.client.start()
     await this.client.onReady()
-    this.log(`NetlifyLSPClient(${this.pathToModule}).client.onReady()`)
+    this.buffer.updateClient(this.client)
+    this.log(`NetlifyLSPClient().client.onReady()`)
     this.status = "running"
     // this.client.onRequest("xxx/showQuickPick", vscode.window.showQuickPick)
     // this.client.onRequest(
@@ -82,7 +89,7 @@ export class NetlifyLSPClient {
   // }
 
   async stop() {
-    this.log(`NetlifyLSPClient(${this.pathToModule}).stop()`)
+    this.log(`NetlifyLSPClient().stop()`)
     if (this.status !== "running") {
       return false
     }

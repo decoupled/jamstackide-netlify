@@ -1,9 +1,13 @@
-import vscode from "vscode"
 import { language_server_build_target } from "../../language_server/language_server"
 import { NetlifyLSPClient } from "./NetlifyLSPClient"
+import * as vscode from "vscode"
+import { NetlifyLSPClientBuffer } from "./NetlifyLSPClientBuffer"
 
 export class NetlifyLSPClientManager {
-  constructor(private ctx: vscode.ExtensionContext) {
+  constructor(
+    private ctx: vscode.ExtensionContext,
+    private buffer: NetlifyLSPClientBuffer
+  ) {
     language_server_build_target.onDevTimeChange(ctx, () => {
       this.restart()
     })
@@ -16,8 +20,9 @@ export class NetlifyLSPClientManager {
   }
   private create() {
     return new NetlifyLSPClient(
-      language_server_build_target.getPathInVSCodeExtensionFolder(this.ctx),
-      this.ctx
+      language_server_build_target.getServerOptions(this.ctx),
+      this.ctx,
+      this.buffer
     )
   }
 }

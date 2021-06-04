@@ -3,6 +3,8 @@ import * as lsp from "vscode-languageserver-types"
 import {
   DecorationData_make as dec,
   DecorationType,
+  DecorationData,
+  DecorationData_is,
 } from "../etc/DecorationData"
 
 // https://github.com/netlify/cli/blob/c9530e8d99f5be911b42d22b70925cd978dc6bc4/src/utils/headers.js
@@ -16,17 +18,32 @@ export function headers_file_parser(src: string) {
   return new HeadersFile(src).render_all
 }
 
+export function headers_file_parser22(src: string) {
+  return new HeadersFile(src)
+}
+
 export class HeadersFile {
   constructor(public src: string) {}
   @lazy() get lines() {
     return this.src.split("\n").map((l, i) => new Line(this, i, l))
   }
-  *render() {
+  @lazy() get paths(): Path[] {
+    return this.lines
+      .map((l) => l.content)
+      .filter((x): x is Path => x instanceof Path)
+  }
+  private *render() {
     for (const line of this.lines) yield* line.render()
     // if (line.content) for (const x of line.content.render()) yield x
   }
   @lazy() get render_all() {
     return Array.from(this.render())
+  }
+  @lazy() get symbols() {
+    return this.paths.map((x) => x.symbol)
+  }
+  @lazy() get decorations(): DecorationData[] {
+    return Array.from(this.render_all).filter(DecorationData_is)
   }
 }
 
@@ -36,7 +53,7 @@ export class Line {
     public lineNumber: number,
     public str: string
   ) {}
-  @lazy() get isComment() {
+  @lazy() get isComment(): boolean {
     return this.contentTextTrimmed.startsWith("#")
   }
   @lazy() get indent(): number | undefined {
@@ -58,12 +75,22 @@ export class Line {
       return { line, character }
     }
   }
+  @lazy() get range(): lsp.Range {
+    const { lineNumber: line } = this
+    return {
+      start: { line, character: 0 },
+      end: { line, character: this.str.length },
+    }
+  }
   @lazy() get content(): Header | Path | Comment | undefined {
     if (this.isComment) return new Comment(this)
     const id = this.indent
     if (typeof id !== "number") return undefined
     if (id === 0) return new Path(this)
     return new Header(this)
+  }
+  @lazy() get next(): Line | undefined {
+    return this.parent.lines[this.lineNumber + 1]
   }
 
   *render() {
@@ -95,20 +122,70 @@ export class Path {
   constructor(public parent: Line) {}
   *render() {
     yield {
-      contents: "this is a path " + this.parent.contentTextTrimmed,
+      contents: "this is a path " + this.pathAsText,
       range: this.parent.contentRange,
     } as lsp.Hover
     yield dec(DecorationType.headers__path, this.parent.contentRange!)
+  }
+  @lazy() get pathAsText() {
+    return this.parent.contentTextTrimmed
+  }
+  @lazy() get pathRange() {
+    return this.parent.contentRange!
+  }
+  @lazy() get fullRange(): lsp.Range {
+    const r1 = this.parent.range
+    const r2 = this.lastLine.range
+    return { start: r1.start, end: r2.end }
+  }
+  @lazy() get headers(): Header[] {
+    return this.__readAhead.headers
+  }
+  @lazy() private get __readAhead() {
+    const idx = this.parent.lineNumber
+    const lines = this.parent.parent.lines
+    const headers: Header[] = []
+    let nextPath: Path | undefined
+    let lastLineNumber = 0
+    for (let i = idx + 1; i < lines.length; i++) {
+      lastLineNumber = i
+      const c = lines[i].content
+      if (c instanceof Path) {
+        lastLineNumber = i - 1
+        nextPath = c
+        break
+      }
+      if (c instanceof Header) headers.push(c)
+    }
+    return { headers, nextPath, lastLineNumber }
+  }
+  @lazy() get lastLineNumber(): number {
+    return this.__readAhead.lastLineNumber
+  }
+  @lazy() get lastLine(): Line {
+    return this.parent.parent.lines[this.lastLineNumber]
+  }
+  @lazy() get nextPath(): Path | undefined {
+    return this.__readAhead.nextPath
+  }
+  @lazy() get symbol(): lsp.DocumentSymbol {
+    return {
+      kind: lsp.SymbolKind.Object,
+      name: this.pathAsText,
+      selectionRange: this.parent.contentRange!,
+      range: this.fullRange,
+      children: this.headers.map((x) => x.symbol),
+    }
   }
 }
 
 export class Header {
   constructor(public parent: Line) {}
   *render() {
-    yield {
-      contents: "this is a header " + this.parent.contentTextTrimmed,
-      range: this.parent.contentRange,
-    } as lsp.Hover
+    // yield {
+    //   contents: "this is a header " + this.parent.contentTextTrimmed,
+    //   range: this.parent.contentRange,
+    // } as lsp.Hover
     yield dec(DecorationType.headers__header_name, this.headerNameRange)
     if (this.indexOfColon !== -1) {
       const line = this.parent.lineNumber
@@ -152,6 +229,15 @@ export class Header {
   @lazy() get headerValue(): HeaderValue | undefined {
     return undefined
   }
+  @lazy() get symbol(): lsp.DocumentSymbol {
+    return {
+      kind: lsp.SymbolKind.Property,
+      name: this.headerNameTrimmedText,
+      range: this.parent.contentRange!,
+      selectionRange: this.headerNameRange,
+      detail: "= " + this.headerValueTrimmedText,
+    }
+  }
 }
 
 export class HeaderName {
@@ -182,8 +268,12 @@ const example = `
 
 {
   const hf = new HeadersFile(example)
+  console.log("aloha")
   const ss = hf.render_all
   console.log(ss)
+  console.log(hf.paths[0])
+  const hh = hf.paths[0].headers
+  console.log(hh)
 }
 
 function num_indent(line: string): number | undefined {

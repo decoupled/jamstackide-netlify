@@ -1,24 +1,18 @@
+import { Singleton } from "lambdragon"
 import express from "express"
-import { memo } from "src/x/decorators"
+import { lazy, memo } from "src/x/decorators"
 import { AddressInfo_cast_getPort_orThrow } from "src/x/net/AddressInfo"
 import { vscode_Uri_smartParse } from "src/x/vscode/vscode_Uri_smartParse"
 import vscode from "vscode"
 
-export function miniserver_init(ctx: vscode.ExtensionContext) {
-  if (MiniServer.instance) throw new Error("cannot init twice")
-  MiniServer.instance = new MiniServer()
-  MiniServer.instance.start()
-}
+const NETLIFY_VSCODE_RPC = "NETLIFY_VSCODE_RPC"
 
-export function miniserver_port(): string {
-  return MiniServer.instance.port() + ""
-}
-
-class MiniServer {
-  @memo() start() {
+export class MiniServer implements Singleton {
+  constructor() {
     this.server()
   }
-  @memo() server() {
+
+  @memo() private server() {
     const app = express()
     app.use(express.json())
     app.post("/rpc", async (req, res) => {
@@ -33,7 +27,7 @@ class MiniServer {
     return app.listen()
   }
 
-  async run(method: string, args: any[]) {
+  private async run(method: string, args: any[]) {
     if (method === "info") {
       ;(vscode.window.showInformationMessage as any)(...args)
     }
@@ -48,19 +42,19 @@ class MiniServer {
       vscode.window.showTextDocument(uri)
     }
     if (method === "withProgress") {
-      const ss = this.progressss.length
+      const ss = this._progress.length
       vscode.window.withProgress(
         { title: args[0], location: vscode.ProgressLocation.Notification },
         () =>
           new Promise<any>((resolve, reject) => {
-            this.progressss.push(resolve)
+            this._progress.push(resolve)
           })
       )
       return ss
     }
     if (method === "withProgress_end") {
-      this.progressss[args[0]]()
-      this.progressss[args[0]] = null
+      this._progress[args[0]]()
+      this._progress[args[0]] = null
     }
     if (method === "command") {
       const [cmd, ...rest] = args
@@ -68,10 +62,25 @@ class MiniServer {
     }
   }
 
-  progressss: any[] = []
+  private _progress: any[] = []
 
-  @memo() port(): number {
+  @lazy() get port(): number {
     return AddressInfo_cast_getPort_orThrow(this.server().address())
   }
-  static instance?: MiniServer
+  @lazy() get envForChildProcesses(): Record<string, any> {
+    return {
+      [NETLIFY_VSCODE_RPC]: this.port,
+    }
+  }
+  // static instance?: MiniServer
 }
+
+// export function miniserver_init() {
+//   if (MiniServer.instance) throw new Error("cannot init twice")
+//   MiniServer.instance = new MiniServer()
+//   MiniServer.instance.start()
+// }
+
+// export function miniserver_port(): string {
+//   return MiniServer.instance.port() + ""
+// }

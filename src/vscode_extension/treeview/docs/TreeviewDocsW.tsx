@@ -1,29 +1,33 @@
-import { TreeItem, TreeItem_render } from "lambdragon"
-import { memoize } from "lodash"
+import { Singleton, TreeItem, TreeItem_render } from "lambdragon"
 import React from "react"
+import { memo } from "src/x/decorators"
 import { vscode_ThemeIcon_memo as icon } from "src/x/vscode/vscode_ThemeIcon_memo"
 import vscode from "vscode"
 
 const treeview_docs_id = "netlify.treeview.docs"
 
-const treeview_docs_get = memoize((ctx: vscode.ExtensionContext) => {
-  const ll = links.map(([label, icn, url]) => (
-    <TreeItem
-      label={label}
-      iconPath={icon(icn)}
-      collapsibleState={vscode.TreeItemCollapsibleState.None}
-      select={() => {
-        if (typeof url === "string") {
-          vscode.env.openExternal(vscode.Uri.parse(url))
-        } else if (typeof url === "function") {
-          ;(url as any)()
-        }
-      }}
-    />
-  ))
-
-  return TreeItem_render(treeview_docs_id, <>{ll}</>)
-})
+export class TreeviewDocsW implements Singleton {
+  constructor() {
+    this.render()
+  }
+  @memo() render() {
+    const ll = links.map(([label, icn, url]) => (
+      <TreeItem
+        label={label}
+        iconPath={icon(icn)}
+        collapsibleState={vscode.TreeItemCollapsibleState.None}
+        select={() => {
+          if (typeof url === "string") {
+            vscode.env.openExternal(vscode.Uri.parse(url))
+          } else if (typeof url === "function") {
+            ;(url as any)()
+          }
+        }}
+      />
+    ))
+    return TreeItem_render(treeview_docs_id, <>{ll}</>)
+  }
+}
 
 const links = [
   ["Netlify.com", "question", "https://netlify.com"],
@@ -48,21 +52,6 @@ const links = [
   // ["Search Redwood Community...", "search", startSearch],
   // ["Summon David Price's Spirit", "smiley", "https://community.redwoodjs.com/"],
 ] as const
-
-async function startSearch() {
-  const res = await vscode.window.showInputBox({
-    prompt: "Search community.redwoodjs.com",
-  })
-  if (!res || res.length < 2) return
-  const url = `https://community.redwoodjs.com/search?q=${encodeURIComponent(
-    res
-  )}`
-  vscode.env.openExternal(vscode.Uri.parse(url))
-}
-
-export function treeview_docs_activate(ctx: vscode.ExtensionContext) {
-  treeview_docs_get(ctx)
-}
 
 export function treeview_docs_contributes() {
   const c1 = treeview_docs_contributes_()
