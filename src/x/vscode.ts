@@ -50,6 +50,7 @@ export type SerializableTreeItem = ReplacePropTypes<
     collapsibleState: TreeItemCollapsibleState2
     iconPath: ThemeIcon2
     command: Command
+    tooltip: string
   }
 > & {
   id: string
@@ -174,7 +175,7 @@ export class TreeItem2Wrapper {
 
 /**
  * https://microsoft.github.io/vscode-codicons/dist/codicon.html
- * plust a few extra icons provided by the redwood extension:
+ * plus a few extra icons provided by the netlify extension:
  * - redwood
  * - prisma
  * - graphql

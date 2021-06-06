@@ -59,10 +59,6 @@ export function treeview_docs_contributes() {
   // return merge(c1, DevServerUI_contributes(), menus_contributes())
 }
 
-{
-  treeview_docs_contributes()
-}
-
 function treeview_docs_contributes_() {
   return {
     contributes: {

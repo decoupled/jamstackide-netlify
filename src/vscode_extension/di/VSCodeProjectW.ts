@@ -5,6 +5,7 @@ import { CreateFunctionCommand } from "../commands/CreateFunctionCommand"
 import { NetlifyLSPClientManager } from "../lsp_client/NetlifyLSPClientManager"
 import { TextEditorDecorations } from "../TextEditorDecorations"
 import { TreeviewDocsW } from "../treeview/docs/TreeviewDocsW"
+import { TreeviewOutlineW } from "../treeview/outline/TreeviewOutlineW"
 
 export class VSCodeProjectW {
   constructor(
@@ -16,6 +17,7 @@ export class VSCodeProjectW {
     _l: NetlifyLSPClientManager,
     _t: TreeviewDocsW,
     _x: TextEditorDecorations,
-    _rt: ReactTreeviewW
+    _rt: ReactTreeviewW,
+    _rr: TreeviewOutlineW
   ) {}
 }

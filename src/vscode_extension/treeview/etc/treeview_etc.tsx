@@ -1,7 +1,6 @@
 import { TreeItem, TreeItem_render } from "lambdragon"
 import { memoize } from "lodash"
 import React from "react"
-import { vscode_ThemeIcon_memo as icon } from "src/x/vscode/vscode_ThemeIcon_memo"
 import vscode from "vscode"
 
 const treeview_etc_id = "netlify.treeview.etc"

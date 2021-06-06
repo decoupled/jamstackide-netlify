@@ -1,6 +1,6 @@
 import {
   TreeItem,
-  TreeItem_Menu_create as TreeItemMenu_create
+  TreeItem_Menu_create as TreeItemMenu_create,
 } from "lambdragon"
 import { LazyGetter as lazy } from "lazy-get-decorator"
 import { Memoize as memo } from "lodash-decorators"
@@ -15,7 +15,7 @@ import {
   NetlifySiteDeploy,
   NetlifySiteForm,
   NetlifySiteSnippet,
-  PaymentMethod
+  PaymentMethod,
 } from "../../../api/netlify_api"
 import { netlify_vsc_oauth_manager } from "../../netlify_vsc_oauth_manager"
 import { LinkUI } from "./LinkUI"
@@ -27,7 +27,7 @@ import {
   menu_def_logged_in,
   menu_def_site,
   menu_def_sites,
-  menu_def_snippet
+  menu_def_snippet,
 } from "./menus"
 import { vsc_assets_icon_uri } from "./vsc_assets_icon"
 

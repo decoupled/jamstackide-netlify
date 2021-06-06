@@ -3,15 +3,16 @@ import { vscode_ThemeIcon_memo } from "src/x/vscode/vscode_ThemeIcon_memo"
 import vscode from "vscode"
 import { LanguageClient } from "vscode-languageclient/node"
 import { log } from "../../log"
-import { contextValue, redwoodjs_treeview_id } from "./consts"
+import { contextValue } from "./consts"
 import { icon_uri } from "./icon_uri"
 import { register_commands } from "./register_commands"
+import { treeview_outline_id } from "./treeview_outline_id"
+import { treeview_outline_method_prefix } from "./treeview_outline_method_prefix"
 
-export function treeview_outline_setup(opts: {
-  ctx: vscode.ExtensionContext
-  client: LanguageClient
-}) {
-  const { client, ctx } = opts
+export function treeview_outline_setup(
+  ctx: vscode.ExtensionContext,
+  client: Pick<LanguageClient, "onRequest" | "sendRequest">
+) {
   register_commands((id, commandShortName) => {
     // client.sendRequest("redwoodjs/x-outline-callMethod", [id, method])
     const cmd = treeItemCache[id]?.menu?.[commandShortName]
@@ -21,27 +22,27 @@ export function treeview_outline_setup(opts: {
     }
   })
   const treeItemCache: any = {}
-  vscode.window.createTreeView(redwoodjs_treeview_id, {
+  vscode.window.createTreeView(treeview_outline_id, {
     treeDataProvider: {
       async getChildren(id: string | undefined): Promise<string[]> {
         try {
           const res = await client.sendRequest(
-            "redwoodjs/x-outline-getChildren",
+            treeview_outline_method_prefix + "getChildren",
             id
           )
           return res as any
         } catch (e) {
-          log("redwoodjs/x-outline-getChildren error: " + e)
+          log(treeview_outline_method_prefix + "getChildren error: " + e)
           return []
         }
       },
       async getTreeItem(id) {
         const item: any = await client.sendRequest(
-          "redwoodjs/x-outline-getTreeItem",
+          treeview_outline_method_prefix + "getTreeItem",
           id
         )
         // eslint-disable-next-line prefer-const
-        let { iconPath, resourceUri, command, ...rest } = item
+        let { iconPath, resourceUri, command, tooltip, ...rest } = item
         if (typeof iconPath === "string") {
           if (iconPath.includes("://")) {
             iconPath = vscode.Uri.file(iconPath)
@@ -61,7 +62,13 @@ export function treeview_outline_setup(opts: {
         if (command) {
           command = processCommand(command)
         }
-        const item2 = { ...rest, iconPath, resourceUri, command }
+        if (typeof tooltip === "string") {
+          const mdstr = new vscode.MarkdownString(tooltip, true)
+          mdstr.isTrusted = true
+          tooltip = mdstr
+        }
+
+        const item2 = { ...rest, iconPath, resourceUri, command, tooltip }
         if (item2.menu) {
           item2.contextValue = contextValue(item2.menu.kind)
         }
@@ -69,11 +76,14 @@ export function treeview_outline_setup(opts: {
         return item2
       },
       onDidChangeTreeData(listener) {
-        client.onRequest("redwoodjs/x-outline-onDidChangeTreeData", (id) => {
-          listener(id)
-        })
+        client.onRequest(
+          treeview_outline_method_prefix + "onDidChangeTreeData",
+          (id) => {
+            listener(id)
+          }
+        )
         // and just in case, refresh everything every 5s
-        setInterval(listener, 5000) //
+        // setInterval(listener, 5000) //
         return null as any
       },
     },

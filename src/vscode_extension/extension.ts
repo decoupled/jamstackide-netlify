@@ -12,6 +12,7 @@ import { NetlifyCLIPath_createDevTime } from "./NetlifyCLIPath"
 import icon from "./static/netlify_logomark.svg"
 import { treeview_docs_contributes } from "./treeview/docs/TreeviewDocsW"
 import { treeview_etc_contributes } from "./treeview/etc/treeview_etc"
+import { treeview_outline_contributes } from "./treeview/outline/consts"
 
 /**
  * we'll publish under a codename for now
@@ -56,6 +57,10 @@ function main() {
   }
 }
 
+{
+  treeview_outline_contributes()
+}
+
 function contributes() {
   return merge([
     // commands_contributes().contributes,
@@ -63,7 +68,8 @@ function contributes() {
     commands_create_function_contributes().contributes,
     treeview_docs_contributes().contributes,
     netlify_vsc_treeview_react_contributes().contributes,
-    // treeview_etc_contributes().contributes,
+    treeview_outline_contributes().contributes,
+    treeview_etc_contributes().contributes,
     {
       viewsContainers: {
         activitybar: [

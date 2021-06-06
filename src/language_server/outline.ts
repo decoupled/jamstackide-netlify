@@ -1,10 +1,10 @@
-import { OutlineInfoResolver } from "src/structure/model/types"
+import { treeview_outline_method_prefix } from "src/vscode_extension/treeview/outline/treeview_outline_method_prefix"
 import { memo } from "src/x/decorators"
 import {
   RemoteTreeDataProviderImpl,
   RemoteTreeDataProvider_publishOverLSPConnection,
+  TreeItem2,
 } from "src/x/vscode"
-
 import { NetlifyLanguageServer } from "./NetlifyLanguageServer"
 
 export class OutlineManager {
@@ -12,23 +12,31 @@ export class OutlineManager {
 
   @memo() start() {
     const getRoot = async () => {
-      const p = this.server.getProject()
-      if (!p)
-        return {
-          async children() {
-            return [{ label: "No Netlify project found..." }]
-          },
-        }
-      const oif = new OutlineInfoResolver(p)
-      return await oif.treeItem()
+      return {
+        async children() {
+          return [
+            {
+              label: "No Netlify project found :)",
+              iconPath: "account",
+              tooltip: `
+                tooltip!!! **boldy boldy**
+                ![img](https://github.com/auchenberg/vscode-browser-preview/blob/master/resources/icon_128.png?raw=true)
+                `.trim(),
+              children() {
+                return [{ label: "hehehe", key: "aaa" }]
+              },
+            },
+          ]
+        },
+      } as TreeItem2
     }
 
-    const tdp = new RemoteTreeDataProviderImpl(getRoot, 10000)
-    const methodPrefix = "netlify/x-outline-"
+    const tdp = new RemoteTreeDataProviderImpl(getRoot, 3000)
+
     RemoteTreeDataProvider_publishOverLSPConnection(
       tdp,
       this.server.connection,
-      methodPrefix
+      treeview_outline_method_prefix
     )
   }
 }

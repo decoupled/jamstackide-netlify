@@ -1,16 +1,10 @@
 import { mapValues, values } from "lodash"
 
-import { redwoodjs_vsc_enabled } from "../../redwoodjs_vsc_enabled"
-
 import { icon_rel_path } from "./icon_rel_path"
-
-export const redwoodjs_treeview_id = "redwoodjs.treeview"
-export const redwoodjs_treeview_data_id = "redwoodjs.treeview.data"
-export const redwoodjs_treeview_docs_id = "redwoodjs.treeview.docs"
-export const redwoodjs_treeview_logs_id = "redwoodjs.treeview.logs"
+import { treeview_outline_id } from "./treeview_outline_id"
 
 export function contextValue(str: string): string {
-  return `${redwoodjs_treeview_id}.contextValue.${str}`
+  return `${treeview_outline_id}.contextValue.${str}`
 }
 
 export const commands = addCommandPropertyFromKey(
@@ -66,7 +60,7 @@ export const commands = addCommandPropertyFromKey(
       title: "rw db up",
     },
   },
-  `${redwoodjs_treeview_id}.commands.`
+  `${treeview_outline_id}.commands.`
 )
 
 export type Command = keyof typeof commands
@@ -92,8 +86,8 @@ export const itemTypes: {
 
 export type NodeType = keyof typeof itemTypes
 
-export function lsp_treeview_contributes() {
-  const isThisView = `view == ${redwoodjs_treeview_id}`
+export function treeview_outline_contributes() {
+  const isThisView = `view == ${treeview_outline_id}`
   return {
     contributes: {
       commands: [...values(commands)],
@@ -108,20 +102,11 @@ export function lsp_treeview_contributes() {
         "view/item/context": [...addMenus2()],
       },
       views: {
-        redwood: [
+        netlify: [
           {
-            id: redwoodjs_treeview_id,
-            name: "Project Outline",
-            when: redwoodjs_vsc_enabled,
-          },
-        ],
-      },
-      viewsContainers: {
-        activitybar: [
-          {
-            id: "redwood",
-            title: "Redwood.js",
-            icon: "assets/icons2/redwood.svg",
+            id: treeview_outline_id,
+            name: "LSP Treeview",
+            // when: treeview_outline_id,
           },
         ],
       },
