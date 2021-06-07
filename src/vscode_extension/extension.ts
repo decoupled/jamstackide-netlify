@@ -4,7 +4,7 @@ import { language_server_build_target } from "src/language_server/language_serve
 // import { netlify_toml_validator_vsc } from "src/x/toml/netlify_toml_validator_vsc"
 import vscode from "vscode"
 import merge from "webpack-merge"
-import { netlify_vsc_treeview_react_contributes } from "x/netlify/vsc/treeview/react/netlify_vsc_treeview_react_contributes"
+import { netlify_vsc_treeview_react_contributes } from "x/netlify/vsc/treeview/react/contributes"
 import { commands_create_function_contributes } from "./commands/CreateFunctionCommand"
 import { autowire } from "./di/autowire"
 import { VSCodeProjectW } from "./di/VSCodeProjectW"

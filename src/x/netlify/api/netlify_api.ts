@@ -1,8 +1,7 @@
-import { lazy } from "x/decorators"
-import { memo } from "x/decorators"
 import moment from "moment"
 import NetlifyAPI from "netlify"
-import { NetlifyApi2 } from "../api2/netlify_api2"
+import { lazy, memo } from "x/decorators"
+import { netlify_vsc_oauth_manager } from "../vsc/netlify_vsc_oauth_manager"
 import {
   R_getCurrentUser,
   R_getSite,
@@ -18,9 +17,7 @@ export class NetlifyAPIWrapper {
   @lazy() get client() {
     return new NetlifyAPI(this.key)
   }
-  @lazy() get client2() {
-    return new NetlifyApi2(this.key)
-  }
+
   @memo() async sites() {
     const x: any[] = await this.client.listSites()
     if (!x) return []
@@ -36,6 +33,20 @@ export class NetlifyAPIWrapper {
   }
   @memo() async site_by_repo_url(repo_url: string) {
     return (await this.sites()).find((s) => s.repo_url === repo_url)
+  }
+
+  async env_get(site_id: string): Promise<Record<string, string>> {
+    const s = await this.client.getSite({ site_id })
+    return s?.build_settings?.env ?? {}
+  }
+  async env_set(
+    site_id: string,
+    env: Record<string, string> | undefined
+  ): Promise<void> {
+    await this.client.updateSite({
+      site_id,
+      body: { build_settings: { env: env ?? {} } },
+    })
   }
 }
 

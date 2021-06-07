@@ -11,6 +11,7 @@ import { TextEditorDecorations } from "../TextEditorDecorations"
 import { TextEditorDecorationsProvider } from "../TextEditorDecorationsProvider"
 import { TextEditorDecorationsProviderFromLSPClient } from "../TextEditorDecorationsProviderFromLSPClient"
 import { ReactTreeviewW } from "../../x/netlify/vsc/treeview/react/ReactTreeviewW"
+import { NetlifyTokenManager } from "../../x/netlify/vsc/netlify_vsc_oauth_manager"
 import { TreeviewOutlineW } from "../treeview/outline/TreeviewOutlineW"
 
 interface __ResolutionContext {
@@ -109,8 +110,12 @@ const __create_TextEditorDecorations = __memo__(
     ),
   false
 )
+const __create_NetlifyTokenManager = __memo__(
+  (ctx) => new NetlifyTokenManager(ctx.params[0]),
+  true
+)
 const __create_ReactTreeviewW = __memo__(
-  (ctx) => new ReactTreeviewW(ctx.params[0]),
+  (ctx) => new ReactTreeviewW(ctx.params[0], __create_NetlifyTokenManager(ctx)),
   false
 )
 const __create_TreeviewOutlineW = __memo__(

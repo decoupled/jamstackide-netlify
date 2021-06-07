@@ -5,8 +5,6 @@ import { netlify_vsc_command_deploy_activate } from "./netlify_vsc_command_deplo
 import { netlify_vsc_oauth } from "./netlify_vsc_oauth"
 import { netlify_vsc_oauth_manager } from "./netlify_vsc_oauth_manager"
 import { netlify_vsc_pjson } from "./netlify_vsc_pjson"
-//import { netlify_vsc_treeview_activate } from "./treeview/netlify_vsc_treeview"
-import { netlify_vsc_treeview_react_activate } from "./treeview/react/netlify_vsc_treeview_react_activate"
 import { netlify_vsc_filesystemprovider } from "./netlify_vsc_filesystemprovider"
 import { netlify_vsc_statusbar } from "./netlify_vsc_statusbar"
 
@@ -19,7 +17,7 @@ export function netlify_vsc(ctx: vscode.ExtensionContext) {
   //netlify_vsc_treeview_activate(ctx)
   netlify_vsc_oauth(ctx)
   netlify_vsc_command_deploy_activate(ctx)
-  netlify_vsc_treeview_react_activate(ctx)
+
   // develop_locally_command_activate(ctx)
   netlify_vsc_filesystemprovider(ctx)
   netlify_vsc_statusbar(ctx)

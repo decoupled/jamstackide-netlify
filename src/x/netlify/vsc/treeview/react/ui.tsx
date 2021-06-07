@@ -2,13 +2,12 @@ import {
   TreeItem,
   TreeItem_Menu_create as TreeItemMenu_create,
 } from "lambdragon"
-import { LazyGetter as lazy } from "lazy-get-decorator"
-import { Memoize as memo } from "lodash-decorators"
-import { computed, observable } from "mobx"
+import { observable } from "mobx"
 import { observer } from "mobx-react"
 import React from "react"
 import { vscode_ThemeIcon_memo as icon } from "src/x/vscode/vscode_ThemeIcon_memo"
 import vscode from "vscode"
+import { lazy, memo } from "x/decorators"
 import {
   NetlifyAPIWrapper,
   NetlifySite,
@@ -17,7 +16,6 @@ import {
   NetlifySiteSnippet,
   PaymentMethod,
 } from "../../../api/netlify_api"
-import { netlify_vsc_oauth_manager } from "../../netlify_vsc_oauth_manager"
 import { LinkUI } from "./LinkUI"
 import {
   menu_def_add,
@@ -29,51 +27,42 @@ import {
   menu_def_sites,
   menu_def_snippet,
 } from "./menus"
-import { vsc_assets_icon_uri } from "./vsc_assets_icon"
-
-// lambdragon doesn't support top-level destructuring (yet)
-// once we fix that, we can write this in a nicer way
-const Expanded = vscode.TreeItemCollapsibleState.Expanded
-const Collapsed = vscode.TreeItemCollapsibleState.Collapsed
-const None = vscode.TreeItemCollapsibleState.None
 
 @observer
-export class NetlifyUI extends React.Component<{
-  ctx: vscode.ExtensionContext
+export class Root extends React.Component<{
+  getAPI: () => NetlifyAPIWrapper | undefined
+  login: () => void
+  logout: () => void
+  netlifyIconPath: vscode.Uri
 }> {
   render() {
     return (
       <TreeItem
         label="netlify accounts"
-        collapsibleState={Expanded}
-        iconPath={vsc_assets_icon_uri("netlify", this.props.ctx)}
+        collapsibleState={vscode.TreeItemCollapsibleState.Expanded}
+        iconPath={this.props.netlifyIconPath}
       >
-        <NetlifyAccountsUI ctx={this.props.ctx} />
+        <Accounts {...this.props} />
       </TreeItem>
     )
   }
 }
 
 @observer
-export class NetlifyAccountsUI extends React.Component<{
-  ctx: vscode.ExtensionContext
+export class Accounts extends React.Component<{
+  getAPI: () => NetlifyAPIWrapper | undefined
+  login: () => void
+  logout: () => void
+  netlifyIconPath: vscode.Uri
 }> {
-  @computed get token() {
-    return netlify_vsc_oauth_manager(this.props.ctx).token
-  }
-  @computed get api() {
-    if (!this.token) return undefined
-    return new NetlifyAPIWrapper(this.token)
-  }
-  private do_login = () => netlify_vsc_oauth_manager(this.props.ctx).login()
   render__logged_out() {
     return (
       <TreeItem
         key="xx"
         label="click here to add account..."
         iconPath={icon("add")}
-        select={this.do_login}
-        collapsibleState={None}
+        select={this.props.login}
+        collapsibleState={vscode.TreeItemCollapsibleState.None}
       />
     )
   }
@@ -83,28 +72,23 @@ export class NetlifyAccountsUI extends React.Component<{
       <TreeItem
         key="xx"
         label="authenticating with netlify..."
-        iconPath={vsc_assets_icon_uri("netlify", this.props.ctx)}
-        collapsibleState={None}
+        iconPath={this.props.netlifyIconPath}
+        collapsibleState={vscode.TreeItemCollapsibleState.None}
       />
     )
   }
 
   render() {
-    if (this.api)
-      return (
-        <NetlifyAccountTreeItem_LoggedIn api={this.api} ctx={this.props.ctx} />
-      )
-    // if (netlify_vsc_oauth_manager(this.props.ctx).authenticating) {
-    //   return this.render__authenticating()
-    // }
+    const api = this.props.getAPI()
+    if (api) return <Account api={api} logout={this.props.logout} />
     return this.render__logged_out()
   }
 }
 
 @observer
-export class NetlifyAccountTreeItem_LoggedIn extends React.Component<{
+export class Account extends React.Component<{
   api: NetlifyAPIWrapper
-  ctx: vscode.ExtensionContext
+  logout: () => void
 }> {
   @observable label: string | undefined
   async componentDidMount() {
@@ -112,12 +96,8 @@ export class NetlifyAccountTreeItem_LoggedIn extends React.Component<{
     this.label = `${u.slug} (${u.full_name})`
   }
   private menu_logged_in = TreeItemMenu_create(menu_def_logged_in, {
-    logout: () => {
-      netlify_vsc_oauth_manager(this.props.ctx).logout()
-    },
-    logout2: () => {
-      netlify_vsc_oauth_manager(this.props.ctx).logout()
-    },
+    logout: this.props.logout,
+    logout2: this.props.logout,
   })
   render() {
     return (
@@ -125,9 +105,9 @@ export class NetlifyAccountTreeItem_LoggedIn extends React.Component<{
         label={this.label ?? "fetching account details..."}
         iconPath={icon("account")}
         menu={this.menu_logged_in}
-        collapsibleState={Expanded}
+        collapsibleState={vscode.TreeItemCollapsibleState.Expanded}
       >
-        <Sites api={this.props.api} ctx={this.props.ctx} />
+        <Sites api={this.props.api} />
         <AccountSettings api={this.props.api} />
       </TreeItem>
     )
@@ -143,16 +123,16 @@ export class AccountSettings extends React.Component<{
       <TreeItem
         label="account settings"
         iconPath={icon("account")}
-        collapsibleState={Collapsed}
+        collapsibleState={vscode.TreeItemCollapsibleState.Collapsed}
       >
-        <AccountSettings_PaymentMethodsUI api={this.props.api} />
+        <AccountSettings_PaymentMethods api={this.props.api} />
       </TreeItem>
     )
   }
 }
 
 @observer
-export class AccountSettings_PaymentMethodsUI extends React.Component<{
+export class AccountSettings_PaymentMethods extends React.Component<{
   api: NetlifyAPIWrapper
 }> {
   @observable data: PaymentMethod[] = []
@@ -165,7 +145,7 @@ export class AccountSettings_PaymentMethodsUI extends React.Component<{
         {() => {
           this.fetch()
           return this.data.map((s, i) => (
-            <AccountSettings_PaymentMethods_MethodUI key={i} data={s} />
+            <AccountSettings_PaymentMethods_Method key={i} data={s} />
           ))
         }}
       </TreeItem>
@@ -174,7 +154,7 @@ export class AccountSettings_PaymentMethodsUI extends React.Component<{
 }
 
 @observer
-export class AccountSettings_PaymentMethods_MethodUI extends React.Component<{
+export class AccountSettings_PaymentMethods_Method extends React.Component<{
   data: PaymentMethod
 }> {
   private menu_edit = TreeItemMenu_create(menu_def_edit, {
@@ -193,7 +173,7 @@ export class AccountSettings_PaymentMethods_MethodUI extends React.Component<{
         label={this.props.data.treeview_label}
         iconPath={icon("credit-card")}
         menu={this.menu_edit}
-        collapsibleState={None}
+        collapsibleState={vscode.TreeItemCollapsibleState.None}
       />
     )
   }
@@ -202,7 +182,6 @@ export class AccountSettings_PaymentMethods_MethodUI extends React.Component<{
 @observer
 export class Sites extends React.Component<{
   api: NetlifyAPIWrapper
-  ctx: vscode.ExtensionContext
 }> {
   @observable data: NetlifySite[] = []
   @memo() async fetch() {
@@ -221,9 +200,7 @@ export class Sites extends React.Component<{
       <TreeItem label="sites" iconPath={icon("browser")} menu={this.menu}>
         {() => {
           this.fetch()
-          return this.data.map((s) => (
-            <Site site={s} key={s.id} ctx={this.props.ctx} />
-          ))
+          return this.data.map((s) => <Site site={s} key={s.id} />)
         }}
       </TreeItem>
     )
@@ -233,7 +210,6 @@ export class Sites extends React.Component<{
 @observer
 export class Site extends React.Component<{
   site: NetlifySite
-  ctx: vscode.ExtensionContext
 }> {
   private addDomain = () => {
     vscode.window.showInformationMessage("add domain??")
@@ -258,7 +234,7 @@ export class Site extends React.Component<{
         description="clone and develop site locally"
         tooltip="clone repo and use Netlify Dev"
         iconPath={icon("remote-explorer")}
-        collapsibleState={None}
+        collapsibleState={vscode.TreeItemCollapsibleState.None}
         select={this.develop_locally_cb}
       />
     )
@@ -358,30 +334,30 @@ export class Site extends React.Component<{
                   iconPath={icon("globe")}
                   tooltip="register a new domain for this site"
                   select={this.addDomain}
-                  collapsibleState={None}
+                  collapsibleState={vscode.TreeItemCollapsibleState.None}
                 />
               )}
               <SiteForms site={site} />
               <TreeItem
                 label="analytics"
                 iconPath={icon("graph")}
-                collapsibleState={None}
+                collapsibleState={vscode.TreeItemCollapsibleState.None}
               />
               <TreeItem
                 label="large media"
                 iconPath={icon("file-media")}
-                collapsibleState={None}
+                collapsibleState={vscode.TreeItemCollapsibleState.None}
               />
               <TreeItem
                 label="identity"
                 iconPath={icon("person")}
-                collapsibleState={None}
+                collapsibleState={vscode.TreeItemCollapsibleState.None}
               />
               <TreeItem
                 label="build.env"
                 description="environment variables (build)"
                 iconPath={icon("symbol-namespace")}
-                collapsibleState={None}
+                collapsibleState={vscode.TreeItemCollapsibleState.None}
                 //resourceUri={this.envVarsUri}
                 select={this.onEnvVarClick}
               />
@@ -499,7 +475,7 @@ export class SiteSnippet extends React.Component<{ data: NetlifySiteSnippet }> {
         tooltip={f.treeview_tooltip}
         // iconPath={icon("code")}
         select={this.onSelect}
-        collapsibleState={None}
+        collapsibleState={vscode.TreeItemCollapsibleState.None}
         menu={this.snippet__menu}
         resourceUri={this.contentUri}
       />
@@ -520,12 +496,12 @@ export class SiteForm extends React.Component<{ data: NetlifySiteForm }> {
         <TreeItem
           label="download as json"
           iconPath={icon("desktop-download")}
-          collapsibleState={None}
+          collapsibleState={vscode.TreeItemCollapsibleState.None}
         ></TreeItem>
         <TreeItem
           label="download as csv"
           iconPath={icon("desktop-download")}
-          collapsibleState={None}
+          collapsibleState={vscode.TreeItemCollapsibleState.None}
         ></TreeItem>
         {/* <TreeItem label="submissions..."></TreeItem> */}
       </TreeItem>
@@ -616,7 +592,7 @@ export class SiteDeployUI extends React.Component<{ data: NetlifySiteDeploy }> {
         iconPath={this.iconPath}
         description={d.treeview_description}
         tooltip={d.treeview_tooltip}
-        collapsibleState={Collapsed}
+        collapsibleState={vscode.TreeItemCollapsibleState.Collapsed}
         menu={d.state2 === "published" ? this.menu_published : this.menu}
       >
         <LinkUI label="open preview" url={d.ssl_url__or__url} />
@@ -629,12 +605,12 @@ export class SiteDeployUI extends React.Component<{ data: NetlifySiteDeploy }> {
         <TreeItem
           label={"state: " + d.state}
           iconPath={icon("circle-outline")}
-          collapsibleState={None}
+          collapsibleState={vscode.TreeItemCollapsibleState.None}
         />
         <TreeItem
           label="summary"
           iconPath={icon("checklist")}
-          collapsibleState={Collapsed}
+          collapsibleState={vscode.TreeItemCollapsibleState.Collapsed}
         >
           {msgs.map((m, i) => {
             return (
@@ -642,7 +618,7 @@ export class SiteDeployUI extends React.Component<{ data: NetlifySiteDeploy }> {
                 key={i}
                 label={m.title}
                 tooltip={`${m.description}\n${m.details}`}
-                collapsibleState={None}
+                collapsibleState={vscode.TreeItemCollapsibleState.None}
               />
             )
           })}

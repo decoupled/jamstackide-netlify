@@ -5,7 +5,11 @@ This README will be displayed in the Visual Studio Marketplace
 - `> Netlify: Create Function...`
   - Creates a function :)
 
+# Magic Links
+
 # `netlify.toml` file support
+
+The Netlify VSCode extension depends on Better TOML
 
 | feature           | status | notes                   |
 | ----------------- | ------ | ----------------------- |

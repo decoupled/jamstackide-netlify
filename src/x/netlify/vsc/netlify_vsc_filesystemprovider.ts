@@ -1,3 +1,4 @@
+import { Singleton } from "lambdragon"
 import { toPairs } from "lodash"
 import { basename } from "path"
 import vscode from "vscode"
@@ -5,6 +6,13 @@ import { NetlifyAPIWrapper } from "../api/netlify_api"
 import { netlify_vsc_oauth_manager } from "./netlify_vsc_oauth_manager"
 
 const scheme = "netlify-api"
+
+export class NetlifyVSCodeFileSystemProviderW implements Singleton {
+  constructor(ctx: vscode.ExtensionContext) {
+    netlify_vsc_filesystemprovider(ctx)
+  }
+  scheme = scheme
+}
 
 /**
  *
@@ -17,25 +25,6 @@ export async function netlify_vsc_filesystemprovider(
     scheme,
     new NetlifyFileSystemProvider(ctx)
   )
-}
-
-type UriData =
-  | { type: "env"; site_id: string }
-  | { type: "snippet"; site_id: string; snippet_id: string }
-
-function parseuri(uri: vscode.Uri): UriData | undefined {
-  if (uri.scheme !== scheme) return undefined
-  const parts = uri.path.split("/")
-  parts.shift() // should be an empty string
-  if (parts[0] === "snippets") {
-    const [__, site_id, snippet_id, basename] = parts
-    return { type: "snippet", snippet_id, site_id }
-  }
-  if (parts[0] === "env") {
-    // env/789789siteid78978979/.env
-    const [__, site_id, basename] = parts
-    return { type: "env", site_id }
-  }
 }
 
 class NetlifyFileSystemProvider implements vscode.FileSystemProvider {
@@ -75,7 +64,7 @@ class NetlifyFileSystemProvider implements vscode.FileSystemProvider {
     }
     if (parsed?.type === "env") {
       const { site_id } = parsed
-      const env = await this.getNetlifyApiOrThrow().client2.env_get(site_id)
+      const env = await this.getNetlifyApiOrThrow().env_get(site_id)
       const txt = toPairs(env)
         .map((kv) => kv.join("="))
         .join("\n")
@@ -202,5 +191,24 @@ class NetlifyFileSystemProvider implements vscode.FileSystemProvider {
     options: { overwrite: boolean }
   ): void | Thenable<void> {
     throw new Error("Method not implemented.")
+  }
+}
+
+type UriData =
+  | { type: "env"; site_id: string }
+  | { type: "snippet"; site_id: string; snippet_id: string }
+
+function parseuri(uri: vscode.Uri): UriData | undefined {
+  if (uri.scheme !== scheme) return undefined
+  const parts = uri.path.split("/")
+  parts.shift() // should be an empty string
+  if (parts[0] === "snippets") {
+    const [__, site_id, snippet_id, basename] = parts
+    return { type: "snippet", snippet_id, site_id }
+  }
+  if (parts[0] === "env") {
+    // env/789789siteid78978979/.env
+    const [__, site_id, basename] = parts
+    return { type: "env", site_id }
   }
 }

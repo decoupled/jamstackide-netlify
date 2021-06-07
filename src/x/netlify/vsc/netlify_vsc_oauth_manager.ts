@@ -6,6 +6,7 @@ import vscode from "vscode"
 import { NetlifyGlobalConfig } from "../NetlifyGlobalConfig"
 import { netlify_oauth_config_netlifyvscode } from "../oauth/config/netlify_oauth_config_netlifyvscode"
 import { netlify_oauth_get_token } from "../oauth/netlify_oauth_get_token"
+import { Singleton } from "lambdragon"
 
 const KEY = "NETLIFY_API_TOKEN_KEY"
 
@@ -15,7 +16,7 @@ export const netlify_vsc_oauth_manager = memoize(
   }
 )
 
-class NetlifyTokenManager {
+export class NetlifyTokenManager implements Singleton {
   constructor(public ctx: vscode.ExtensionContext) {}
   // @observable private _authenticating = false
   // get authenticating() {

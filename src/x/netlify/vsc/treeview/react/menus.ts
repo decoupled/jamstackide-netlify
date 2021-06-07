@@ -1,7 +1,7 @@
 import merge from "webpack-merge"
 import { TreeItem_Menu_def as def, TreeItem_Menu_to_json } from "lambdragon"
 
-const base = "jamstack.netlify.treeview.menus"
+const base = "netlify.treeview.menus"
 
 export const menu_def_authenticating = def({
   id: base + ".menu_def_authenticating",

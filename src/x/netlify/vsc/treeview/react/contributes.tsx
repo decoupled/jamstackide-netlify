@@ -1,4 +1,4 @@
-import { netlify_vsc_treeview_react_id } from "./netlify_vsc_treeview_react_id"
+import { netlify_vsc_treeview_react_id } from "./treeview_id"
 import merge from "webpack-merge"
 import { menus_contributes } from "./menus"
 
@@ -9,7 +9,7 @@ export function netlify_vsc_treeview_react_contributes() {
         netlify: [
           {
             id: netlify_vsc_treeview_react_id,
-            name: "Netlify",
+            name: "Accounts",
             // when: netlify_vsc_treeview_context_netlifyEnable,
           },
         ],
