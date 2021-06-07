@@ -5,7 +5,7 @@ import { NetlifyAPIWrapper } from "x/netlify/api/netlify_api"
 import { NetlifyTokenManager } from "../../netlify_vsc_oauth_manager"
 import { icon_uri } from "./icon_uri"
 import { netlify_vsc_treeview_react_id } from "./treeview_id"
-import { Root } from "./ui"
+import { Root } from "./Root"
 
 export class ReactTreeviewW {
   constructor(ctx: vscode.ExtensionContext, tokens: NetlifyTokenManager) {
