@@ -1,9 +1,8 @@
-import { TreeItem } from "lambdragon"
-import { observer } from "mobx-react"
 import React from "react"
 import vscode from "vscode"
 import * as api from "../../../api/netlify_api"
 import { Accounts } from "./Accounts"
+import { Expanded, observer, TreeItem } from "./deps"
 
 @observer
 export class Root extends React.Component<{
@@ -16,7 +15,7 @@ export class Root extends React.Component<{
     return (
       <TreeItem
         label="netlify accounts"
-        collapsibleState={vscode.TreeItemCollapsibleState.Expanded}
+        collapsibleState={Expanded}
         iconPath={this.props.netlifyIconPath}
       >
         <Accounts {...this.props} />

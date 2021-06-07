@@ -1,7 +1,6 @@
 import React, { useCallback } from "react"
 import vscode from "vscode"
-import { TreeItem } from "lambdragon"
-import { vscode_ThemeIcon_memo as icon } from "src/x/vscode/vscode_ThemeIcon_memo"
+import { icon, None, TreeItem } from "./deps"
 
 export const LinkUI = (props: {
   label: string
@@ -22,7 +21,7 @@ export const LinkUI = (props: {
       iconPath={icon("link-external")}
       tooltip={props.url}
       select={cb}
-      collapsibleState={vscode.TreeItemCollapsibleState.None}
+      collapsibleState={None}
     />
   )
 }

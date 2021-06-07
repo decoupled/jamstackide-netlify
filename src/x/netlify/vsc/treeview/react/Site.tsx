@@ -1,18 +1,13 @@
-import {
-  TreeItem,
-  TreeItem_Menu_create as TreeItemMenu_create,
-} from "lambdragon"
-import { observer } from "mobx-react"
 import React from "react"
-import { vscode_ThemeIcon_memo as icon } from "src/x/vscode/vscode_ThemeIcon_memo"
 import vscode from "vscode"
 import { lazy } from "x/decorators"
 import * as api from "../../../api/netlify_api"
+import { icon, menu, None, observer, TreeItem } from "./deps"
 import { LinkUI } from "./LinkUI"
 import { menu_def_site } from "./menus"
 import { SiteDeploys } from "./SiteDeploys"
-import { SiteSnippets } from "./SiteSnippets"
 import { SiteForms } from "./SiteForms"
+import { SiteSnippets } from "./SiteSnippets"
 
 @observer
 export class Site extends React.Component<{
@@ -41,7 +36,7 @@ export class Site extends React.Component<{
         description="clone and develop site locally"
         tooltip="clone repo and use Netlify Dev"
         iconPath={icon("remote-explorer")}
-        collapsibleState={vscode.TreeItemCollapsibleState.None}
+        collapsibleState={None}
         select={this.develop_locally_cb}
       />
     )
@@ -51,7 +46,7 @@ export class Site extends React.Component<{
     return <SiteSnippets site={this.props.site} />
   }
 
-  private menu = TreeItemMenu_create(menu_def_site, {
+  private menu = menu(menu_def_site, {
     preview: () => {
       const {
         site: { url },
@@ -141,30 +136,30 @@ export class Site extends React.Component<{
                   iconPath={icon("globe")}
                   tooltip="register a new domain for this site"
                   select={this.addDomain}
-                  collapsibleState={vscode.TreeItemCollapsibleState.None}
+                  collapsibleState={None}
                 />
               )}
               <SiteForms site={site} />
               <TreeItem
                 label="analytics"
                 iconPath={icon("graph")}
-                collapsibleState={vscode.TreeItemCollapsibleState.None}
+                collapsibleState={None}
               />
               <TreeItem
                 label="large media"
                 iconPath={icon("file-media")}
-                collapsibleState={vscode.TreeItemCollapsibleState.None}
+                collapsibleState={None}
               />
               <TreeItem
                 label="identity"
                 iconPath={icon("person")}
-                collapsibleState={vscode.TreeItemCollapsibleState.None}
+                collapsibleState={None}
               />
               <TreeItem
                 label="build.env"
                 description="environment variables (build)"
                 iconPath={icon("symbol-namespace")}
-                collapsibleState={vscode.TreeItemCollapsibleState.None}
+                collapsibleState={None}
                 //resourceUri={this.envVarsUri}
                 select={this.onEnvVarClick}
               />

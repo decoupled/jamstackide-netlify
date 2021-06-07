@@ -1,9 +1,9 @@
 import merge from "webpack-merge"
-import { TreeItem_Menu_def as def, TreeItem_Menu_to_json } from "lambdragon"
+import { TreeItem_Menu_def as menudef, TreeItem_Menu_to_json } from "lambdragon"
 
 const base = "netlify.treeview.menus"
 
-export const menu_def_authenticating = def({
+export const menu_def_authenticating = menudef({
   id: base + ".menu_def_authenticating",
   commands: {
     retry: {
@@ -14,7 +14,7 @@ export const menu_def_authenticating = def({
   },
 })
 
-export const menu_def_logged_in = def({
+export const menu_def_logged_in = menudef({
   id: base + ".menu_def_logged_in",
   commands: {
     logout: {
@@ -29,7 +29,7 @@ export const menu_def_logged_in = def({
   },
 })
 
-export const menu_def_add = def({
+export const menu_def_add = menudef({
   id: base + ".menu_def_add",
   commands: {
     add: {
@@ -40,7 +40,7 @@ export const menu_def_add = def({
   },
 })
 
-export const menu_def_snippet = def({
+export const menu_def_snippet = menudef({
   id: base + ".menu_def_snippet",
   commands: {
     rename: {
@@ -54,7 +54,7 @@ export const menu_def_snippet = def({
   },
 })
 
-export const menu_def_edit = def({
+export const menu_def_edit = menudef({
   id: base + ".menu_def_edit",
   commands: {
     edit: {
@@ -65,7 +65,7 @@ export const menu_def_edit = def({
   },
 })
 
-export const menu_def_sites = def({
+export const menu_def_sites = menudef({
   id: base + ".menu_def_sites",
   commands: {
     search: {
@@ -81,7 +81,7 @@ export const menu_def_sites = def({
   },
 })
 
-export const menu_def_site = def({
+export const menu_def_site = menudef({
   id: base + ".menu_def_site",
   commands: {
     delete: {
@@ -100,7 +100,7 @@ export const menu_def_site = def({
   },
 })
 
-export const menu_def_deploy_published = def({
+export const menu_def_deploy_published = menudef({
   id: base + ".menu_def_deploy_published",
   commands: {
     preview: {
@@ -111,7 +111,7 @@ export const menu_def_deploy_published = def({
   },
 })
 
-export const menu_def_deploy = def({
+export const menu_def_deploy = menudef({
   id: base + ".menu_def_deploy",
   commands: {
     preview: {
@@ -131,7 +131,7 @@ export const menu_def_deploy = def({
   },
 })
 
-export const menu_def_forms = def({
+export const menu_def_forms = menudef({
   id: base + ".menu_def_forms",
   commands: {
     doc: {

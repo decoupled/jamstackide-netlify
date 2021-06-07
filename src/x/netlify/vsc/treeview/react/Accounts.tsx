@@ -1,10 +1,8 @@
-import { TreeItem } from "lambdragon"
-import { observer } from "mobx-react"
 import React from "react"
-import { vscode_ThemeIcon_memo as icon } from "src/x/vscode/vscode_ThemeIcon_memo"
 import vscode from "vscode"
 import * as api from "../../../api/netlify_api"
 import { Account } from "./Account"
+import { icon, observer, TreeItem, None } from "./deps"
 
 @observer
 export class Accounts extends React.Component<{
@@ -20,7 +18,7 @@ export class Accounts extends React.Component<{
         label="click here to add account..."
         iconPath={icon("add")}
         select={this.props.login}
-        collapsibleState={vscode.TreeItemCollapsibleState.None}
+        collapsibleState={None}
       />
     )
   }
@@ -31,7 +29,7 @@ export class Accounts extends React.Component<{
         key="xx"
         label="authenticating with netlify..."
         iconPath={this.props.netlifyIconPath}
-        collapsibleState={vscode.TreeItemCollapsibleState.None}
+        collapsibleState={None}
       />
     )
   }

@@ -1,12 +1,7 @@
-import {
-  TreeItem,
-  TreeItem_Menu_create as TreeItemMenu_create,
-} from "lambdragon"
-import { observer } from "mobx-react"
 import React from "react"
-import { vscode_ThemeIcon_memo as icon } from "src/x/vscode/vscode_ThemeIcon_memo"
 import vscode from "vscode"
 import * as api from "../../../api/netlify_api"
+import { Collapsed, icon, menu, None, observer, TreeItem } from "./deps"
 import { LinkUI } from "./LinkUI"
 import { menu_def_deploy, menu_def_deploy_published } from "./menus"
 
@@ -43,7 +38,7 @@ export class SiteDeploy extends React.Component<{
     )
   }
 
-  private menu = TreeItemMenu_create(menu_def_deploy, {
+  private menu = menu(menu_def_deploy, {
     preview: () => {
       const r = this.props.data.raw
       const url = r.deploy_ssl_url ?? r.deploy_url
@@ -57,7 +52,7 @@ export class SiteDeploy extends React.Component<{
     restore2: this.restore,
   })
 
-  private menu_published = TreeItemMenu_create(menu_def_deploy_published, {
+  private menu_published = menu(menu_def_deploy_published, {
     preview: () => {
       const url = this.props.data.ssl_url__or__url
       if (url)
@@ -77,7 +72,7 @@ export class SiteDeploy extends React.Component<{
         iconPath={this.iconPath}
         description={d.treeview_description}
         tooltip={d.treeview_tooltip}
-        collapsibleState={vscode.TreeItemCollapsibleState.Collapsed}
+        collapsibleState={Collapsed}
         menu={d.state2 === "published" ? this.menu_published : this.menu}
       >
         <LinkUI label="open preview" url={d.ssl_url__or__url} />
@@ -90,12 +85,12 @@ export class SiteDeploy extends React.Component<{
         <TreeItem
           label={"state: " + d.state}
           iconPath={icon("circle-outline")}
-          collapsibleState={vscode.TreeItemCollapsibleState.None}
+          collapsibleState={None}
         />
         <TreeItem
           label="summary"
           iconPath={icon("checklist")}
-          collapsibleState={vscode.TreeItemCollapsibleState.Collapsed}
+          collapsibleState={Collapsed}
         >
           {msgs.map((m, i) => {
             return (
@@ -103,7 +98,7 @@ export class SiteDeploy extends React.Component<{
                 key={i}
                 label={m.title}
                 tooltip={`${m.description}\n${m.details}`}
-                collapsibleState={vscode.TreeItemCollapsibleState.None}
+                collapsibleState={None}
               />
             )
           })}

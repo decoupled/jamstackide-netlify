@@ -1,10 +1,7 @@
-import { observable } from "mobx"
-import { observer } from "mobx-react"
 import React from "react"
-import vscode from "vscode"
 import * as api from "../../../api/netlify_api"
 import { AccountSettings } from "./AccountSettings"
-import { menu, TreeItem, icon } from "./deps"
+import { Expanded, icon, menu, observable, observer, TreeItem } from "./deps"
 import { menu_def_logged_in } from "./menus"
 import { Sites } from "./Sites"
 
@@ -28,7 +25,7 @@ export class Account extends React.Component<{
         label={this.label ?? "fetching account details..."}
         iconPath={icon("account")}
         menu={this.menu_logged_in}
-        collapsibleState={vscode.TreeItemCollapsibleState.Expanded}
+        collapsibleState={Expanded}
       >
         <Sites api={this.props.api} />
         <AccountSettings api={this.props.api} />
