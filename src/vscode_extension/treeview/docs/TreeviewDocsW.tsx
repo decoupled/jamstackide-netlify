@@ -5,7 +5,6 @@ import { vscode_ThemeIcon_memo as icon } from "src/x/vscode/vscode_ThemeIcon_mem
 import vscode from "vscode"
 
 const treeview_docs_id = "netlify.treeview.docs"
-
 export class TreeviewDocsW implements Singleton {
   constructor() {
     this.render()

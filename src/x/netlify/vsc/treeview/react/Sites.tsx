@@ -9,6 +9,7 @@ import { Site } from "./Site"
 @observer
 export class Sites extends React.Component<{
   api: api.NetlifyAPIWrapper
+  ctx: vscode.ExtensionContext
 }> {
   @observable data: api.NetlifySite[] = []
   @memo() async fetch() {
@@ -27,7 +28,9 @@ export class Sites extends React.Component<{
       <TreeItem label="sites" iconPath={icon("browser")} menu={this.menu}>
         {() => {
           this.fetch()
-          return this.data.map((s) => <Site site={s} key={s.id} />)
+          return this.data.map((s) => (
+            <Site site={s} key={s.id} ctx={this.props.ctx} />
+          ))
         }}
       </TreeItem>
     )

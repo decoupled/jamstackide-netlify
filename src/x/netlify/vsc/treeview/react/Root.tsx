@@ -10,6 +10,7 @@ export class Root extends React.Component<{
   login: () => void
   logout: () => void
   netlifyIconPath: vscode.Uri
+  ctx: vscode.ExtensionContext
 }> {
   render() {
     return (

@@ -1,6 +1,5 @@
 import { existsSync, removeSync } from "fs-extra"
-import { values } from "lodash"
-import { memo } from "x/decorators"
+import { Singleton } from "lambdragon"
 import { join } from "path"
 import { GitURL } from "src/x/git/GitURL"
 import { npm__yarn__install_dry } from "src/x/npm__yarn/npm__yarn__install"
@@ -10,6 +9,7 @@ import { vscode_run } from "src/x/vscode/vscode_run"
 import { vscode_window_createTerminal_andRun } from "src/x/vscode/vscode_window_createTerminal_andRun"
 import vscode, { Uri } from "vscode"
 import { Command } from "vscode-languageserver-types"
+import { memo } from "x/decorators"
 import {
   NewJamstackProjectSource,
   NewJamstackProjectSourceString,
@@ -19,91 +19,55 @@ import {
 import { NewJamstackProjectSource_prompt } from "../util/NewJamstackProjectSource_prompt"
 import { TargetDirSpecification } from "../util/TargetDirSpecification"
 import { clone_repo } from "./clone_repo"
-import { init_hook_set_and_open } from "./init_hook"
-import { jamstack_projects_dir } from "./jamstack_projects_dir"
+import { commands } from "./commands"
+import { init_hook_activate, init_hook_set_and_open } from "./init_hook"
+import { netlify_projects_dir } from "./netlify_projects_dir"
 import { start_dev } from "./start_dev"
+import {
+  DevelopLocallyOpts,
+  ExtraOpts,
+  FromCommandInvocation,
+  InitAfterReload,
+} from "./types"
 import { yarn_create_dry } from "./yarn_create"
 
-export const commands = {
-  // this is a public facing command
-  develop_locally: {
-    command: "netlify.develop_locally",
-    title: "Fetch and Develop Locally",
-    category: "Netlify",
-  },
-}
-
-export function ___buildmeta___() {
-  return {
-    pjson: {
-      contributes: {
-        commands: [...values(commands)],
-      },
-    },
+export class DevelopLocallyServiceW implements Singleton {
+  constructor(private ctx: vscode.ExtensionContext) {
+    this.setup()
+  }
+  private setup() {
+    init_hook_activate(this.ctx)
+    vscode.commands.registerCommand(
+      commands.develop_locally.command,
+      (opts?: NewJamstackProjectSourceString | DevelopLocallyOpts) => {
+        const opts2 =
+          typeof opts === "object"
+            ? opts
+            : ({
+                action: "FromCommandInvocation",
+                sourceStr: opts,
+              } as FromCommandInvocation)
+        this.start(opts2)
+      }
+    )
+  }
+  start(opts: DevelopLocallyOpts) {
+    develop_locally(opts, this.ctx)
   }
 }
 
-export type Opts =
-  | FromMagicURL
-  | InitAfterReload
-  | FromCommandInvocation
-  | FromNetlifyExplorer
-
-interface FromMagicURL {
-  action: "FromMagicURL"
-  source?: NewJamstackProjectSourceString
-  extraOpts?: ExtraOpts
-}
-
-export interface ExtraOpts {
-  /**
-   * relative path to a file to open upon launching
-   */
-  open?: string
-  /**
-   * override netlify-dev framework
-   */
-  framework?: string
-  /**
-   * provide a command run start dev
-   * TODO: prompt user for authorization
-   */
-  command?: string
-  /**
-   * override the install command
-   * TODO: prompt user for authorization
-   */
-  install?: string
-
-  /**
-   * use degit instead of git clone
-   */
-  degit?: boolean
-}
-
-interface FromNetlifyExplorer {
-  action: "FromNetlifyExplorer"
-  source: NewJamstackProjectSourceString
-}
-
-export interface FromCommandInvocation {
-  action: "FromCommandInvocation"
-  source?: NewJamstackProjectSourceString
-}
-
-interface InitAfterReload {
-  action: "InitAfterReload"
-  source: NewJamstackProjectSourceString
-  workspaceUri: string
-  extraOpts?: ExtraOpts
-}
-
-export function develop_locally(opts: Opts, ctx: vscode.ExtensionContext) {
-  return new DevelopLocally(opts, ctx).start()
+export function develop_locally(
+  opts: DevelopLocallyOpts,
+  ctx: vscode.ExtensionContext
+) {
+  new DevelopLocally(opts, this.ctx).start()
 }
 
 class DevelopLocally {
-  constructor(private opts: Opts, private ctx: vscode.ExtensionContext) {}
+  constructor(
+    private opts: DevelopLocallyOpts,
+    private ctx: vscode.ExtensionContext
+  ) {}
   @memo() async start() {
     const opts = this.opts
     const { ctx } = this
@@ -159,9 +123,9 @@ class DevelopLocally {
       }
       // fetch code
 
-      // delete the .jamstackide folder if present
+      // delete the .netlify-vscode folder if present
       // otherwise "git clone" and "yarn create" won't work
-      removeSync(join(wf.uri.fsPath, ".jamstackide"))
+      removeSync(join(wf.uri.fsPath, ".netlify-vscode"))
 
       if (source instanceof GitURL) {
         const clone_opts = {
@@ -284,7 +248,7 @@ async function reload_and_init({
     }
   }
   const dir2 =
-    dir ?? NewJamstackProjectSource_autoPickDir(source, jamstack_projects_dir())
+    dir ?? NewJamstackProjectSource_autoPickDir(source, netlify_projects_dir())
   const cmd = {
     command: commands.develop_locally.command,
     arguments: [
@@ -301,7 +265,7 @@ async function reload_and_init({
 }
 
 // function devLaunchMarkerForDir(dir: string): string {
-//   return join(dir, ".jamstackide", ".dev")
+//   return join(dir, ".netlify-vscode", ".dev")
 // }
 
 function requireAtLeastOneOpenWorkspace(uri: string) {

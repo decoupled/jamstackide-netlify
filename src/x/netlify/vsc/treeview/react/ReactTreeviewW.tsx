@@ -4,8 +4,8 @@ import vscode from "vscode"
 import { NetlifyAPIWrapper } from "x/netlify/api/netlify_api"
 import { NetlifyTokenManager } from "../../netlify_vsc_oauth_manager"
 import { icon_uri } from "./icon_uri"
-import { netlify_vsc_treeview_react_id } from "./treeview_id"
 import { Root } from "./Root"
+import { netlify_vsc_treeview_react_id } from "./treeview_id"
 
 export class ReactTreeviewW {
   constructor(ctx: vscode.ExtensionContext, tokens: NetlifyTokenManager) {
@@ -18,6 +18,7 @@ export class ReactTreeviewW {
         login={() => tokens.login()}
         logout={() => tokens.logout()}
         netlifyIconPath={icon_uri("netlify", ctx)}
+        ctx={ctx}
       />
     )
     TreeItem_render(netlify_vsc_treeview_react_id, root)

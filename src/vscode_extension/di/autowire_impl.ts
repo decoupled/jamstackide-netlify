@@ -4,6 +4,7 @@ import { CreateFunctionCommand } from "../commands/CreateFunctionCommand"
 import { MiniServer } from "../MiniServer"
 import { CWD } from "./CWD"
 import { NetlifyCLIWrapper } from "../NetlifyCLIWrapper"
+import { NetlifyCLIPath } from "../NetlifyCLIPath"
 import { NetlifyLSPClientManager } from "../lsp_client/NetlifyLSPClientManager"
 import { NetlifyLSPClientBuffer } from "../lsp_client/NetlifyLSPClientBuffer"
 import { TreeviewDocsW } from "../treeview/docs/TreeviewDocsW"
@@ -13,126 +14,212 @@ import { TextEditorDecorationsProviderFromLSPClient } from "../TextEditorDecorat
 import { ReactTreeviewW } from "../../x/netlify/vsc/treeview/react/ReactTreeviewW"
 import { NetlifyTokenManager } from "../../x/netlify/vsc/netlify_vsc_oauth_manager"
 import { TreeviewOutlineW } from "../treeview/outline/TreeviewOutlineW"
+import { MagicURLsW } from "../magic_urls/magic_urls"
+import { OutputChannelW } from "./OutputChannelW"
+import { DevelopLocallyServiceW } from "../dev/develop_locally"
+import { TreeviewWorkflowW } from "../treeview/workflow/TreeviewWorkflowW"
 
-interface __ResolutionContext {
-  params: any[]
-  cache: __ValueCache
-}
+export const autowire__impl = ___autowire__(
+  "VSCodeProjectW",
+  ["ExtensionContext", "WorkspaceFolder", "NetlifyCLIPath"],
+  [
+    {
+      out: "VSCodeProjectW",
+      isConstructor: true,
+      isSingleton: false,
+      args: [
+        "RedirectsFileW",
+        "CreateFunctionCommand",
+        "NetlifyLSPClientManager",
+        "TreeviewDocsW",
+        "TextEditorDecorations",
+        "ReactTreeviewW",
+        "TreeviewOutlineW",
+        "MagicURLsW",
+        "TreeviewWorkflowW",
+      ],
+      impl: VSCodeProjectW,
+    },
+    {
+      out: "RedirectsFileW",
+      isConstructor: true,
+      isSingleton: false,
+      args: ["ExtensionContext"],
+      impl: RedirectsFileW,
+    },
+    {
+      out: "CreateFunctionCommand",
+      isConstructor: true,
+      isSingleton: false,
+      args: [
+        "ExtensionContext",
+        "MiniServer",
+        "CWD",
+        "NetlifyCLIWrapper",
+        "NetlifyCLIPath",
+      ],
+      impl: CreateFunctionCommand,
+    },
+    {
+      out: "MiniServer",
+      isConstructor: true,
+      isSingleton: true,
+      args: [],
+      impl: MiniServer,
+    },
+    {
+      out: "CWD",
+      isConstructor: true,
+      isSingleton: false,
+      args: ["WorkspaceFolder"],
+      impl: CWD,
+    },
+    {
+      out: "NetlifyCLIWrapper",
+      isConstructor: true,
+      isSingleton: false,
+      args: ["NetlifyCLIPath"],
+      impl: NetlifyCLIWrapper,
+    },
+    {
+      out: "NetlifyCLIPath",
+      isConstructor: true,
+      isSingleton: false,
+      args: ["string"],
+      impl: NetlifyCLIPath,
+    },
+    {
+      out: "NetlifyLSPClientManager",
+      isConstructor: true,
+      isSingleton: false,
+      args: ["ExtensionContext", "NetlifyLSPClientBuffer"],
+      impl: NetlifyLSPClientManager,
+    },
+    {
+      out: "NetlifyLSPClientBuffer",
+      isConstructor: true,
+      isSingleton: true,
+      args: [],
+      impl: NetlifyLSPClientBuffer,
+    },
+    {
+      out: "TreeviewDocsW",
+      isConstructor: true,
+      isSingleton: true,
+      args: [],
+      impl: TreeviewDocsW,
+    },
+    {
+      out: "TextEditorDecorations",
+      isConstructor: true,
+      isSingleton: false,
+      args: ["ExtensionContext", "TextEditorDecorationsProvider"],
+      impl: TextEditorDecorations,
+    },
+    {
+      out: "TextEditorDecorationsProvider",
+      isConstructor: true,
+      isSingleton: false,
+      args: ["TextEditorDecorationsProviderFromLSPClient"],
+      impl: TextEditorDecorationsProvider,
+    },
+    {
+      out: "TextEditorDecorationsProviderFromLSPClient",
+      isConstructor: true,
+      isSingleton: false,
+      args: ["NetlifyLSPClientBuffer"],
+      impl: TextEditorDecorationsProviderFromLSPClient,
+    },
+    {
+      out: "ReactTreeviewW",
+      isConstructor: true,
+      isSingleton: false,
+      args: ["ExtensionContext", "NetlifyTokenManager"],
+      impl: ReactTreeviewW,
+    },
+    {
+      out: "NetlifyTokenManager",
+      isConstructor: true,
+      isSingleton: true,
+      args: ["ExtensionContext"],
+      impl: NetlifyTokenManager,
+    },
+    {
+      out: "TreeviewOutlineW",
+      isConstructor: true,
+      isSingleton: false,
+      args: ["ExtensionContext", "NetlifyLSPClientBuffer"],
+      impl: TreeviewOutlineW,
+    },
+    {
+      out: "MagicURLsW",
+      isConstructor: true,
+      isSingleton: true,
+      args: ["OutputChannelW", "DevelopLocallyServiceW"],
+      impl: MagicURLsW,
+    },
+    {
+      out: "OutputChannelW",
+      isConstructor: true,
+      isSingleton: true,
+      args: [],
+      impl: OutputChannelW,
+    },
+    {
+      out: "DevelopLocallyServiceW",
+      isConstructor: true,
+      isSingleton: true,
+      args: ["ExtensionContext"],
+      impl: DevelopLocallyServiceW,
+    },
+    {
+      out: "TreeviewWorkflowW",
+      isConstructor: true,
+      isSingleton: true,
+      args: ["ExtensionContext"],
+      impl: TreeviewWorkflowW,
+    },
+  ]
+)
 
-function __ctx__(params: any[]): __ResolutionContext {
-  return { params, cache: new __ValueCache() }
-}
+function ___autowire__(t, o, rules) {
+  type TypeID = any
+  type RuleDef = any
+  class Ctx {
+    constructor(
+      private rules: RuleDef[],
+      private overrides = new Map<TypeID, any>(),
+      private parent?: Ctx
+    ) {}
+    cache = new Map<TypeID, any>()
+    solve(t: TypeID) {
+      if (this.overrides.has(t)) return this.overrides.get(t)
+      if (this.parent) return this.parent.solve(t)
+      const r = this.rules.find(({ out }) => out === t)
+      if (!r) throw new Error("not found")
+      if (r.isSingleton)
+        if (Ctx.singletonCache.has(t)) return Ctx.singletonCache.get(t)
 
-function __memo__<T extends Function>(f: T, singleton?: boolean): T {
-  return function (ctx: __ResolutionContext) {
-    let cache = ctx.cache
-    if (singleton) cache = __singletonCache
-    return cache.get(f, () => f(ctx))
-  } as any
-}
-
-class __Cache<K, V> {
-  private m = new Map<K, V>()
-  private running = new Set<K>()
-  get(k: K, f: () => V): V {
-    if (this.m.has(k)) return this.m.get(k)!
-    if (this.running.has(k)) throw new Error("cycle")
-    this.running.add(k)
-    const v = f()
-    this.running.delete(k)
-    this.m.set(k, v)
-    return v
+      const args = (r.args ?? []).map((arg) => {
+        if (arg === "undefined") return undefined
+        if (typeof arg === "object")
+          return this.createFactory(arg.type, arg.overrides)
+        return this.solve(arg)
+      })
+      const v = r.isConstructor ? new r.impl(...args) : r.impl(...args)
+      if (r.isSingleton) Ctx.singletonCache.set(t, v)
+      return v
+    }
+    createFactory(t: TypeID, overrideTypes: TypeID[]) {
+      return (...args: any[]) => {
+        const overrides2 = new Map(this.overrides)
+        for (const [i, ot] of overrideTypes.entries())
+          overrides2.set(ot, args[i])
+        const ctx2 = new Ctx(this.rules, overrides2)
+        return ctx2.solve(t)
+      }
+    }
+    private static singletonCache = new Map<TypeID, any>()
   }
+  return new Ctx(rules).createFactory(t, o)
 }
-class __ValueCache extends __Cache<Function, any> {}
-
-const __singletonCache = new __ValueCache()
-
-export {}
-
-export function autowire_impl(...params) {
-  const ctx = __ctx__(params)
-  return __create_VSCodeProjectW(ctx)
-}
-const __create_RedirectsFileW = __memo__(
-  (ctx) => new RedirectsFileW(ctx.params[0]),
-  false
-)
-const __create_MiniServer = __memo__((ctx) => new MiniServer(), true)
-const __create_CWD = __memo__((ctx) => new CWD(ctx.params[1]), false)
-const __create_NetlifyCLIWrapper = __memo__(
-  (ctx) => new NetlifyCLIWrapper(ctx.params[2]),
-  false
-)
-const __create_CreateFunctionCommand = __memo__(
-  (ctx) =>
-    new CreateFunctionCommand(
-      ctx.params[0],
-      __create_MiniServer(ctx),
-      __create_CWD(ctx),
-      __create_NetlifyCLIWrapper(ctx),
-      ctx.params[2]
-    ),
-  false
-)
-const __create_NetlifyLSPClientBuffer = __memo__(
-  (ctx) => new NetlifyLSPClientBuffer(),
-  true
-)
-const __create_NetlifyLSPClientManager = __memo__(
-  (ctx) =>
-    new NetlifyLSPClientManager(
-      ctx.params[0],
-      __create_NetlifyLSPClientBuffer(ctx)
-    ),
-  false
-)
-const __create_TreeviewDocsW = __memo__((ctx) => new TreeviewDocsW(), true)
-const __create_TextEditorDecorationsProviderFromLSPClient = __memo__(
-  (ctx) =>
-    new TextEditorDecorationsProviderFromLSPClient(
-      __create_NetlifyLSPClientBuffer(ctx)
-    ),
-  false
-)
-const __create_TextEditorDecorationsProvider = __memo__(
-  (ctx) =>
-    new TextEditorDecorationsProvider(
-      __create_TextEditorDecorationsProviderFromLSPClient(ctx)
-    ),
-  false
-)
-const __create_TextEditorDecorations = __memo__(
-  (ctx) =>
-    new TextEditorDecorations(
-      ctx.params[0],
-      __create_TextEditorDecorationsProvider(ctx)
-    ),
-  false
-)
-const __create_NetlifyTokenManager = __memo__(
-  (ctx) => new NetlifyTokenManager(ctx.params[0]),
-  true
-)
-const __create_ReactTreeviewW = __memo__(
-  (ctx) => new ReactTreeviewW(ctx.params[0], __create_NetlifyTokenManager(ctx)),
-  false
-)
-const __create_TreeviewOutlineW = __memo__(
-  (ctx) =>
-    new TreeviewOutlineW(ctx.params[0], __create_NetlifyLSPClientBuffer(ctx)),
-  false
-)
-const __create_VSCodeProjectW = __memo__(
-  (ctx) =>
-    new VSCodeProjectW(
-      __create_RedirectsFileW(ctx),
-      __create_CreateFunctionCommand(ctx),
-      __create_NetlifyLSPClientManager(ctx),
-      __create_TreeviewDocsW(ctx),
-      __create_TextEditorDecorations(ctx),
-      __create_ReactTreeviewW(ctx),
-      __create_TreeviewOutlineW(ctx)
-    ),
-  false
-)

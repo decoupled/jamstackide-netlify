@@ -9,13 +9,9 @@ export class AccountSettings_PaymentMethods_Method extends React.Component<{
   data: api.PaymentMethod
 }> {
   private menu_edit = menu(menu_def_edit, {
-    edit: () => {
-      vscode.env.openExternal(
-        vscode.Uri.parse(
-          // TODO: replace with user's URL. This is just for testing
-          "https://app.netlify.com/teams/aldonline/billing/general#payment-information"
-        )
-      )
+    edit: async () => {
+      const url = await this.props.data.admin_url()
+      vscode.env.openExternal(vscode.Uri.parse(url))
     },
   })
   render() {

@@ -6,6 +6,7 @@ import vscode from "vscode"
 import merge from "webpack-merge"
 import { netlify_vsc_treeview_react_contributes } from "x/netlify/vsc/treeview/react/contributes"
 import { commands_create_function_contributes } from "./commands/CreateFunctionCommand"
+import { develop_locally_contributes } from "./dev/contributes"
 import { autowire } from "./di/autowire"
 import { VSCodeProjectW } from "./di/VSCodeProjectW"
 import { NetlifyCLIPath_createDevTime } from "./NetlifyCLIPath"
@@ -13,6 +14,7 @@ import icon from "./static/netlify_logomark.svg"
 import { treeview_docs_contributes } from "./treeview/docs/TreeviewDocsW"
 import { treeview_etc_contributes } from "./treeview/etc/treeview_etc"
 import { treeview_outline_contributes } from "./treeview/outline/consts"
+import { treeview_workflow_contributes } from "./treeview/workflow/contributes"
 
 /**
  * we'll publish under a codename for now
@@ -63,13 +65,13 @@ function main() {
 
 function contributes() {
   return merge([
-    // commands_contributes().contributes,
-    // treeview_workflow_contributes().contributes,
     commands_create_function_contributes().contributes,
     treeview_docs_contributes().contributes,
     netlify_vsc_treeview_react_contributes().contributes,
     treeview_outline_contributes().contributes,
     treeview_etc_contributes().contributes,
+    develop_locally_contributes().contributes,
+    treeview_workflow_contributes().contributes,
     {
       viewsContainers: {
         activitybar: [

@@ -1,4 +1,5 @@
 import React from "react"
+import { develop_locally } from "src/vscode_extension/dev/develop_locally"
 import vscode from "vscode"
 import { lazy } from "x/decorators"
 import * as api from "../../../api/netlify_api"
@@ -12,6 +13,7 @@ import { SiteSnippets } from "./SiteSnippets"
 @observer
 export class Site extends React.Component<{
   site: api.NetlifySite
+  ctx: vscode.ExtensionContext
 }> {
   private addDomain = () => {
     vscode.window.showInformationMessage("add domain??")
@@ -19,13 +21,13 @@ export class Site extends React.Component<{
   private develop_locally_cb = () => {
     const source = this.props.site.repo_url
     if (!source) return
-    // develop_locally(
-    //   {
-    //     action: "FromNetlifyExplorer",
-    //     source,
-    //   },
-    //   this.props.ctx
-    // )
+    develop_locally(
+      {
+        action: "FromNetlifyExplorer",
+        source,
+      },
+      this.props.ctx
+    )
   }
   private develop_locally__render() {
     const { site } = this.props
@@ -110,10 +112,12 @@ export class Site extends React.Component<{
     const { site } = this.props
     const { custom_domain, admin_url, url } = site
     //        iconPath={icon("browser")}
+    const md = new vscode.MarkdownString(site.treeItem_tooltip ?? "", true)
+    md.isTrusted = true
     return (
       <TreeItem
         label={site.name}
-        tooltip={site.treeItem_tooltip}
+        tooltip={md}
         description={custom_domain ?? ""}
         menu={this.menu}
       >

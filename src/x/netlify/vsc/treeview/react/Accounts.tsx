@@ -2,7 +2,7 @@ import React from "react"
 import vscode from "vscode"
 import * as api from "../../../api/netlify_api"
 import { Account } from "./Account"
-import { icon, observer, TreeItem, None } from "./deps"
+import { icon, None, observer, TreeItem } from "./deps"
 
 @observer
 export class Accounts extends React.Component<{
@@ -10,6 +10,7 @@ export class Accounts extends React.Component<{
   login: () => void
   logout: () => void
   netlifyIconPath: vscode.Uri
+  ctx: vscode.ExtensionContext
 }> {
   render__logged_out() {
     return (
@@ -36,7 +37,10 @@ export class Accounts extends React.Component<{
 
   render() {
     const api = this.props.getAPI()
-    if (api) return <Account api={api} logout={this.props.logout} />
+    if (api)
+      return (
+        <Account api={api} logout={this.props.logout} ctx={this.props.ctx} />
+      )
     return this.render__logged_out()
   }
 }

@@ -2,13 +2,13 @@ import command_exists from "command-exists"
 import { existsSync } from "fs-extra"
 import { join } from "path"
 import { getPortPromise } from "portfinder"
+import { wait } from "x/Promise/wait"
+import { vscode_run } from "x/vscode/vscode_run"
 import vscode from "vscode"
 import waitPort from "wait-port"
-import { wait } from "src/x/Promise/wait"
 // import { jamstackide_vsc_treeview_get } from "../treeview/jamstackide_vsc_treeview"
 import { browser_preview } from "./browser_preview"
-import { ExtraOpts } from "./develop_locally"
-import { vscode_run } from "src/x/vscode/vscode_run"
+import { ExtraOpts } from "./types"
 
 interface Opts {
   uri: vscode.Uri

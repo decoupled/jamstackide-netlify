@@ -1,7 +1,6 @@
 import moment from "moment"
 import NetlifyAPI from "netlify"
 import { lazy, memo } from "x/decorators"
-import { netlify_vsc_oauth_manager } from "../vsc/netlify_vsc_oauth_manager"
 import {
   R_getCurrentUser,
   R_getSite,
@@ -59,11 +58,19 @@ export class PaymentMethod {
     if (this.raw.type === "card") return `card (${this.raw.data.last4})`
     return this.raw.type
   }
+  @memo() async admin_url() {
+    const u = await this.api.getCurrentUser()
+    return `https://app.netlify.com/teams/${u.slug}/billing/general#payment-information`
+  }
 }
 
 export class NetlifySite {
   constructor(public api: NetlifyAPIWrapper, public raw: SiteRaw) {}
   get treeItem_tooltip() {
+    const su = this.raw.screenshot_url
+    if (typeof su === "string") {
+      return `![screenshot](${su})`
+    }
     const d = this.raw.published_deploy
     if (!d) return "no published deploys"
     return `published`

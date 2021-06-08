@@ -1,14 +1,15 @@
 import React from "react"
+import vscode from "vscode"
 import * as api from "../../../api/netlify_api"
 import { AccountSettings } from "./AccountSettings"
 import { Expanded, icon, menu, observable, observer, TreeItem } from "./deps"
 import { menu_def_logged_in } from "./menus"
 import { Sites } from "./Sites"
-
 @observer
 export class Account extends React.Component<{
   api: api.NetlifyAPIWrapper
   logout: () => void
+  ctx: vscode.ExtensionContext
 }> {
   @observable label: string | undefined
   async componentDidMount() {
@@ -27,7 +28,7 @@ export class Account extends React.Component<{
         menu={this.menu_logged_in}
         collapsibleState={Expanded}
       >
-        <Sites api={this.props.api} />
+        <Sites api={this.props.api} ctx={this.props.ctx} />
         <AccountSettings api={this.props.api} />
       </TreeItem>
     )
