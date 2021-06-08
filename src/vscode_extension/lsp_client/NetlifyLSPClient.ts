@@ -1,4 +1,3 @@
-import { xmethods } from "src/language_server/xmethods"
 import { memo } from "src/x/decorators"
 import {
   LanguageClient,
@@ -74,11 +73,7 @@ export class NetlifyLSPClient {
 
   async getInfo(uri: string): Promise<any[]> {
     await this.client.onReady()
-    try {
-      return await this.client.sendRequest(xmethods.getInfo, uri)
-    } catch (e) {
-      return []
-    }
+    return []
   }
 
   // @memo()

@@ -6,6 +6,9 @@ import {
   LanguageClientOptions,
 } from "vscode-languageclient/node"
 
+/**
+ * @provides
+ */
 export function LanguageClientOptions_build(
   ctx: vscode.ExtensionContext
 ): LanguageClientOptions {

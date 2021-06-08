@@ -60,7 +60,7 @@ export function develop_locally(
   opts: DevelopLocallyOpts,
   ctx: vscode.ExtensionContext
 ) {
-  new DevelopLocally(opts, this.ctx).start()
+  new DevelopLocally(opts, ctx).start()
 }
 
 class DevelopLocally {

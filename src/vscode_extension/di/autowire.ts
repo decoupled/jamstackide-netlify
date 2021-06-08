@@ -15,5 +15,13 @@ export function autowire<T>(
 
 function extra_deps() {
   // we want these to be picked up by the DI framework
-  ;[LanguageClientOptions_build].forEach(() => {})
+  ;[LanguageClientOptions_build, outputChannel].length
+}
+
+/**
+ * @singleton
+ * @provides
+ */
+export function outputChannel(): vscode.OutputChannel {
+  return vscode.window.createOutputChannel("Netlify")
 }

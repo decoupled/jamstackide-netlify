@@ -18,7 +18,7 @@ import { ReactTreeviewW } from "../../x/netlify/vsc/treeview/react/ReactTreeview
 import { NetlifyTokenManager } from "../../x/netlify/vsc/netlify_vsc_oauth_manager"
 import { TreeviewOutlineW } from "../treeview/outline/TreeviewOutlineW"
 import { MagicURLsW } from "../magic_urls/magic_urls"
-import { OutputChannelW } from "./OutputChannelW"
+import { outputChannel } from "./autowire"
 import { DevelopLocallyServiceW } from "../dev/develop_locally"
 import { TreeviewWorkflowW } from "../treeview/workflow/TreeviewWorkflowW"
 
@@ -114,6 +114,7 @@ export const autowire__impl = ___autowire__(
     },
     {
       out: "LanguageClientOptions",
+      isSingleton: false,
       args: ["ExtensionContext"],
       impl: LanguageClientOptions_build,
     },
@@ -188,16 +189,10 @@ export const autowire__impl = ___autowire__(
       out: "MagicURLsW",
       isConstructor: true,
       isSingleton: true,
-      args: ["OutputChannelW", "DevelopLocallyServiceW"],
+      args: ["OutputChannel", "DevelopLocallyServiceW"],
       impl: MagicURLsW,
     },
-    {
-      out: "OutputChannelW",
-      isConstructor: true,
-      isSingleton: true,
-      args: [],
-      impl: OutputChannelW,
-    },
+    { out: "OutputChannel", isSingleton: true, args: [], impl: outputChannel },
     {
       out: "DevelopLocallyServiceW",
       isConstructor: true,

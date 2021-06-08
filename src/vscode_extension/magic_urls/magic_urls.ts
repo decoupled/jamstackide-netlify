@@ -3,15 +3,14 @@ import { vscode_window_registerUriHandler_multi } from "src/x/vscode/vscode_wind
 import vscode from "vscode"
 import { DevelopLocallyServiceW } from "../dev/develop_locally"
 import { ExtraOpts } from "../dev/types"
-import { OutputChannelW } from "../di/OutputChannelW"
 import { Singleton } from "lambdragon"
 
 export class MagicURLsW implements Singleton {
-  constructor(out: OutputChannelW, dls: DevelopLocallyServiceW) {
+  constructor(out: vscode.OutputChannel, dls: DevelopLocallyServiceW) {
     vscode_window_registerUriHandler_multi({
       handleUri(uri: vscode.Uri) {
         const msg = `handleUri("${uri.toString()}")`
-        out.out.appendLine(msg)
+        out.appendLine(msg)
         console.log(msg)
         if (uri.path !== "/open") return
         const q = parse(uri.query)
