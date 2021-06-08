@@ -6,11 +6,14 @@ import { CWD } from "./CWD"
 import { NetlifyCLIWrapper } from "../NetlifyCLIWrapper"
 import { NetlifyCLIPath } from "../NetlifyCLIPath"
 import { NetlifyLSPClientManager } from "../lsp_client/NetlifyLSPClientManager"
+import { NetlifyLSPClient } from "../lsp_client/NetlifyLSPClient"
+import { LanguageClientOptions_build } from "../lsp_client/LanguageClientOptions_build"
 import { NetlifyLSPClientBuffer } from "../lsp_client/NetlifyLSPClientBuffer"
 import { TreeviewDocsW } from "../treeview/docs/TreeviewDocsW"
 import { TextEditorDecorations } from "../TextEditorDecorations"
 import { TextEditorDecorationsProvider } from "../TextEditorDecorationsProvider"
 import { TextEditorDecorationsProviderFromLSPClient } from "../TextEditorDecorationsProviderFromLSPClient"
+import { SingleTextEditorDecorations } from "../TextEditorDecorations"
 import { ReactTreeviewW } from "../../x/netlify/vsc/treeview/react/ReactTreeviewW"
 import { NetlifyTokenManager } from "../../x/netlify/vsc/netlify_vsc_oauth_manager"
 import { TreeviewOutlineW } from "../treeview/outline/TreeviewOutlineW"
@@ -92,8 +95,27 @@ export const autowire__impl = ___autowire__(
       out: "NetlifyLSPClientManager",
       isConstructor: true,
       isSingleton: false,
-      args: ["ExtensionContext", "NetlifyLSPClientBuffer"],
+      args: [
+        "ExtensionContext",
+        { type: "NetlifyLSPClient", overrides: ["ServerOptions"] },
+      ],
       impl: NetlifyLSPClientManager,
+    },
+    {
+      out: "NetlifyLSPClient",
+      isConstructor: true,
+      isSingleton: false,
+      args: [
+        "ServerOptions",
+        "LanguageClientOptions",
+        "NetlifyLSPClientBuffer",
+      ],
+      impl: NetlifyLSPClient,
+    },
+    {
+      out: "LanguageClientOptions",
+      args: ["ExtensionContext"],
+      impl: LanguageClientOptions_build,
     },
     {
       out: "NetlifyLSPClientBuffer",
@@ -113,7 +135,11 @@ export const autowire__impl = ___autowire__(
       out: "TextEditorDecorations",
       isConstructor: true,
       isSingleton: false,
-      args: ["ExtensionContext", "TextEditorDecorationsProvider"],
+      args: [
+        "ExtensionContext",
+        "TextEditorDecorationsProvider",
+        { type: "SingleTextEditorDecorations", overrides: ["TextEditor"] },
+      ],
       impl: TextEditorDecorations,
     },
     {
@@ -129,6 +155,13 @@ export const autowire__impl = ___autowire__(
       isSingleton: false,
       args: ["NetlifyLSPClientBuffer"],
       impl: TextEditorDecorationsProviderFromLSPClient,
+    },
+    {
+      out: "SingleTextEditorDecorations",
+      isConstructor: true,
+      isSingleton: false,
+      args: ["TextEditor", "TextEditorDecorationsProvider"],
+      impl: SingleTextEditorDecorations,
     },
     {
       out: "ReactTreeviewW",

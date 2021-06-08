@@ -1,19 +1,18 @@
 import { xmethods } from "src/language_server/xmethods"
 import { memo } from "src/x/decorators"
-import vscode from "vscode"
 import {
   LanguageClient,
+  LanguageClientOptions,
   ServerOptions,
   State,
 } from "vscode-languageclient/node"
 import { log } from "../log"
-import { LanguageClientOptions_build } from "./LanguageClientOptions_build"
 import { NetlifyLSPClientBuffer } from "./NetlifyLSPClientBuffer"
 
 export class NetlifyLSPClient {
   constructor(
     private serverOptions: ServerOptions,
-    private ctx: vscode.ExtensionContext,
+    private clientOptions: LanguageClientOptions,
     private buffer: NetlifyLSPClientBuffer
   ) {
     this.start()
@@ -34,7 +33,7 @@ export class NetlifyLSPClient {
       "netlify-language-server",
       "Netlify Language Server",
       this.serverOptions,
-      LanguageClientOptions_build(this.ctx)
+      this.clientOptions
     )
 
     this.client.onDidChangeState((e) => {

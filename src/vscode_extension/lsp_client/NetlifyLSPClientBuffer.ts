@@ -28,7 +28,7 @@ export class NetlifyLSPClientBuffer
     this.sendRequest_queue.forEach(async ({ args, resolve, reject }) => {
       try {
         await c.onReady()
-        resolve(await c.sendRequest( ...(args as [any])))
+        resolve(await c.sendRequest(...(args as [any])))
       } catch (e) {
         reject(e)
       }

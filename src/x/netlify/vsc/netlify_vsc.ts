@@ -2,20 +2,13 @@ import * as vscode from "vscode"
 import { wait } from "../../Promise/wait"
 import { netlify_vsc_commands } from "./netlify_vsc_commands"
 import { netlify_vsc_command_deploy_activate } from "./netlify_vsc_command_deploy"
-import { netlify_vsc_oauth } from "./netlify_vsc_oauth"
-import { netlify_vsc_oauth_manager } from "./netlify_vsc_oauth_manager"
-import { netlify_vsc_pjson } from "./netlify_vsc_pjson"
 import { netlify_vsc_filesystemprovider } from "./netlify_vsc_filesystemprovider"
+import { netlify_vsc_oauth_manager } from "./netlify_vsc_oauth_manager"
 import { netlify_vsc_statusbar } from "./netlify_vsc_statusbar"
-
-export function ___buildmeta___() {
-  return { pjson: netlify_vsc_pjson() }
-}
 
 export function netlify_vsc(ctx: vscode.ExtensionContext) {
   // netlifytoml_vsc()
   //netlify_vsc_treeview_activate(ctx)
-  netlify_vsc_oauth(ctx)
   netlify_vsc_command_deploy_activate(ctx)
 
   // develop_locally_command_activate(ctx)

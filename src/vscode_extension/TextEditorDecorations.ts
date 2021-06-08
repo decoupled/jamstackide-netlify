@@ -1,3 +1,4 @@
+import { DIFactory } from "lambdragon"
 import { Throttle } from "lodash-decorators"
 import { MapWithLifecycle } from "src/x/Map/MapWithLifecycle"
 import { vscode_TextEditor_setDecorations_pivot } from "src/x/vscode/vscode_TextEditor_setDecorations_pivot"
@@ -7,7 +8,11 @@ import { TextEditorDecorationsProvider } from "./TextEditorDecorationsProvider"
 export class TextEditorDecorations {
   constructor(
     public ctx: vscode.ExtensionContext,
-    public provider: TextEditorDecorationsProvider
+    public provider: TextEditorDecorationsProvider,
+    private factory: DIFactory<
+      typeof SingleTextEditorDecorations,
+      [vscode.TextEditor]
+    >
   ) {
     this.start()
   }
@@ -17,7 +22,7 @@ export class TextEditorDecorations {
       vscode.TextEditor,
       SingleTextEditorDecorations
     >({
-      create: (textEditor) => new SingleTextEditorDecorations(textEditor, this),
+      create: (textEditor) => this.factory(textEditor),
       dispose: (manager) => manager.dispose(),
     })
     cache.update(vscode.window.visibleTextEditors)
@@ -32,11 +37,11 @@ export class TextEditorDecorations {
   }
 }
 
-class SingleTextEditorDecorations implements vscode.Disposable {
+export class SingleTextEditorDecorations implements vscode.Disposable {
   private subscriptions: vscode.Disposable[] = []
   constructor(
     public editor: vscode.TextEditor,
-    public parent: TextEditorDecorations
+    public provider: TextEditorDecorationsProvider // public parent: TextEditorDecorations
   ) {
     this.init()
   }
@@ -65,7 +70,7 @@ class SingleTextEditorDecorations implements vscode.Disposable {
   // TODO: ThrottleAync
   @Throttle(100, { leading: true })
   private async update() {
-    const { provider } = this.parent
+    const { provider } = this
     vscode_TextEditor_setDecorations_pivot(
       this.editor,
       provider.getAllDecorationTypes(),

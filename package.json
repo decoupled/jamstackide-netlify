@@ -30,7 +30,7 @@
     "fs-extra": "^10.0.0",
     "git-url-parse": "^11.4.4",
     "isomorphic-fetch": "^3.0.0",
-    "lambdragon": "0.0.10",
+    "lambdragon": "^0.0.11",
     "line-column": "^1.0.2",
     "mobx": "^5.8.0",
     "mobx-react": "^5.4.3",
