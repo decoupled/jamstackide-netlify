@@ -1,6 +1,7 @@
 // import { HeadersFileW } from "src/x/netlify/headers_file/headers_file_vsc"
 import { RedirectsFileW } from "src/x/netlify/redirects_file/RedirectsFileW"
 import { CreateFunctionCommand } from "../commands/CreateFunctionCommand"
+import { Debugging } from "../debugging/Debugging"
 import { NetlifyLSPClientManager } from "../lsp_client/NetlifyLSPClientManager"
 import { MagicURLsW } from "../magic_urls/magic_urls"
 import { TextEditorDecorations } from "../TextEditorDecorations"
@@ -16,6 +17,7 @@ export class VSCodeProjectW {
     _l: NetlifyLSPClientManager,
     _x: TextEditorDecorations,
     _dddd: MagicURLsW,
-    _treeviews: TreeviewModules
+    _treeviews: TreeviewModules,
+    _debugging: Debugging
   ) {}
 }

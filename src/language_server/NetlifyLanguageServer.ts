@@ -1,6 +1,5 @@
 import { lazy, memo } from "src/x/decorators"
 import { headers_file_parser22 } from "src/x/netlify/headers_file/headers_file_parser"
-import { Project } from "src/x/netlify/model/Project"
 import { URL_toFile } from "src/x/url/URL_fromFile"
 import { ExtendedDiagnostic_findRelevantQuickFixes } from "src/x/vscode-languageserver-types/lsp_extensions"
 // import { URL_toFile } from "src/x/url/URL_toFile"
@@ -17,9 +16,10 @@ import {
   TextDocuments,
   TextDocumentSyncKind,
 } from "vscode-languageserver/node"
+import { FileSystemWithLSPDocumentStore } from "x/fs/FileSystemWithLSPDocumentStore"
+import { Project_create } from "x/netlify/model/Project_create"
 import { CommandsManager } from "./commands"
 import { DiagnosticsManager } from "./diagnostics"
-import { HostWithDocumentsStore } from "./HostWithDocumentsStore"
 import { OutlineManager } from "./outline"
 
 const SUPPRESS_ERRORS = false
@@ -164,13 +164,13 @@ export class NetlifyLanguageServer {
   //   return new XMethodsManager(this)
   // }
   @lazy() get host() {
-    return new HostWithDocumentsStore(this.documents)
+    return new FileSystemWithLSPDocumentStore(this.documents)
   }
 
   projectRoot: string | undefined
-  getProject(): Project | undefined {
+  getProject() {
     if (!this.projectRoot) return undefined
-    return new Project({ filePath: this.projectRoot, host: this.host })
+    return Project_create(this.host, this.projectRoot)
   }
   // get vscodeWindowMethods() {
   //   return VSCodeWindowMethods_fromConnection(this.connection)

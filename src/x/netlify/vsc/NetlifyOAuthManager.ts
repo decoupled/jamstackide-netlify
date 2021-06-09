@@ -1,23 +1,24 @@
-import { lazy } from "x/decorators"
-import { memoize } from "lodash"
+import { Singleton } from "lambdragon"
 import { computed, observable } from "mobx"
 import { now } from "mobx-utils"
 import vscode from "vscode"
+import { lazy } from "x/decorators"
 import { NetlifyGlobalConfig } from "../NetlifyGlobalConfig"
 import { netlify_oauth_config_netlifyvscode } from "../oauth/config/netlify_oauth_config_netlifyvscode"
 import { netlify_oauth_get_token } from "../oauth/netlify_oauth_get_token"
-import { Singleton } from "lambdragon"
+import { netlify_vsc_commands } from "./netlify_vsc_commands"
 
 const KEY = "NETLIFY_API_TOKEN_KEY"
 
-export const netlify_vsc_oauth_manager = memoize(
-  (ctx: vscode.ExtensionContext) => {
-    return new NetlifyTokenManager(ctx)
+export class NetlifyOAuthManager implements Singleton {
+  constructor(private ctx: vscode.ExtensionContext) {
+    vscode.commands.registerCommand(netlify_vsc_commands.login.command, () => {
+      this.login()
+    })
+    vscode.commands.registerCommand(netlify_vsc_commands.logout.command, () => {
+      this.logout()
+    })
   }
-)
-
-export class NetlifyTokenManager implements Singleton {
-  constructor(public ctx: vscode.ExtensionContext) {}
   // @observable private _authenticating = false
   // get authenticating() {
   //   return this._authenticating

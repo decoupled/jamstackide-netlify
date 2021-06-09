@@ -1,13 +1,13 @@
-import { lazy } from "x/decorators"
+import { DIFactory } from "lambdragon"
 import { values } from "lodash"
-import { memo } from "x/decorators"
-import { basename, join } from "path"
-import vscode from "vscode"
+import { basename } from "path"
 import { iter } from "src/x/Iterable/iter"
-import { vscode_Uri_smartParse } from "../../vscode/vscode_Uri_smartParse"
-import { NetlifyAPIWrapper } from "../api/netlify_api"
-import { netlify_vsc_oauth_manager } from "./netlify_vsc_oauth_manager"
-import { NetlifyStateDotJSON } from "../NetlifyStateDotJSON"
+import vscode from "vscode"
+import { lazy, memo } from "x/decorators"
+import { NetlifyAPIWrapper } from "../../x/netlify/api/netlify_api"
+import { NetlifyStateDotJSON } from "../../x/netlify/NetlifyStateDotJSON"
+import { NetlifyOAuthManager } from "../../x/netlify/vsc/NetlifyOAuthManager"
+import { vscode_Uri_smartParse } from "../../x/vscode/vscode_Uri_smartParse"
 
 const commands = {
   deploy: {
@@ -17,34 +17,39 @@ const commands = {
   },
 }
 
-/**
- * This command is everywhere
- */
-export function netlify_vsc_command_deploy_activate(
-  ctx: vscode.ExtensionContext
-) {
-  vscode.commands.registerCommand(
-    commands.deploy.command,
-    async (...args: any[]) => {
-      let [uri] = args
-      if (typeof uri === "string") uri = vscode_Uri_smartParse(uri)
-      if (!(uri instanceof vscode.Uri)) uri = undefined
-      const cc = new DeployToNetlifyCommandBuilder({ uri, ctx })
-      await cc.start()
-    }
-  )
+export class DeployToNetlifyCommand {
+  constructor(
+    private factory: DIFactory<typeof DeployToNetlifyCommandBuilder, [Opts]>
+  ) {
+    vscode.commands.registerCommand(
+      commands.deploy.command,
+      async (...args: any[]) => {
+        let [uri] = args
+        if (typeof uri === "string") uri = vscode_Uri_smartParse(uri)
+        if (!(uri instanceof vscode.Uri)) uri = undefined
+        const cc = this.factory({ uri })
+        await cc.start()
+      }
+    )
+  }
 }
 
 interface Opts {
   uri?: vscode.Uri
-  ctx: vscode.ExtensionContext
 }
 
-class DeployToNetlifyCommandBuilder {
-  constructor(private opts: Opts) {}
+export class DeployToNetlifyCommandBuilder {
+  constructor(
+    private opts: Opts,
+    private oauth: NetlifyOAuthManager,
+    private DeployExistingFolder_F: DIFactory<
+      typeof DeployExistingFolder,
+      [vscode.Uri]
+    >
+  ) {}
   @memo() async start() {
     // logged in?
-    const mgr = netlify_vsc_oauth_manager(this.opts.ctx)
+    const mgr = this.oauth
     if (!mgr.token) {
       const res = await (
         await vscode.window.showQuickPick(
@@ -70,12 +75,12 @@ class DeployToNetlifyCommandBuilder {
     }
     const uri = await new PickDeployFolder(this.opts).start()
     if (!uri) return
-    return await new DeployExistingFolder({ uri, ctx: this.opts.ctx }).start()
+    return await this.DeployExistingFolder_F(uri).start()
   }
 }
 
-class DeployExistingFolder {
-  constructor(private opts: Opts & { uri: vscode.Uri }) {}
+export class DeployExistingFolder {
+  constructor(private uri: vscode.Uri, private oauth: NetlifyOAuthManager) {}
 
   @memo() async start() {
     const site = await this.site()
@@ -87,7 +92,7 @@ class DeployExistingFolder {
   }
   @lazy() get basename() {
     // TODO: show more path parts
-    return this.opts.uri.path.split("/").pop()
+    return this.uri.path.split("/").pop()
   }
   @lazy() get quickPick() {
     const qp = vscode.window.createQuickPick()
@@ -100,9 +105,7 @@ class DeployExistingFolder {
   @memo() async api() {
     this.quickPick.step = 1
     this.quickPick.busy = true
-    const token = await netlify_vsc_oauth_manager(
-      this.opts.ctx
-    ).get_token_login_if_needed()
+    const token = await this.oauth.get_token_login_if_needed()
     this.quickPick.busy = false
     if (!token) {
       vscode.window.showErrorMessage("could not login to netlify")
@@ -110,12 +113,10 @@ class DeployExistingFolder {
     }
     return new NetlifyAPIWrapper(token)
   }
-  getSiteIdFromStateJSON() {
-    const { uri } = this.opts
-  }
+  getSiteIdFromStateJSON() {}
   @memo() async site() {
     // check if site is already linked via .netlify/state.json > siteId
-    const siteId = NetlifyStateDotJSON.forDir(this.opts.uri.fsPath).siteId
+    const siteId = NetlifyStateDotJSON.forDir(this.uri.fsPath).siteId
     if (siteId) {
       // do something here
     }

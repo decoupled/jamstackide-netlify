@@ -1,0 +1,1 @@
+export type ProjectRoot = string

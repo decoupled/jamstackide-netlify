@@ -1,4 +1,5 @@
 import { VSCodeExtension } from "lambdragon"
+import { values } from "lodash"
 import { join } from "path"
 import { language_server_build_target } from "src/language_server/language_server"
 import vscode from "vscode"
@@ -10,7 +11,7 @@ import { VSCodeProjectW } from "./di/VSCodeProjectW"
 import { NetlifyCLIPath_createDevTime } from "./NetlifyCLIPath"
 import icon from "./static/netlify_logomark.svg"
 import { treeview_contributes } from "./treeview/contributes"
-import { treeview_outline_contributes } from "./treeview/outline/consts"
+import { when_clauses } from "./util/when_clauses"
 
 /**
  * we'll publish under a codename for now
@@ -56,7 +57,7 @@ function main() {
 }
 
 {
-  treeview_outline_contributes()
+  commands_contributes()
 }
 
 function contributes() {
@@ -82,5 +83,77 @@ function contributes() {
         },
       ],
     },
+    commands_contributes(),
   ])
+}
+
+// https://code.visualstudio.com/api/references/contribution-points#Sorting-of-groups
+function commands_contributes() {
+  function cc(group: string) {
+    return [
+      ...netlify_toml_commands().map((cmd) => {
+        return {
+          when: when_clauses.is_netlify_toml,
+          command: cmd.command,
+          group,
+        }
+      }),
+      ...headers_commands().map((cmd) => {
+        return {
+          when: when_clauses.is_headers,
+          command: cmd.command,
+          group,
+        }
+      }),
+      ...redirects_commands().map((cmd) => {
+        return {
+          when: when_clauses.is_redirects,
+          command: cmd.command,
+          group,
+        }
+      }),
+    ]
+  }
+  return {
+    menus: {
+      "explorer/context": [...cc("7_modification")],
+      "editor/context": [...cc("1_modification")],
+    },
+    commands: values(command_ids),
+  }
+}
+
+function netlify_toml_commands() {
+  return values(command_ids)
+}
+
+function headers_commands() {
+  return [command_ids.add_custom_header]
+}
+
+function redirects_commands() {
+  return [command_ids.add_redirect]
+}
+
+const command_ids = {
+  add_redirect: {
+    command: "netlify.add_redirect",
+    title: "Add Redirect",
+    category: "Netlify",
+  },
+  add_context: {
+    command: "netlify.add_context",
+    title: "Add Context",
+    category: "Netlify",
+  },
+  add_custom_header: {
+    command: "netlify.add_custom_header",
+    title: "Add Custom Header",
+    category: "Netlify",
+  },
+  add_edge_handler: {
+    command: "netlify.add_edge_handler",
+    title: "Add Edge Handler",
+    category: "Netlify",
+  },
 }

@@ -2,43 +2,27 @@ import { Singleton } from "lambdragon"
 import { toPairs } from "lodash"
 import { basename } from "path"
 import vscode from "vscode"
-import { NetlifyAPIWrapper } from "../api/netlify_api"
-import { netlify_vsc_oauth_manager } from "./netlify_vsc_oauth_manager"
+import { NetlifyAPIService } from "../api/NetlifyAPIService"
 
 const scheme = "netlify-api"
 
-export class NetlifyVSCodeFileSystemProviderW implements Singleton {
-  constructor(ctx: vscode.ExtensionContext) {
-    netlify_vsc_filesystemprovider(ctx)
+export class NetlifyVSCodeFileSystemProvider
+  implements vscode.FileSystemProvider, Singleton {
+  constructor(private api: NetlifyAPIService) {
+    vscode.workspace.registerFileSystemProvider(scheme, this)
   }
-  scheme = scheme
-}
 
-/**
- *
- * @param ctx
- */
-export async function netlify_vsc_filesystemprovider(
-  ctx: vscode.ExtensionContext
-) {
-  vscode.workspace.registerFileSystemProvider(
-    scheme,
-    new NetlifyFileSystemProvider(ctx)
-  )
-}
-
-class NetlifyFileSystemProvider implements vscode.FileSystemProvider {
-  constructor(private ctx: vscode.ExtensionContext) {}
   private _ee = new vscode.EventEmitter<vscode.FileChangeEvent[]>()
   get onDidChangeFile(): vscode.Event<vscode.FileChangeEvent[]> {
     return this._ee.event
   }
 
   private getNetlifyApiOrThrow() {
-    const { token } = netlify_vsc_oauth_manager(this.ctx)
-    if (!token)
-      throw vscode.FileSystemError.NoPermissions("not authenticated to netlify")
-    return new NetlifyAPIWrapper(token)
+    try {
+      return this.api.getAuthenticatedAPIOrThrow()
+    } catch (e) {
+      throw vscode.FileSystemError.NoPermissions(e.toString())
+    }
   }
 
   private getSnippet(params: { site_id: string; snippet_id: string }) {

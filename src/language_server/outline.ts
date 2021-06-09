@@ -16,7 +16,7 @@ export class OutlineManager {
         async children() {
           return [
             {
-              label: "No Netlify project found :)",
+              label: "zzz",
               iconPath: "account",
               tooltip: `
                 tooltip!!! **boldy boldy**

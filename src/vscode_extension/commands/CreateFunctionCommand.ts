@@ -1,3 +1,4 @@
+import { Singleton } from "lambdragon"
 import { values } from "lodash"
 import { memo } from "src/x/decorators"
 import { netlify_events_meta } from "src/x/netlify/events/netlify_events_meta"
@@ -9,7 +10,7 @@ import { MiniServer } from "../MiniServer"
 import { NetlifyCLIPath } from "../NetlifyCLIPath"
 import { NetlifyCLIWrapper } from "../NetlifyCLIWrapper"
 
-export class CreateFunctionCommand {
+export class CreateFunctionCommand implements Singleton {
   constructor(
     private ctx: vscode.ExtensionContext,
     private MiniServer: MiniServer,

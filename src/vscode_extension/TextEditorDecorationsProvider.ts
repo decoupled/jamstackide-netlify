@@ -1,7 +1,7 @@
 import { lsp_Range__vscode_Range } from "src/x/lsp__vscode/lsp_Range__vscode_Range"
 import {
   vscode_decoration_types_all,
-  vscode_decoration_types_find
+  vscode_decoration_types_find,
 } from "src/x/netlify/etc/vscode_decoration_types"
 import { vscode_TextEditor_setDecorations_pivot_Item } from "src/x/vscode/vscode_TextEditor_setDecorations_pivot"
 import * as vscode from "vscode"

@@ -19,7 +19,6 @@
   # Installs the Lighthouse Build Plugin for all deploy contexts
   package = "@netlify/plugin-lighthouse"
 
-
 # Production context: all deploys from the Production branch set in your site’s
 # deploy contexts will inherit these settings.
 [context.production]
@@ -84,7 +83,7 @@
   query = {id = ":id"}
 
   # Redirect based on browser language and geolocation.
-  conditions = {Language = ["en"], Country = ["US"]}
+  conditions = {Language = ["en"], Country = ["us"]}
 
   # Sign each request with a value defined in an environment variable
   signed = "API_SIGNATURE_TOKEN"

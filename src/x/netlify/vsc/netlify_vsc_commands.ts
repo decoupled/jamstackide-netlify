@@ -21,11 +21,11 @@ export const netlify_vsc_commands = {
     title: "Create New Site",
     category,
   },
-  register_domain: {
-    command: base + ".register_domain",
-    title: "Register Domain",
-    category,
-  },
+  // register_domain: {
+  //   command: base + ".register_domain",
+  //   title: "Register Domain",
+  //   category,
+  // },
   add_snippet: {
     command: "_decoupled.netlify.add_snippet",
     title: "Add Snippet",

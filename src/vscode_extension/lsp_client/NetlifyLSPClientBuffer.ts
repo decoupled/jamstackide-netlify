@@ -1,6 +1,6 @@
 import { Singleton } from "lambdragon"
+import vscode from "vscode"
 import { LanguageClient } from "vscode-languageclient/node"
-
 export class NetlifyLSPClientBuffer
   implements Singleton, Pick<LanguageClient, "sendRequest" | "onRequest"> {
   private client: LanguageClient | undefined
@@ -15,11 +15,17 @@ export class NetlifyLSPClientBuffer
       this.tick()
     })
   }
-  private onRequest_queue: any[] = []
+
   onRequest(...args: any[]) {
-    this.onRequest_queue.push(args)
+    const item: OnRequestHandler = { args }
+    this.onRequest_list.push(item)
     this.tick()
-    return { dispose() {} } //<-TODO
+    return {
+      dispose() {
+        item.disposable?.dispose?.()
+        this.onRequest_list = this.onRequest_list.filter((x) => x !== item)
+      },
+    }
   }
   private tick() {
     const c = this.client
@@ -35,7 +41,20 @@ export class NetlifyLSPClientBuffer
     })
     this.sendRequest_queue = []
     // onRequest
-    this.onRequest_queue.forEach((args) => c.onRequest(...(args as [any, any])))
-    this.onRequest_queue = []
+    for (const or of this.onRequest_list) {
+      if (or.client !== c) {
+        or.disposable?.dispose?.()
+        or.client = c
+        or.disposable = c.onRequest(...(or.args as [any, any]))
+      }
+    }
   }
+
+  private onRequest_list: OnRequestHandler[] = []
+}
+
+interface OnRequestHandler {
+  args: any[]
+  disposable?: vscode.Disposable
+  client?: LanguageClient
 }

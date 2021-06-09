@@ -1,13 +1,12 @@
 import { ArrayLike } from "src/x/Array/ArrayLike"
 import { memo } from "src/x/decorators"
 import { ExtendedDiagnostic } from "src/x/vscode-languageserver-types/lsp_extensions"
-import { FileNode } from "./base"
-import { Project } from "./Project"
 import * as lsp from "vscode-languageserver"
-
+import { FileNode, FilePath } from "./base"
+import { IFileSystem } from "x/fs/IFileSystem"
 export class HeadersFile extends FileNode {
-  constructor(public project: Project, filePath: string) {
-    super(filePath)
+  constructor(filePath: FilePath, fs: IFileSystem) {
+    super(filePath, fs)
   }
   @memo() getDiagnostics(): ArrayLike<ExtendedDiagnostic> {
     const d: ExtendedDiagnostic = {

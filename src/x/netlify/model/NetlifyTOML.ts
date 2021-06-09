@@ -1,10 +1,11 @@
-import { netlify_toml_validator_get_diagnostics } from "src/x/toml/netlify_toml_validator"
-import { ExtendedDiagnostic } from "src/x/vscode-languageserver-types/lsp_extensions"
-import { FileNode } from "./base"
-import { Project } from "./Project"
+import { netlify_toml_validator_get_diagnostics } from "x/toml/netlify_toml_validator"
+import { ExtendedDiagnostic } from "x/vscode-languageserver-types/lsp_extensions"
+import { FileNode, FilePath } from "./base"
+import { IFileSystem } from "x/fs/IFileSystem"
+
 export class NetlifyTOML extends FileNode {
-  constructor(public project: Project, filePath: string) {
-    super(filePath)
+  constructor(filePath: FilePath, fs: IFileSystem) {
+    super(filePath, fs)
   }
 
   getDiagnostics() {

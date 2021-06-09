@@ -6,13 +6,16 @@ import {
   State,
 } from "vscode-languageclient/node"
 import { log } from "../log"
+import { TreeviewOutlineW } from "../treeview/outline/TreeviewOutlineW"
+import { treeview_outline_setup } from "../treeview/outline/treeview_outline_setup"
 import { NetlifyLSPClientBuffer } from "./NetlifyLSPClientBuffer"
 
 export class NetlifyLSPClient {
   constructor(
     private serverOptions: ServerOptions,
     private clientOptions: LanguageClientOptions,
-    private buffer: NetlifyLSPClientBuffer
+    private buffer: NetlifyLSPClientBuffer,
+    private treeview: TreeviewOutlineW
   ) {
     this.start()
   }
@@ -69,6 +72,10 @@ export class NetlifyLSPClient {
     //   }
     // )
     // this.setupOutline2()
+  }
+
+  private setupTreeview() {
+    treeview_outline_setup(ctx, client)
   }
 
   async getInfo(uri: string): Promise<any[]> {

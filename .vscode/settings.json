@@ -1,5 +1,8 @@
 {
-    "editor.formatOnSave": true,
-    "editor.tabSize": 2,
-    "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": true,
+  "editor.tabSize": 2,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "evenBetterToml.schema.associations": {
+    ".*netlify\\.toml": "./src/x/toml/netlify_toml_json_schema.json"
+  }
 }

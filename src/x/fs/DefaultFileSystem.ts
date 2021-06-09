@@ -1,8 +1,8 @@
 import * as fs from "fs-extra"
 import glob from "glob"
-import { Host } from "./Host"
+import { IFileSystem } from "./IFileSystem"
 
-export class DefaultHost implements Host {
+export class DefaultFileSystem implements IFileSystem {
   existsSync(path: string) {
     return fs.existsSync(path)
   }

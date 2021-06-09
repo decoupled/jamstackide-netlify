@@ -1,6 +1,6 @@
 import { cloneDeep } from "lodash"
 import { vscode_ThemeIcon_memo } from "src/x/vscode/vscode_ThemeIcon_memo"
-import vscode from "vscode"
+import vscode, { Disposable } from "vscode"
 import { LanguageClient } from "vscode-languageclient/node"
 import { log } from "../../log"
 import { contextValue } from "./consts"
@@ -12,17 +12,19 @@ import { treeview_outline_method_prefix } from "./treeview_outline_method_prefix
 export function treeview_outline_setup(
   ctx: vscode.ExtensionContext,
   client: Pick<LanguageClient, "onRequest" | "sendRequest">
-) {
-  register_commands((id, commandShortName) => {
-    // client.sendRequest("redwoodjs/x-outline-callMethod", [id, method])
+): vscode.Disposable {
+  const disposables: Disposable[] = []
+  const d = register_commands((id, commandShortName) => {
+    // client.sendRequest("netlify/x-outline-callMethod", [id, method])
     const cmd = treeItemCache[id]?.menu?.[commandShortName]
     if (cmd) {
       const cmd2 = processCommand(cmd)
       vscode.commands.executeCommand(cmd2.command, ...(cmd2.arguments ?? []))
     }
   })
+  disposables.push(d)
   const treeItemCache: any = {}
-  vscode.window.createTreeView(treeview_outline_id, {
+  const tv = vscode.window.createTreeView(treeview_outline_id, {
     treeDataProvider: {
       async getChildren(id: string | undefined): Promise<string[]> {
         try {
@@ -89,6 +91,7 @@ export function treeview_outline_setup(
     },
     showCollapseAll: true,
   })
+  return vscode.Disposable.from(...disposables, tv)
 }
 
 function processCommand(cmd: vscode.Command): vscode.Command {

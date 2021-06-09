@@ -1,6 +1,6 @@
 import { memoize } from "lodash"
 import { observable, when } from "mobx"
-import { lazy, memo } from "src/x/decorators"
+import { lazy } from "src/x/decorators"
 import { BrowserModel } from "./BrowserModel"
 import { BuildServerModel } from "./BuildServerModel"
 import { DevServerModel } from "./DevServerModel"

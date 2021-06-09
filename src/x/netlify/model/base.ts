@@ -3,13 +3,13 @@ import { lazy, memo } from "src/x/decorators"
 import { URL_fromFile } from "src/x/url/URL_fromFile"
 import { ExtendedDiagnostic } from "src/x/vscode-languageserver-types/lsp_extensions"
 import { DocumentUri } from "vscode-languageserver-types"
-import { Host } from "./Host"
-import { Project } from "./Project"
+import { IFileSystem } from "../../fs/IFileSystem"
 
 export type IDEStuff = any
 
+export type FilePath = string
+
 export abstract class ModelNode {
-  abstract get project(): Project
   getChildren(): ArrayLike<ModelNode> {
     return null
   }
@@ -29,11 +29,8 @@ export abstract class ModelNode {
 }
 
 export abstract class FileNode extends ModelNode {
-  constructor(public filePath: string) {
+  constructor(public filePath: FilePath, public host: IFileSystem) {
     super()
-  }
-  @lazy() get host(): Host {
-    return this.project.host
   }
   @lazy() get uri(): DocumentUri {
     return URL_fromFile(this.filePath)

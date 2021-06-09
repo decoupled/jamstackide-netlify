@@ -1,15 +1,15 @@
-import { lazy, memo } from "src/x/decorators"
+import { lazy, memo } from "x/decorators"
 import {
   NetlifyRedirectParserResult,
   netlify_redirect_parser_from_source,
-} from "src/x/netlify-redirect-parser/netlify_redirect_parser"
+} from "x/netlify-redirect-parser/netlify_redirect_parser"
 import * as lsp from "vscode-languageserver-types"
-import { FileNode } from "./base"
-import { Project } from "./Project"
+import { IFileSystem } from "x/fs/IFileSystem"
+import { FileNode, FilePath } from "./base"
 
 export class RedirectsFile extends FileNode {
-  constructor(public project: Project, filePath: string) {
-    super(filePath)
+  constructor(filePath: FilePath, fs: IFileSystem) {
+    super(filePath, fs)
   }
 
   @memo() raw(): Promise<NetlifyRedirectParserResult> {

@@ -1,0 +1,120 @@
+{
+  "Settings": {
+    "ID": "Your_Site_ID"
+  },
+  "build": {
+    "base": "project/",
+    "publish": "project/build-output/",
+    "command": "echo 'default context'",
+    "functions": "project/functions/",
+    "ignore": "git diff --quiet HEAD^ HEAD sub_dir/",
+    "processing": {
+      "skip_processing": false,
+      "css": {
+        "bundle": true,
+        "minify": false
+      },
+      "js": {
+        "bundle": true,
+        "minify": false
+      },
+      "html": {
+        "pretty_urls": true
+      },
+      "images": {
+        "compress": true
+      }
+    }
+  },
+  "template": {
+    "environment": {
+      "YOUR_ENV_KEYS_NEEDED": "Enter in the ENV key here",
+      "incoming-hooks": ["Service-1"]
+    }
+  },
+  "context": {
+    "production": {
+      "publish": "output/",
+      "command": "make publish",
+      "environment": {
+        "ACCESS_TOKEN": "super secret",
+        "NODE_ENV": "8.0.1"
+      }
+    },
+    "deploy-preview": {
+      "publish": "dist/",
+      "environment": {
+        "ACCESS_TOKEN": "not so secret"
+      }
+    },
+    "branch-deploy": {
+      "command": "echo branch",
+      "environment": {
+        "NODE_ENV": "development"
+      }
+    },
+    "staging": {
+      "command": "echo 'staging'",
+      "base": "staging"
+    },
+    "feat/branch": {
+      "command": "echo 'special branch'",
+      "base": "branch"
+    }
+  },
+  "redirects": [
+    {
+      "from": "/*",
+      "to": "/blog/:splat"
+    },
+    {
+      "from": "/old-path",
+      "to": "/new-path",
+      "status": 301,
+      "force": false,
+      "query": {
+        "path": ":path"
+      },
+      "conditions": {
+        "Language": ["en"],
+        "Country": ["US"],
+        "Role": ["admin"]
+      },
+      "signed": "API_SIGNATURE_TOKEN",
+      "headers": {
+        "X-From": "Netlify",
+        "X-Api-Key": "some-api-key-string"
+      }
+    },
+    {
+      "from": "/*",
+      "to": "/index.html",
+      "status": 200
+    },
+    {
+      "from": "/api/*",
+      "to": "https://us-central1-netlify-intercom.cloudfunctions.net/readHeaders/:splat",
+      "status": 200,
+      "force": true,
+      "conditions": {
+        "Role": ["admin", "cms"]
+      },
+      "headers": {
+        "X-From": "Netlify",
+        "X-Api-Key": "some-api-key-string"
+      }
+    }
+  ],
+  "headers": [
+    {
+      "for": "/*",
+      "values": {
+        "X-Frame-Options": "DENY",
+        "X-XSS-Protection": "1; mode=block",
+        "Content-Security-Policy": "frame-ancestors https://www.facebook.com",
+        "Link": "    </assets/css/base.css>; rel=preload; as=style, \\\n    </assets/css/base2.css>; rel=preload; as=style, \\\n    </assets/css/base3.css>; rel=preload; as=style",
+        "Basic-Auth": "someuser:somepassword anotheruser:anotherpassword"
+      }
+    }
+  ]
+}

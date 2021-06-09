@@ -9,18 +9,20 @@ import { NetlifyLSPClientManager } from "../lsp_client/NetlifyLSPClientManager"
 import { NetlifyLSPClient } from "../lsp_client/NetlifyLSPClient"
 import { LanguageClientOptions_build } from "../lsp_client/LanguageClientOptions_build"
 import { NetlifyLSPClientBuffer } from "../lsp_client/NetlifyLSPClientBuffer"
-import { TreeviewDocsW } from "../treeview/docs/TreeviewDocsW"
 import { TextEditorDecorations } from "../TextEditorDecorations"
 import { TextEditorDecorationsProvider } from "../TextEditorDecorationsProvider"
 import { TextEditorDecorationsProviderFromLSPClient } from "../TextEditorDecorationsProviderFromLSPClient"
 import { SingleTextEditorDecorations } from "../TextEditorDecorations"
-import { ReactTreeviewW } from "../../x/netlify/vsc/treeview/react/ReactTreeviewW"
-import { NetlifyTokenManager } from "../../x/netlify/vsc/netlify_vsc_oauth_manager"
-import { TreeviewOutlineW } from "../treeview/outline/TreeviewOutlineW"
 import { MagicURLsW } from "../magic_urls/magic_urls"
 import { outputChannel } from "./autowire"
 import { DevelopLocallyServiceW } from "../dev/develop_locally"
+import { TreeviewModules } from "../treeview/TreeviewModules"
+import { TreeviewDocsW } from "../treeview/docs/TreeviewDocsW"
+import { ReactTreeviewW } from "../../x/netlify/vsc/treeview/react/ReactTreeviewW"
+import { NetlifyOAuthManager } from "../../x/netlify/vsc/NetlifyOAuthManager"
+import { TreeviewOutlineW } from "../treeview/outline/TreeviewOutlineW"
 import { TreeviewWorkflowW } from "../treeview/workflow/TreeviewWorkflowW"
+import { Debugging } from "../debugging/Debugging"
 
 export const autowire__impl = ___autowire__(
   "VSCodeProjectW",
@@ -34,12 +36,10 @@ export const autowire__impl = ___autowire__(
         "RedirectsFileW",
         "CreateFunctionCommand",
         "NetlifyLSPClientManager",
-        "TreeviewDocsW",
         "TextEditorDecorations",
-        "ReactTreeviewW",
-        "TreeviewOutlineW",
         "MagicURLsW",
-        "TreeviewWorkflowW",
+        "TreeviewModules",
+        "Debugging",
       ],
       impl: VSCodeProjectW,
     },
@@ -53,7 +53,7 @@ export const autowire__impl = ___autowire__(
     {
       out: "CreateFunctionCommand",
       isConstructor: true,
-      isSingleton: false,
+      isSingleton: true,
       args: [
         "ExtensionContext",
         "MiniServer",
@@ -126,13 +126,6 @@ export const autowire__impl = ___autowire__(
       impl: NetlifyLSPClientBuffer,
     },
     {
-      out: "TreeviewDocsW",
-      isConstructor: true,
-      isSingleton: true,
-      args: [],
-      impl: TreeviewDocsW,
-    },
-    {
       out: "TextEditorDecorations",
       isConstructor: true,
       isSingleton: false,
@@ -165,27 +158,6 @@ export const autowire__impl = ___autowire__(
       impl: SingleTextEditorDecorations,
     },
     {
-      out: "ReactTreeviewW",
-      isConstructor: true,
-      isSingleton: false,
-      args: ["ExtensionContext", "NetlifyTokenManager"],
-      impl: ReactTreeviewW,
-    },
-    {
-      out: "NetlifyTokenManager",
-      isConstructor: true,
-      isSingleton: true,
-      args: ["ExtensionContext"],
-      impl: NetlifyTokenManager,
-    },
-    {
-      out: "TreeviewOutlineW",
-      isConstructor: true,
-      isSingleton: false,
-      args: ["ExtensionContext", "NetlifyLSPClientBuffer"],
-      impl: TreeviewOutlineW,
-    },
-    {
       out: "MagicURLsW",
       isConstructor: true,
       isSingleton: true,
@@ -201,11 +173,58 @@ export const autowire__impl = ___autowire__(
       impl: DevelopLocallyServiceW,
     },
     {
+      out: "TreeviewModules",
+      isConstructor: true,
+      isSingleton: false,
+      args: [
+        "TreeviewDocsW",
+        "ReactTreeviewW",
+        "TreeviewOutlineW",
+        "TreeviewWorkflowW",
+      ],
+      impl: TreeviewModules,
+    },
+    {
+      out: "TreeviewDocsW",
+      isConstructor: true,
+      isSingleton: true,
+      args: [],
+      impl: TreeviewDocsW,
+    },
+    {
+      out: "ReactTreeviewW",
+      isConstructor: true,
+      isSingleton: false,
+      args: ["ExtensionContext", "NetlifyOAuthManager"],
+      impl: ReactTreeviewW,
+    },
+    {
+      out: "NetlifyOAuthManager",
+      isConstructor: true,
+      isSingleton: true,
+      args: ["ExtensionContext"],
+      impl: NetlifyOAuthManager,
+    },
+    {
+      out: "TreeviewOutlineW",
+      isConstructor: true,
+      isSingleton: false,
+      args: ["ExtensionContext", "NetlifyLSPClientBuffer"],
+      impl: TreeviewOutlineW,
+    },
+    {
       out: "TreeviewWorkflowW",
       isConstructor: true,
       isSingleton: true,
       args: ["ExtensionContext"],
       impl: TreeviewWorkflowW,
+    },
+    {
+      out: "Debugging",
+      isConstructor: true,
+      isSingleton: false,
+      args: ["NetlifyCLIPath"],
+      impl: Debugging,
     },
   ]
 )
