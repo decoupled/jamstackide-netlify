@@ -52,6 +52,10 @@ export function netlify_toml_json_schema_generate() {
         type: "array",
         items: {
           type: "object",
+          title: "HeaderSet",
+          "x-label": (v) => {
+            if (v?.for) return `${v.for}`
+          },
           properties: {
             for: { type: "string" },
             values: $ref("HeaderMap"),
@@ -144,6 +148,21 @@ including production CI builds, Netlify CLI and the JavaScript client.
       },
       ContextMap: {
         type: "object",
+        properties: {
+          // production: $ref("Context"),
+          // "deploy-preview": $ref("Context"),
+          // "branch-deploy": $ref("Context"),
+          // we created the Context_() helper function just so we could pass different descriptions
+          production: Context_(
+            "This context corresponds to the main site’s deployment, attached to the Git branch you set when the site is created"
+          ),
+          "deploy-preview": Context_(
+            "This context corresponds to the previews we build for pull/merge requests."
+          ),
+          "branch-deploy": Context_(
+            "This context corresponds to deploys from branches that are not the site’s main production branch."
+          ),
+        },
         additionalProperties: $ref("Context"),
       },
       Context: {
@@ -194,9 +213,15 @@ including production CI builds, Netlify CLI and the JavaScript client.
         type: "array",
         items: $ref("Plugin"),
         description: "Build Plugins",
+        title: "Plugins",
       },
       Plugin: {
         type: "object",
+        title: "Plugin",
+        "x-label": (v) => {
+          const p = v?.package
+          if (typeof p === "string") return p
+        },
         description: `[Docs](https://docs.netlify.com/configure-builds/build-plugins/#configure-settings)`,
         properties: {
           package: { type: "string", description: Plugin_package_description },
@@ -247,6 +272,7 @@ including production CI builds, Netlify CLI and the JavaScript client.
       },
       Dev: {
         type: "object",
+        description: "Configuration for Netlify Dev",
         properties: {
           command: {
             type: "string",
@@ -302,11 +328,31 @@ including production CI builds, Netlify CLI and the JavaScript client.
           initKeys: ["command"],
         },
       },
-
       Condition_Country: iso3166_countries_jsonSchema("Country"),
     },
   }
   return removeUndefinedProps(schema)
+
+  function Context_(description?: string) {
+    return {
+      type: "object",
+      description,
+      properties: {
+        base: {
+          type: "string",
+          description: build_base_description,
+        },
+        publish: {
+          type: "string",
+          description: build_publish_description,
+        },
+        command: { type: "string", description: build_command_description },
+        environment: $ref("Env"),
+        plugins: $ref("Plugins"),
+        processing: $ref("Processing"),
+      },
+    }
+  }
 
   function conditionArr(description?: string) {
     return {
@@ -320,7 +366,21 @@ including production CI builds, Netlify CLI and the JavaScript client.
   function Redirect_(roleBased?: boolean) {
     return {
       type: "object",
-      title: "Redirect" + (roleBased ? " (Role Based)" : ""),
+      title: "Redirect",
+      "x-label": (v: any) => {
+        if (typeof v !== "object") return
+        if (v === null) return
+        const parts: string[] = []
+        parts.push(v.from)
+        if (v.to) {
+          parts.push("-->")
+          parts.push(v.to)
+        }
+        if (typeof v.status === "number") {
+          parts.push(v.status)
+        }
+        return parts.join(" ")
+      },
       properties: {
         from: { type: "string" },
         to: roleBased ? undefined : { type: "string" },

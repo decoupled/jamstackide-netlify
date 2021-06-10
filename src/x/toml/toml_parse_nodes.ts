@@ -5,75 +5,97 @@ import { join } from "path"
   const netlify_toml = join(__dirname, "example1_netlify.toml")
   const result = parse(readFileSync(netlify_toml).toString())
   result
-  findNode(["build", "base"], result)
+  toml_parse_find_node(
+    ["context", "deploy-preview", "environment", "ACCESS_TOKEN"],
+    result
+  )
+  // findNode(["build", "project"], result)
 }
 
-function findNode(path: (string | number)[], nodes: TopLevelNode[]) {
-  let currentPath: (string | number)[] = []
-  for (const node of nodes) {
-    if (node.type === "ObjectPath") {
-      currentPath = node.value
-      if (pathEquals(path, node.value)) return node
+export function toml_parse_find_node_2(path: (string | number)[], src: string) : TOMLNode | undefined {
+  return toml_parse_find_node(path, parse(src))
+}
+export function toml_parse_find_node(
+  path: (string | number)[],
+  nodes: TopLevelNode[]
+): TOMLNode | undefined {
+  try {
+    findNode2()
+  } catch (e) {
+    if (Array.isArray(e)) return e[0]
+    throw e
+  }
+  function findNode2() {
+    let currentPath: (string | number)[] = []
+    for (const node of nodes) {
+      if (node.type === "ObjectPath") {
+        currentPath = node.value
+        if (pathEquals(path, node.value)) throw [node]
+      } else if (node.type === "ArrayPath") {
+        currentPath = node.value
+        if (pathEquals(path, node.value)) throw [node]
+      } else if (node.type === "Assign") {
+        iterRec(node.value, [...currentPath, node.key])
+      }
     }
-    if (node.type === "ArrayPath") {
-      currentPath = node.value
-      if (pathEquals(path, node.value)) return node
-    }
-    if (node.type === "Assign") {
-      currentPath.push(node.key)
-      if (pathEquals(path, currentPath)) return node
-      currentPath.pop()
+    function iterRec(x: Value, p: (string | number)[]) {
+      if (pathEquals(p, path)) throw [x] // trampoline
+      if (x.type === "Array") {
+        x.value.forEach((xx, i) => iterRec(xx, [...p, i]))
+      } else if (x.type === "InlineTable") {
+        x.value.forEach((v) => iterRec(v.value, [...p, v.key]))
+      }
     }
   }
 }
 
 function pathEquals(p1: (string | number)[], p2: (string | number)[]): boolean {
-  return p1.join("  ") === p2.join("  ")
+  return p1.join(".") === p2.join(".")
 }
 
-interface HasPos {
+interface TOMLNode {
   line: number
   column: number
 }
 
-interface ObjectPath extends HasPos {
+interface ObjectPath extends TOMLNode {
   type: "ObjectPath"
   value: string[] //["functions"],
 }
-interface ArrayPath extends HasPos {
+interface ArrayPath extends TOMLNode {
   type: "ArrayPath"
   value: string[]
 }
-interface ArrayValue extends HasPos {
+interface ArrayValue extends TOMLNode {
   type: "Array"
   value: ScalarValue[]
 }
 type ScalarValue = StringValue | IntegerValue | BooleanValue
-type Value = ArrayValue | ScalarValue
-interface StringValue extends HasPos {
+type Value = ArrayValue | ScalarValue | InlineTable
+interface StringValue extends TOMLNode {
   type: "String"
   value: string //"myfunctions/",
 }
-interface IntegerValue extends HasPos {
+interface IntegerValue extends TOMLNode {
   type: "Integer"
   value: number //"myfunctions/",
 }
-interface BooleanValue extends HasPos {
+interface BooleanValue extends TOMLNode {
   type: "Boolean"
   value: boolean //"myfunctions/",
 }
-interface Assign extends HasPos {
+interface Assign extends TOMLNode {
   type: "Assign"
-  value: Value | InlineTable
+  value: Value
   key: string //"directory",
 }
 type TopLevelNode = Assign | ObjectPath | ArrayPath
-interface InlineTable extends HasPos {
+interface InlineTable extends TOMLNode {
   type: "InlineTable"
   value: InlineTableValue[]
 }
 
-interface InlineTableValue extends HasPos {
+interface InlineTableValue extends TOMLNode {
   type: "InlineTableValue"
   value: Value
   key: string

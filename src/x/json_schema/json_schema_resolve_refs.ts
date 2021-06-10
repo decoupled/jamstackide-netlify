@@ -16,6 +16,20 @@ export function json_schema_resolve_refs(schemaObj: any) {
   return o
 }
 
+export function json_schema_resolve_refs_in_place(o: any) {
+  while (tick()) {}
+  function tick() {
+    let changed = false
+    traverse(o).forEach(function (x: any) {
+      const id = x_$ref_id(x)
+      if (!id) return
+      changed = true
+      this.update(o.definitions[id], true)
+    })
+    return changed
+  }
+}
+
 function clone(x) {
   return JSON.parse(JSON.stringify(x))
 }
