@@ -4,6 +4,10 @@ import { treeview_outline_setup } from "./treeview_outline_setup"
 
 export class TreeviewOutlineW {
   constructor(ctx: vscode.ExtensionContext, client: NetlifyLSPClientBuffer) {
-    treeview_outline_setup(ctx, client)
+    let d: vscode.Disposable | undefined
+    client.onClientChanged.event((c) => {
+      d?.dispose()
+      d = treeview_outline_setup(ctx, c)
+    })
   }
 }

@@ -3,8 +3,11 @@ import vscode from "vscode"
 import { LanguageClient } from "vscode-languageclient/node"
 export class NetlifyLSPClientBuffer
   implements Singleton, Pick<LanguageClient, "sendRequest" | "onRequest"> {
+  onClientChanged = new vscode.EventEmitter<LanguageClient | undefined>()
+
   private client: LanguageClient | undefined
   updateClient(client: LanguageClient | undefined) {
+    this.onClientChanged.fire(client)
     this.client = client
     this.tick()
   }

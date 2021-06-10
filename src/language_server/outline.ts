@@ -5,6 +5,7 @@ import {
   RemoteTreeDataProvider_publishOverLSPConnection,
   TreeItem2,
 } from "src/x/vscode"
+import { getSuperConfigOutline } from "x/__netlify/config/playground"
 import { NetlifyLanguageServer } from "./NetlifyLanguageServer"
 
 export class OutlineManager {
@@ -31,7 +32,11 @@ export class OutlineManager {
       } as TreeItem2
     }
 
-    const tdp = new RemoteTreeDataProviderImpl(getRoot, 3000)
+    const getRoot2 = async () => {
+      return getSuperConfigOutline(this.server.projectRoot)
+    }
+
+    const tdp = new RemoteTreeDataProviderImpl(getRoot2, 10000)
 
     RemoteTreeDataProvider_publishOverLSPConnection(
       tdp,

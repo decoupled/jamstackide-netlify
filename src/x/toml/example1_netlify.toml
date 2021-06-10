@@ -18,6 +18,7 @@
 [[plugins]]
   # Installs the Lighthouse Build Plugin for all deploy contexts
   package = "@netlify/plugin-lighthouse"
+  inputs = {  }
 
 # Production context: all deploys from the Production branch set in your site’s
 # deploy contexts will inherit these settings.
@@ -70,7 +71,7 @@
   to = "/new-path"
 
   # The default HTTP status code is 301, but you can define a different one.
-  status = 302
+  status = 301
 
   # By default, redirects won’t be applied if there’s a file with the same
   # path as the one defined in the `from` property. Setting `force` to `true`

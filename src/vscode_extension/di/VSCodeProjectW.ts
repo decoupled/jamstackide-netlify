@@ -1,5 +1,6 @@
 // import { HeadersFileW } from "src/x/netlify/headers_file/headers_file_vsc"
 import { RedirectsFileW } from "src/x/netlify/redirects_file/RedirectsFileW"
+import { TaploUpdateW } from "x/taplo/TaploUpdateW"
 import { CreateFunctionCommand } from "../commands/CreateFunctionCommand"
 import { Debugging } from "../debugging/Debugging"
 import { NetlifyLSPClientManager } from "../lsp_client/NetlifyLSPClientManager"
@@ -18,6 +19,7 @@ export class VSCodeProjectW {
     _x: TextEditorDecorations,
     _dddd: MagicURLsW,
     _treeviews: TreeviewModules,
-    _debugging: Debugging
+    _debugging: Debugging,
+    _taplo: TaploUpdateW
   ) {}
 }

@@ -20,9 +20,11 @@ import { TreeviewModules } from "../treeview/TreeviewModules"
 import { TreeviewDocsW } from "../treeview/docs/TreeviewDocsW"
 import { ReactTreeviewW } from "../../x/netlify/vsc/treeview/react/ReactTreeviewW"
 import { NetlifyOAuthManager } from "../../x/netlify/vsc/NetlifyOAuthManager"
+import { ConfigTreeviewW } from "../../x/netlify/vsc/treeview/react/config/ConfigTreeviewW"
 import { TreeviewOutlineW } from "../treeview/outline/TreeviewOutlineW"
 import { TreeviewWorkflowW } from "../treeview/workflow/TreeviewWorkflowW"
 import { Debugging } from "../debugging/Debugging"
+import { TaploUpdateW } from "../../x/taplo/TaploUpdateW"
 
 export const autowire__impl = ___autowire__(
   "VSCodeProjectW",
@@ -40,6 +42,7 @@ export const autowire__impl = ___autowire__(
         "MagicURLsW",
         "TreeviewModules",
         "Debugging",
+        "TaploUpdateW",
       ],
       impl: VSCodeProjectW,
     },
@@ -179,6 +182,7 @@ export const autowire__impl = ___autowire__(
       args: [
         "TreeviewDocsW",
         "ReactTreeviewW",
+        "ConfigTreeviewW",
         "TreeviewOutlineW",
         "TreeviewWorkflowW",
       ],
@@ -206,6 +210,13 @@ export const autowire__impl = ___autowire__(
       impl: NetlifyOAuthManager,
     },
     {
+      out: "ConfigTreeviewW",
+      isConstructor: true,
+      isSingleton: false,
+      args: [],
+      impl: ConfigTreeviewW,
+    },
+    {
       out: "TreeviewOutlineW",
       isConstructor: true,
       isSingleton: false,
@@ -225,6 +236,13 @@ export const autowire__impl = ___autowire__(
       isSingleton: false,
       args: ["NetlifyCLIPath"],
       impl: Debugging,
+    },
+    {
+      out: "TaploUpdateW",
+      isConstructor: true,
+      isSingleton: false,
+      args: ["CWD"],
+      impl: TaploUpdateW,
     },
   ]
 )

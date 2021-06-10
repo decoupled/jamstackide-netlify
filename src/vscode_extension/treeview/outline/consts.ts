@@ -105,7 +105,7 @@ export function treeview_outline_contributes() {
         netlify: [
           {
             id: treeview_outline_id,
-            name: "LSP Treeview",
+            name: "Netlify Config",
             // when: treeview_outline_id,
           },
         ],

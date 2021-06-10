@@ -49,6 +49,7 @@
     "simple-git": "^2.38.0",
     "tmp": "^0.2.1",
     "toml": "^3.0.0",
+    "traverse": "^0.6.6",
     "ts-morph": "^10.0.2",
     "tslib": "^2.2.0",
     "vscode-extension-telemetry": "^0.1.7",

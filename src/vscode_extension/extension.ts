@@ -33,7 +33,10 @@ export const netlify_vscode_extension_build_target = new VSCodeExtension({
   engines: { vscode: "^1.53.0" },
   deps: [language_server_build_target],
   staticDir: join(__dirname, "static"),
-  extensionDependencies: ["auchenberg.vscode-browser-preview"],
+  extensionDependencies: [
+    "auchenberg.vscode-browser-preview",
+    "tamasfe.even-better-toml",
+  ],
 })
 
 // the entrypoint

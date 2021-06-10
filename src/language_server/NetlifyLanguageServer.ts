@@ -2,9 +2,6 @@ import { lazy, memo } from "src/x/decorators"
 import { headers_file_parser22 } from "src/x/netlify/headers_file/headers_file_parser"
 import { URL_toFile } from "src/x/url/URL_fromFile"
 import { ExtendedDiagnostic_findRelevantQuickFixes } from "src/x/vscode-languageserver-types/lsp_extensions"
-// import { URL_toFile } from "src/x/url/URL_toFile"
-// import { VSCodeWindowMethods_fromConnection } from "src/x/vscode"
-// import { Connection_suppressErrors } from "src/x/vscode-languageserver"
 import { TextDocument } from "vscode-languageserver-textdocument"
 import * as lsp from "vscode-languageserver-types"
 import { CodeAction } from "vscode-languageserver-types"
@@ -97,8 +94,22 @@ export class NetlifyLanguageServer {
     })
 
     connection.onCodeLens(async ({ textDocument: { uri } }) => {
-      connection.console.log("codelens provider!" + uri)
-      // return (await this.info(uri, "CodeLens")).map((i) => i.codeLens)
+      if (uri.endsWith("netlify.toml")) {
+        const range: lsp.Range = {
+          start: { line: 0, character: 0 },
+          end: { line: 0, character: 0 },
+        }
+        const d: lsp.CodeLens = {
+          range,
+          command: {
+            command: "netlify.xxx",
+            title: "Show Resolved Config",
+            arguments: [uri],
+          },
+        }
+        return [d]
+      }
+
       return []
     })
 
