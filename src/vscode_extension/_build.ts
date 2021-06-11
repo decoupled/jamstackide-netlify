@@ -4,6 +4,11 @@ import { degit_with_retries } from "src/x/degit/degit_with_retries"
 import { netlify_vscode_extension_build_target as extension } from "./extension"
 
 {
+  const x = 88
+  console.log(x)
+}
+
+{
   // openExtensionOn("git@github.com:redwoodjs/example-blog.git")
   extension.dev.buildAndOpen({
     openOnFolder: "/Users/aldo/com.github/redwoodjs/example-blog",

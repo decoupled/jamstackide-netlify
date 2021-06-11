@@ -213,7 +213,7 @@ export const autowire__impl = ___autowire__(
       out: "ConfigTreeviewW",
       isConstructor: true,
       isSingleton: false,
-      args: [],
+      args: ["ExtensionContext"],
       impl: ConfigTreeviewW,
     },
     {

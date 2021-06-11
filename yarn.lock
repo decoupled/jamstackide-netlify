@@ -1887,10 +1887,10 @@ kind-of@^6.0.2:
   resolved "https://registry.yarnpkg.com/kind-of/-/kind-of-6.0.3.tgz#07c05034a6c349fa06e24fa35aa76db4580ce4dd"
   integrity sha512-dcS1ul+9tmeD95T+x28/ehLgd9mENa3LsvDTtzm3vyBEO7RPptvAD+t44WVXaUjTBRcrpFeFlC8WCruUR456hw==
 
-lambdragon@^0.0.11:
-  version "0.0.11"
-  resolved "https://registry.yarnpkg.com/lambdragon/-/lambdragon-0.0.11.tgz#9cfd7c3c28f28e9aa3c8e47c75f968005903b1dd"
-  integrity sha512-BJOusPf7ayNQgMrGGtXT4ZBQbnDTYb1LHgv3UnVnDORXvf89YZ9XtGCanGj8hKl2yT8OJaUTHRqu2QcuvK/OSg==
+lambdragon@^0.0.12:
+  version "0.0.12"
+  resolved "https://registry.yarnpkg.com/lambdragon/-/lambdragon-0.0.12.tgz#ca65be6b838e00b4b93f2db70e6ad0084d090b11"
+  integrity sha512-Xcn08G5F37uExNJWZ5WztQl3J/xn8s3LYnTCb+FMAPyf5OctM1oxY5ag3Q5GSKU/fGhkh1Cer3HAz5BN4cnnhA==
   dependencies:
     code-block-writer "^10.1.1"
     cote "^1.0.2"

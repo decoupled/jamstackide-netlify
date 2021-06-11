@@ -26,7 +26,7 @@ class VSCodeMobx {
     )
   }
 
-  get activeTextEditor$$() {
+  get activeTextEditor$$(): vscode.TextEditor | undefined {
     return this._activeTextEditor
   }
   @o private _activeTextEditor: vscode.TextEditor | undefined

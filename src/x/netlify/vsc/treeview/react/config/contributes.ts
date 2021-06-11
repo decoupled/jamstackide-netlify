@@ -6,10 +6,10 @@ export function netlify_vsc_treeview_config_contributes() {
   const cc = {
     contributes: {
       views: {
-        netlify: [
+        explorer: [
           {
             id: netlify_vsc_treeview_config_id,
-            name: "Netlify Config (React)",
+            name: "Netlify",
             // when: netlify_vsc_treeview_context_netlifyEnable,
           },
         ],

@@ -21,6 +21,6 @@ export class ReactTreeviewW {
         ctx={ctx}
       />
     )
-    TreeItem_render(netlify_vsc_treeview_react_id, root)
+    const tree = TreeItem_render(netlify_vsc_treeview_react_id, root)
   }
 }

@@ -9,14 +9,81 @@ import { join } from "path"
     ["context", "deploy-preview", "environment", "ACCESS_TOKEN"],
     result
   )
+  toml_parse_find_node_or_ancestor_2
   // findNode(["build", "project"], result)
 }
 
-export function toml_parse_find_node_2(path: (string | number)[], src: string) : TOMLNode | undefined {
+type Path = (string | number)[]
+
+export class TOMLHelper {
+  private nodes: TopLevelNode[]
+  constructor(x: string | TopLevelNode[]) {
+    this.nodes = typeof x === "string" ? parse(x) : x
+  }
+  findByPath(path: Path): TOMLNode | undefined {
+    return toml_parse_find_node(path, this.nodes)
+  }
+  findClosestAncestorByPath(
+    path: Path
+  ): { ancestor: TOMLNode; ancestorPath: Path } | undefined {
+    path = [...path] // clone
+    while (true) {
+      if (path.length === 0) break
+      const x = this.findByPath(path)
+      if (x) return { ancestor: x, ancestorPath: path }
+      path.pop()
+    }
+  }
+  getTopLevelSections() {
+    type Section = { node?: ObjectPath | ArrayPath; assigns: Assign[] }
+    const sections: Section[] = [{ assigns: [] }]
+    for (const n of this.nodes) {
+      if (n.type === "ObjectPath" || n.type === "ArrayPath") {
+        sections.push({ node: n, assigns: [] })
+      } else {
+        sections[sections.length - 1].assigns.push(n)
+      }
+    }
+    return sections
+  }
+  getLastNodeInSection(
+    n: ObjectPath | ArrayPath
+  ): ObjectPath | ArrayPath | Assign {
+    for (const { node, assigns } of this.getTopLevelSections()) {
+      if (node === n) {
+        if (assigns.length === 0) return node
+        return assigns[assigns.length - 1]
+      }
+    }
+    throw new Error(
+      "section not found. this is not possible unless you passed in TOMLNode created by another parser"
+    )
+  }
+}
+
+export function toml_parse_find_node_or_ancestor_2(
+  path: Path,
+  src: string
+): { ancestor: TOMLNode; ancestorPath: Path } | undefined {
+  const parsed = parse(src)
+  path = [...path] // clone
+  while (true) {
+    if (path.length === 0) break
+    const x = toml_parse_find_node(path, parsed)
+    if (x) return { ancestor: x, ancestorPath: path }
+
+    path.pop()
+  }
+}
+
+export function toml_parse_find_node_2(
+  path: Path,
+  src: string
+): TOMLNode | undefined {
   return toml_parse_find_node(path, parse(src))
 }
 export function toml_parse_find_node(
-  path: (string | number)[],
+  path: Path,
   nodes: TopLevelNode[]
 ): TOMLNode | undefined {
   try {
@@ -26,7 +93,7 @@ export function toml_parse_find_node(
     throw e
   }
   function findNode2() {
-    let currentPath: (string | number)[] = []
+    let currentPath: Path = []
     for (const node of nodes) {
       if (node.type === "ObjectPath") {
         currentPath = node.value
@@ -38,7 +105,7 @@ export function toml_parse_find_node(
         iterRec(node.value, [...currentPath, node.key])
       }
     }
-    function iterRec(x: Value, p: (string | number)[]) {
+    function iterRec(x: Value, p: Path) {
       if (pathEquals(p, path)) throw [x] // trampoline
       if (x.type === "Array") {
         x.value.forEach((xx, i) => iterRec(xx, [...p, i]))
@@ -49,53 +116,56 @@ export function toml_parse_find_node(
   }
 }
 
-function pathEquals(p1: (string | number)[], p2: (string | number)[]): boolean {
+function pathEquals(p1: Path, p2: Path): boolean {
   return p1.join(".") === p2.join(".")
 }
 
-interface TOMLNode {
+interface TOMLNodeBase {
   line: number
   column: number
+  type: string
 }
 
-interface ObjectPath extends TOMLNode {
+type TopLevelNode = Assign | ObjectPath | ArrayPath
+type ScalarValue = StringValue | IntegerValue | BooleanValue
+type Value = ArrayValue | ScalarValue | InlineTable
+type TOMLNode = TopLevelNode | Value
+interface ObjectPath extends TOMLNodeBase {
   type: "ObjectPath"
   value: string[] //["functions"],
 }
-interface ArrayPath extends TOMLNode {
+interface ArrayPath extends TOMLNodeBase {
   type: "ArrayPath"
   value: string[]
 }
-interface ArrayValue extends TOMLNode {
+interface ArrayValue extends TOMLNodeBase {
   type: "Array"
   value: ScalarValue[]
 }
-type ScalarValue = StringValue | IntegerValue | BooleanValue
-type Value = ArrayValue | ScalarValue | InlineTable
-interface StringValue extends TOMLNode {
+interface StringValue extends TOMLNodeBase {
   type: "String"
   value: string //"myfunctions/",
 }
-interface IntegerValue extends TOMLNode {
+interface IntegerValue extends TOMLNodeBase {
   type: "Integer"
   value: number //"myfunctions/",
 }
-interface BooleanValue extends TOMLNode {
+interface BooleanValue extends TOMLNodeBase {
   type: "Boolean"
   value: boolean //"myfunctions/",
 }
-interface Assign extends TOMLNode {
+interface Assign extends TOMLNodeBase {
   type: "Assign"
   value: Value
   key: string //"directory",
 }
-type TopLevelNode = Assign | ObjectPath | ArrayPath
-interface InlineTable extends TOMLNode {
+
+interface InlineTable extends TOMLNodeBase {
   type: "InlineTable"
   value: InlineTableValue[]
 }
 
-interface InlineTableValue extends TOMLNode {
+interface InlineTableValue extends TOMLNodeBase {
   type: "InlineTableValue"
   value: Value
   key: string
