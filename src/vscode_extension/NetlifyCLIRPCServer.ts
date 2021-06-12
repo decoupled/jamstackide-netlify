@@ -7,7 +7,10 @@ import vscode from "vscode"
 
 const NETLIFY_VSCODE_RPC = "NETLIFY_VSCODE_RPC"
 
-export class MiniServer implements Singleton {
+/**
+ * starts a local HTTP server that the CLI uses to call back "into" vscode
+ */
+export class NetlifyCLIRPCServer implements Singleton {
   constructor() {
     this.server()
   }
@@ -72,15 +75,4 @@ export class MiniServer implements Singleton {
       [NETLIFY_VSCODE_RPC]: this.port,
     }
   }
-  // static instance?: MiniServer
 }
-
-// export function miniserver_init() {
-//   if (MiniServer.instance) throw new Error("cannot init twice")
-//   MiniServer.instance = new MiniServer()
-//   MiniServer.instance.start()
-// }
-
-// export function miniserver_port(): string {
-//   return MiniServer.instance.port() + ""
-// }

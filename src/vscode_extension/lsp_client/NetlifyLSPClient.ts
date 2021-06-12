@@ -1,18 +1,18 @@
 import { memo } from "src/x/decorators"
+import vscode from "vscode"
 import {
   LanguageClient,
   LanguageClientOptions,
   ServerOptions,
   State,
 } from "vscode-languageclient/node"
-import { log } from "../log"
 import { NetlifyLSPClientBuffer } from "./NetlifyLSPClientBuffer"
-
 export class NetlifyLSPClient {
   constructor(
     private serverOptions: ServerOptions,
     private clientOptions: LanguageClientOptions,
-    private buffer: NetlifyLSPClientBuffer
+    private buffer: NetlifyLSPClientBuffer,
+    private out: vscode.OutputChannel
   ) {
     this.start()
   }
@@ -20,7 +20,7 @@ export class NetlifyLSPClient {
   client!: LanguageClient
   private log(...args: any[]) {
     const msg = args.map(String).join(" ")
-    log(msg)
+    this.out.appendLine(msg)
     console.log(msg)
   }
 

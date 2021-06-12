@@ -1,7 +1,7 @@
 import { VSCodeProjectW } from "./VSCodeProjectW"
 import { RedirectsFileW } from "../../x/netlify/redirects_file/RedirectsFileW"
 import { CreateFunctionCommand } from "../commands/CreateFunctionCommand"
-import { MiniServer } from "../MiniServer"
+import { NetlifyCLIRPCServer } from "../NetlifyCLIRPCServer"
 import { CWD } from "./CWD"
 import { NetlifyCLIWrapper } from "../NetlifyCLIWrapper"
 import { NetlifyCLIPath } from "../NetlifyCLIPath"
@@ -70,7 +70,7 @@ export const autowire__impl = ___autowire__(
       isConstructor: true,
       isSingleton: true,
       args: [],
-      impl: MiniServer,
+      impl: NetlifyCLIRPCServer,
     },
     {
       out: "CWD",

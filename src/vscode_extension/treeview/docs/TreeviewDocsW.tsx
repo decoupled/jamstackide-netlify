@@ -29,27 +29,20 @@ export class TreeviewDocsW implements Singleton {
 }
 
 const links = [
-  ["Netlify.com", "question", "https://netlify.com"],
-  // [
-  //   "Redwood Tutorials",
-  //   "question",
-  //   "https://learn.redwoodjs.com/docs/tutorial/welcome-to-redwood/",
-  // ],
-  // ["Chat on Discord", "comment-discussion", "https://discord.gg/jjSYEQd"],
-  // ["Redwood on GitHub", "github", "https://github.com/redwoodjs/redwood"],
-  // [
-  //   "Open Issue on GitHub",
-  //   "issues",
-  //   "https://github.com/redwoodjs/redwood/issues",
-  // ],
-  // ["Redwood on Twitter", "twitter", "https://twitter.com/redwoodjs"],
-  // [
-  //   "Redwood Community (Discourse)",
-  //   "comment",
-  //   "https://community.redwoodjs.com/",
-  // ],
-  // ["Search Redwood Community...", "search", startSearch],
-  // ["Summon David Price's Spirit", "smiley", "https://community.redwoodjs.com/"],
+  ["Netlify app", "question", "https://app.netlify.com/"],
+  ["Documentation", "question", "https://docs.netlify.com/"],
+  ["Community Forums", "comment-discussion", "https://answers.netlify.com/"],
+  [
+    "Report Issue (Github)",
+    "issues",
+    "https://github.com/netlify/project-vscode-extension/issues",
+  ],
+  ["Ping!", "search", () => vscode.window.showInformationMessage("ping!")],
+  [
+    "Debug Functions",
+    "debug",
+    () => vscode.window.showInformationMessage("debug functions"),
+  ],
 ] as const
 
 export function treeview_docs_contributes() {
@@ -65,7 +58,7 @@ function treeview_docs_contributes_() {
         netlify: [
           {
             id: treeview_docs_id,
-            name: "Docs",
+            name: "Shortcuts",
             // when: redwoodjs_vsc_enabled,
           },
         ],

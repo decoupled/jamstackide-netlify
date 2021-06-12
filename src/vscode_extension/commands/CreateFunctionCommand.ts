@@ -6,14 +6,14 @@ import { vscode_QuickPick_await } from "src/x/vscode/vscode_QuickPick_await"
 import { vscode_window_createTerminal_andRun } from "src/x/vscode/vscode_window_createTerminal_andRun"
 import vscode from "vscode"
 import { CWD } from "../di/CWD"
-import { MiniServer } from "../MiniServer"
+import { NetlifyCLIRPCServer } from "../NetlifyCLIRPCServer"
 import { NetlifyCLIPath } from "../NetlifyCLIPath"
 import { NetlifyCLIWrapper } from "../NetlifyCLIWrapper"
 
 export class CreateFunctionCommand implements Singleton {
   constructor(
     private ctx: vscode.ExtensionContext,
-    private MiniServer: MiniServer,
+    private MiniServer: NetlifyCLIRPCServer,
     private CWD: CWD,
     private cli: NetlifyCLIWrapper,
     private clipath: NetlifyCLIPath

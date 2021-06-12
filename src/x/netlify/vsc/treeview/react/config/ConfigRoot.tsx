@@ -382,6 +382,12 @@ export class Root extends React.Component<{ ctx: vscode.ExtensionContext }> {
       },
     })
   }
+  @computed get experimental_enabled() {
+    now(500)
+    return (
+      vscode.workspace.getConfiguration("netlify.experimental.enabled") === true
+    )
+  }
   render() {
     if (!this.active_netlify_toml_doc)
       return <TreeItem label="..." collapsibleState={None} />
@@ -403,7 +409,9 @@ export class Root extends React.Component<{ ctx: vscode.ExtensionContext }> {
           onSelect={this.__onSelect}
           onEdit={this.__onEdit}
         />
-        <CheckboxUI label="show resolved values" />
+        {this.experimental_enabled ? (
+          <CheckboxUI label="show resolved values" />
+        ) : null}
       </TreeItem>
     )
   }
