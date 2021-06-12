@@ -4,14 +4,16 @@ import { NetlifyCLIPath, NetlifyCLIPath_createDevTime } from "./NetlifyCLIPath"
 export class NetlifyCLIWrapper {
   constructor(private clipath: NetlifyCLIPath) {}
   async functions_create_list_templates() {
-    const res = await execa(this.clipath.x, [
+    const res = await execa(await this.clipath.withIDESupport(), [
       "functions:create",
       "--ide_templates",
     ])
     return JSON.parse(res.stdout) as FuncTemplateData[]
   }
   async info(cwd: string) {
-    const res = await execa(this.clipath.x, ["ide"], { cwd })
+    const res = await execa(await this.clipath.withIDESupport(), ["ide"], {
+      cwd,
+    })
     return JSON.parse(res.stdout)
   }
 }

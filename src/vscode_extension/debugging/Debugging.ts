@@ -42,7 +42,7 @@ export class Debugging {
       request: "launch",
       name: "Netlify Dev",
       skipFiles: ["<node_internals>/**"],
-      program: this.NetlifyCLIPath.x,
+      program: await this.NetlifyCLIPath.withFunctionsDebuggingSupport(),
       args,
       // /**
       //  * Netlify Dev starts several child processes, including frameworks like Gatsby, Next.js, etc.

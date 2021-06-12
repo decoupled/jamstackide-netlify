@@ -9,6 +9,8 @@ export class NetlifyTOML extends FileNode {
   }
 
   getDiagnostics() {
+    return []
+    // TODO: we need more work mapping the @netlify/config errors to netlify.toml
     const ds = netlify_toml_validator_get_diagnostics(this.readFileSync())
     return ds.map((diagnostic) => {
       return { diagnostic, uri: this.uri } as ExtendedDiagnostic

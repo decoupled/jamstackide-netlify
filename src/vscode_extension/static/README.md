@@ -3,7 +3,7 @@ This README will be displayed in the Visual Studio Marketplace
 # Commands
 
 - `> Netlify: Create Function...`
-  - Creates a function :)
+  -
 
 # Magic Links
 

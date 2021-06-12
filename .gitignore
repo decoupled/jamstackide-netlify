@@ -2,6 +2,7 @@ src/secrets.ts
 
 .lambdragon
 .metals
+.tmp
 
 ### Node ###
 # Logs

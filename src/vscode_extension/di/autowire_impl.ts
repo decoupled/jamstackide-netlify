@@ -4,20 +4,19 @@ import { CreateFunctionCommand } from "../commands/CreateFunctionCommand"
 import { NetlifyCLIRPCServer } from "../NetlifyCLIRPCServer"
 import { CWD } from "./CWD"
 import { NetlifyCLIWrapper } from "../NetlifyCLIWrapper"
-import { NetlifyCLIPath } from "../NetlifyCLIPath"
 import { NetlifyLSPClientManager } from "../lsp_client/NetlifyLSPClientManager"
 import { NetlifyLSPClient } from "../lsp_client/NetlifyLSPClient"
 import { LanguageClientOptions_build } from "../lsp_client/LanguageClientOptions_build"
 import { NetlifyLSPClientBuffer } from "../lsp_client/NetlifyLSPClientBuffer"
+import { outputChannel } from "./autowire"
 import { TextEditorDecorations } from "../TextEditorDecorations"
 import { TextEditorDecorationsProvider } from "../TextEditorDecorationsProvider"
 import { TextEditorDecorationsProviderFromLSPClient } from "../TextEditorDecorationsProviderFromLSPClient"
 import { SingleTextEditorDecorations } from "../TextEditorDecorations"
 import { MagicURLsW } from "../magic_urls/magic_urls"
-import { outputChannel } from "./autowire"
 import { DevelopLocallyServiceW } from "../dev/develop_locally"
 import { TreeviewModules } from "../treeview/TreeviewModules"
-import { TreeviewDocsW } from "../treeview/docs/TreeviewDocsW"
+import { TreeviewShortcutsW } from "../treeview/shortcuts/TreeviewShortcutsW"
 import { ReactTreeviewW } from "../../x/netlify/vsc/treeview/react/ReactTreeviewW"
 import { NetlifyOAuthManager } from "../../x/netlify/vsc/NetlifyOAuthManager"
 import { ConfigTreeviewW } from "../../x/netlify/vsc/treeview/react/config/ConfigTreeviewW"
@@ -58,7 +57,7 @@ export const autowire__impl = ___autowire__(
       isSingleton: true,
       args: [
         "ExtensionContext",
-        "MiniServer",
+        "NetlifyCLIRPCServer",
         "CWD",
         "NetlifyCLIWrapper",
         "NetlifyCLIPath",
@@ -66,7 +65,7 @@ export const autowire__impl = ___autowire__(
       impl: CreateFunctionCommand,
     },
     {
-      out: "MiniServer",
+      out: "NetlifyCLIRPCServer",
       isConstructor: true,
       isSingleton: true,
       args: [],
@@ -87,13 +86,6 @@ export const autowire__impl = ___autowire__(
       impl: NetlifyCLIWrapper,
     },
     {
-      out: "NetlifyCLIPath",
-      isConstructor: true,
-      isSingleton: false,
-      args: ["string"],
-      impl: NetlifyCLIPath,
-    },
-    {
       out: "NetlifyLSPClientManager",
       isConstructor: true,
       isSingleton: false,
@@ -111,6 +103,7 @@ export const autowire__impl = ___autowire__(
         "ServerOptions",
         "LanguageClientOptions",
         "NetlifyLSPClientBuffer",
+        "OutputChannel",
       ],
       impl: NetlifyLSPClient,
     },
@@ -127,6 +120,7 @@ export const autowire__impl = ___autowire__(
       args: [],
       impl: NetlifyLSPClientBuffer,
     },
+    { out: "OutputChannel", isSingleton: true, args: [], impl: outputChannel },
     {
       out: "TextEditorDecorations",
       isConstructor: true,
@@ -166,7 +160,6 @@ export const autowire__impl = ___autowire__(
       args: ["OutputChannel", "DevelopLocallyServiceW"],
       impl: MagicURLsW,
     },
-    { out: "OutputChannel", isSingleton: true, args: [], impl: outputChannel },
     {
       out: "DevelopLocallyServiceW",
       isConstructor: true,
@@ -179,7 +172,7 @@ export const autowire__impl = ___autowire__(
       isConstructor: true,
       isSingleton: false,
       args: [
-        "TreeviewDocsW",
+        "TreeviewShortcutsW",
         "ReactTreeviewW",
         "ConfigTreeviewW",
         "TreeviewWorkflowW",
@@ -187,11 +180,11 @@ export const autowire__impl = ___autowire__(
       impl: TreeviewModules,
     },
     {
-      out: "TreeviewDocsW",
+      out: "TreeviewShortcutsW",
       isConstructor: true,
       isSingleton: true,
       args: [],
-      impl: TreeviewDocsW,
+      impl: TreeviewShortcutsW,
     },
     {
       out: "ReactTreeviewW",

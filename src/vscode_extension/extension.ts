@@ -9,8 +9,11 @@ import { configuration_contributes } from "./configuration/contributes"
 import { develop_locally_contributes } from "./dev/contributes"
 import { autowire } from "./di/autowire"
 import { VSCodeProjectW } from "./di/VSCodeProjectW"
-import { NetlifyCLIPath_createDevTime } from "./NetlifyCLIPath"
-import icon from "./static/netlify_logomark.svg"
+import {
+  NetlifyCLIPath_createDevTime,
+  NetlifyCLIPath_createForExtension,
+} from "./NetlifyCLIPath"
+import icon from "./static/netlify_vscode_logo.png"
 import { treeview_contributes } from "./treeview/contributes"
 import { when_clauses } from "./util/when_clauses"
 
@@ -25,11 +28,12 @@ export const netlify_vscode_extension_build_target = new VSCodeExtension({
   activationEvents: ["*"],
   publisher: "decoupled",
   name: CODENAME,
-  version: "0.0.1",
+  version: "0.0.7",
   displayName: CODENAME,
   description: CODENAME,
   categories: ["Other"],
   icon,
+  repository: "https://github.com/netlify/project-vscode-extension",
   contributes: contributes() as any,
   engines: { vscode: "^1.53.0" },
   deps: [language_server_build_target],
@@ -40,17 +44,23 @@ export const netlify_vscode_extension_build_target = new VSCodeExtension({
   ],
 })
 
+const USE_LOCAL_CLI = false
+
 // the entrypoint
 function main() {
   return {
-    activate(ctx: vscode.ExtensionContext) {
+    async activate(ctx: vscode.ExtensionContext) {
+      const clipath = USE_LOCAL_CLI
+        ? NetlifyCLIPath_createDevTime()
+        : await NetlifyCLIPath_createForExtension(ctx)
       for (const workspaceFolder of vscode.workspace.workspaceFolders ?? []) {
         // use lambdragon's "autowire" to create an instance of VSCodeProjectW
         // it will "inject" all dependencies, transitively
         autowire<VSCodeProjectW>(
           ctx,
           workspaceFolder,
-          NetlifyCLIPath_createDevTime()
+          // NetlifyCLIPath_createDevTime()
+          clipath
         )
         return // TODO: support more workspaces
       }

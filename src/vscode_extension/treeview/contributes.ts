@@ -1,7 +1,7 @@
 import merge from "webpack-merge"
 import { netlify_vsc_treeview_config_contributes } from "x/netlify/vsc/treeview/react/config/contributes"
 import { netlify_vsc_treeview_react_contributes } from "x/netlify/vsc/treeview/react/contributes"
-import { treeview_docs_contributes } from "./docs/TreeviewDocsW"
+import { treeview_docs_contributes } from "./shortcuts/TreeviewShortcutsW"
 import { treeview_workflow_contributes } from "./workflow/contributes"
 
 export function treeview_contributes() {

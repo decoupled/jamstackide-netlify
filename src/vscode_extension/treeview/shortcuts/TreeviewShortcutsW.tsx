@@ -4,12 +4,12 @@ import { memo } from "src/x/decorators"
 import { vscode_ThemeIcon_memo as icon } from "src/x/vscode/vscode_ThemeIcon_memo"
 import vscode from "vscode"
 
-const treeview_docs_id = "netlify.treeview.docs"
-export class TreeviewDocsW implements Singleton {
+const treeview_shortcuts_id = "netlify.treeview.docs"
+export class TreeviewShortcutsW implements Singleton {
   constructor() {
     this.render()
   }
-  @memo() render() {
+  @memo() private render() {
     const ll = links.map(([label, icn, url]) => (
       <TreeItem
         label={label}
@@ -24,7 +24,7 @@ export class TreeviewDocsW implements Singleton {
         }}
       />
     ))
-    return TreeItem_render(treeview_docs_id, <>{ll}</>)
+    return TreeItem_render(treeview_shortcuts_id, <>{ll}</>)
   }
 }
 
@@ -57,7 +57,7 @@ function treeview_docs_contributes_() {
       views: {
         netlify: [
           {
-            id: treeview_docs_id,
+            id: treeview_shortcuts_id,
             name: "Shortcuts",
             // when: redwoodjs_vsc_enabled,
           },

@@ -13,7 +13,7 @@ import { NetlifyCLIWrapper } from "../NetlifyCLIWrapper"
 export class CreateFunctionCommand implements Singleton {
   constructor(
     private ctx: vscode.ExtensionContext,
-    private MiniServer: NetlifyCLIRPCServer,
+    private rpc: NetlifyCLIRPCServer,
     private CWD: CWD,
     private cli: NetlifyCLIWrapper,
     private clipath: NetlifyCLIPath
@@ -84,12 +84,13 @@ const validateRepoURL = function (_url) {
     // we don't use the functionsDir directly
     // but we verify that it exists
     breakIfNull(await this.functionsDir())
-    const cmd = `${this.clipath.x} functions:create ${args}`
+    const clipath = await this.clipath.withIDESupport()
+    const cmd = `${clipath} functions:create ${args}`
     vscode_window_createTerminal_andRun({
       cmd,
       name: "netlify functions:create",
       cwd: this.CWD.x,
-      env: this.MiniServer.envForChildProcesses,
+      env: this.rpc.envForChildProcesses,
     })
   }
 

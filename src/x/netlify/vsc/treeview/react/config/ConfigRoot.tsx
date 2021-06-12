@@ -385,14 +385,27 @@ export class Root extends React.Component<{ ctx: vscode.ExtensionContext }> {
   @computed get experimental_enabled() {
     now(500)
     return (
-      vscode.workspace.getConfiguration("netlify.experimental.enabled") === true
+      vscode.workspace
+        .getConfiguration("netlify.experimental")
+        .get("enabled") === true
     )
   }
   render() {
     if (!this.active_netlify_toml_doc)
-      return <TreeItem label="..." collapsibleState={None} />
+      return (
+        <TreeItem
+          label="(open netlify.toml to see more)"
+          collapsibleState={None}
+        />
+      )
     const d = this.parsedDoc
-    if (!d) return <TreeItem label="..." collapsibleState={None} />
+    if (!d)
+      return (
+        <TreeItem
+          label="(open netlify.toml to see more)"
+          collapsibleState={None}
+        />
+      )
     // the amount of slots at the root has to be exactly one
     return (
       <TreeItem
