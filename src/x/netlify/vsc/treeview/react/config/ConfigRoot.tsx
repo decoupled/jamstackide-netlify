@@ -21,7 +21,13 @@ import {
   TreeItemProps,
 } from "../deps"
 import { icon_uri } from "../icon_uri"
-import { menu_def_add, menu_def_edit } from "../menus"
+import {
+  menu_def_add,
+  menu_def_edit,
+  menu_def__add__docs,
+  menu_def__edit__docs,
+  menu_def__docs,
+} from "../menus"
 /*
 add these as issues:
 - add info (link to docs)
@@ -55,6 +61,45 @@ class SchemaNodeUI extends React.Component<
       },
     })
   }
+
+  @lazy() get __menu_def__add__docs() {
+    return menu(menu_def__add__docs, {
+      add: () => {
+        if (this.props.schema.title === "Plugins") {
+        } else {
+          vscode.window.showInformationMessage("add!")
+        }
+      },
+      docs: () => {
+        this.openDocs()
+      },
+    })
+  }
+
+  @lazy() get __menu_def__docs() {
+    return menu(menu_def__docs, {
+      docs: () => {
+        this.openDocs()
+      },
+    })
+  }
+
+  private openDocs() {
+    const docs = this.props.schema["x-docs"]
+    if (typeof docs === "string") openDocs(docs)
+  }
+
+  @lazy() get __menu_def__edit__docs() {
+    return menu(menu_def__edit__docs, {
+      edit: () => {
+        this.props.onEdit?.(this.props.path)
+      },
+      docs: () => {
+        this.openDocs()
+      },
+    })
+  }
+
   @lazy() get __menu_edit() {
     return menu(menu_def_edit, {
       edit: () => {
@@ -75,8 +120,50 @@ class SchemaNodeUI extends React.Component<
     const f = schema?.["x-label"]
     if (typeof f === "function") return f(value)
   }
-  get isRoot() {
+  get isRoot(): boolean {
     return this.props.path.length === 0
+  }
+  get menu__is__add(): boolean {
+    const { schema } = this.props
+    if (schema.type === "array") return true
+    if (schema.additionalProperties) return true
+    return false
+  }
+  get menu__is__edit(): boolean {
+    const { schema, value } = this.props
+    if (schema.type === "array") {
+      return false
+    } else if (schema.type === "object") {
+      if (typeof value === "undefined") {
+        return true
+      }
+      return false
+    } else {
+      return true
+    }
+  }
+  get menu__is__docs(): boolean {
+    const { schema } = this.props
+    return !!schema["x-docs"]
+  }
+  get menu() {
+    if (this.menu__is__add && this.menu__is__docs) {
+      return this.__menu_def__add__docs
+    }
+    if (this.menu__is__edit && this.menu__is__docs) {
+      return this.__menu_def__edit__docs
+    }
+    if (this.menu__is__edit) {
+      return this.__menu_edit
+    }
+    if (this.menu__is__add) {
+      return this.__menu_add
+    }
+    if (this.menu__is__docs) {
+      return this.__menu_def__docs
+    }
+
+    return undefined
   }
   render_object(): React.ReactNode {
     const {
@@ -124,7 +211,7 @@ class SchemaNodeUI extends React.Component<
       <TreeItem
         {...label_description(this.isUndefined, label, description2)}
         tooltip={tooltip}
-        menu={canHaveAdditional ? this.__menu_add : undefined}
+        menu={this.menu}
         select={this.__onSelect}
       >
         {elms}
@@ -161,7 +248,7 @@ class SchemaNodeUI extends React.Component<
       <TreeItem
         {...label_description(this.isUndefined, label, description)}
         tooltip={tooltip}
-        menu={this.__menu_add}
+        menu={this.menu}
         select={this.__onSelect}
       >
         {elms}
@@ -176,7 +263,6 @@ class SchemaNodeUI extends React.Component<
     if (schema.type === "array") {
       return this.render_array()
     }
-
     if (typeof value === "undefined") {
       return (
         <TreeItem
@@ -184,7 +270,7 @@ class SchemaNodeUI extends React.Component<
           description={label}
           collapsibleState={None}
           tooltip={tooltip}
-          menu={this.__menu_edit}
+          menu={this.menu}
           select={this.__onSelect}
         />
       )
@@ -195,7 +281,7 @@ class SchemaNodeUI extends React.Component<
           description={"= " + (value + "").trim()}
           collapsibleState={None}
           tooltip={tooltip}
-          menu={this.__menu_edit}
+          menu={this.menu}
           select={this.__onSelect}
         />
       )
@@ -286,6 +372,16 @@ export class Root extends React.Component<{ ctx: vscode.ExtensionContext }> {
     if (!editor) return
     netlify_toml_inserts_insertPath_vscode(editor, path as any)
   }
+
+  @lazy() get netlify_toml_menu() {
+    return menu(menu_def__docs, {
+      docs: () => {
+        openDocs(
+          "https://docs.netlify.com/configure-builds/file-based-configuration/"
+        )
+      },
+    })
+  }
   render() {
     if (!this.active_netlify_toml_doc)
       return <TreeItem label="..." collapsibleState={None} />
@@ -298,6 +394,7 @@ export class Root extends React.Component<{ ctx: vscode.ExtensionContext }> {
         description={this.isStale ? "SYNTAX ERRORS FOUND" : undefined}
         collapsibleState={Expanded}
         iconPath={icon_uri("netlify", this.props.ctx)}
+        menu={this.netlify_toml_menu}
       >
         <SchemaNodeUI
           value={d}
@@ -330,4 +427,16 @@ function getSchema() {
   const schema = netlify_toml_json_schema_generate()
   json_schema_resolve_refs_in_place(schema)
   return schema
+}
+
+const OPEN_DOCS_IN_VSCODE = false
+async function openDocs(url: string) {
+  if (!OPEN_DOCS_IN_VSCODE) {
+    vscode.env.openExternal(vscode.Uri.parse(url))
+  } else {
+    const pv = await vscode.commands.executeCommand(
+      "browser-preview.openPreview",
+      url
+    )
+  }
 }

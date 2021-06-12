@@ -33,8 +33,35 @@ export const menu_def_add = menudef({
   id: base + ".menu_def_add",
   commands: {
     add: {
-      title: "add...",
+      title: "Add...",
       icon: "$(add)",
+      group: "inline",
+    },
+  },
+})
+
+export const menu_def__add__docs = menudef({
+  id: base + ".menu__add__docs",
+  commands: {
+    add: {
+      title: "Add...",
+      icon: "$(add)",
+      group: "inline",
+    },
+    docs: {
+      title: "Open Documentation",
+      icon: "$(question)",
+      group: "inline",
+    },
+  },
+})
+
+export const menu_def__docs = menudef({
+  id: base + ".menu__docs",
+  commands: {
+    docs: {
+      title: "Open Documentation",
+      icon: "$(question)",
       group: "inline",
     },
   },
@@ -60,6 +87,22 @@ export const menu_def_edit = menudef({
     edit: {
       title: "edit...",
       icon: "$(edit)",
+      group: "inline",
+    },
+  },
+})
+
+export const menu_def__edit__docs = menudef({
+  id: base + ".menu__edit__docs",
+  commands: {
+    edit: {
+      title: "edit...",
+      icon: "$(edit)",
+      group: "inline",
+    },
+    docs: {
+      title: "Open Documentation",
+      icon: "$(question)",
       group: "inline",
     },
   },
@@ -155,6 +198,9 @@ export function menus_contributes() {
     menu_def_deploy,
     menu_def_forms,
     menu_def_snippet,
+    menu_def__add__docs,
+    menu_def__docs,
+    menu_def__edit__docs,
   ]
   return merge({}, ...defs.map(TreeItem_Menu_to_json))
 }

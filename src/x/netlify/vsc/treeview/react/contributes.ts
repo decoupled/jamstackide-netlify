@@ -1,6 +1,7 @@
-import { netlify_vsc_treeview_react_id } from "./treeview_id"
+import { when_clauses } from "src/vscode_extension/util/when_clauses"
 import merge from "webpack-merge"
 import { menus_contributes } from "./menus"
+import { netlify_vsc_treeview_react_id } from "./treeview_id"
 
 export function netlify_vsc_treeview_react_contributes() {
   const cc = {
@@ -10,7 +11,7 @@ export function netlify_vsc_treeview_react_contributes() {
           {
             id: netlify_vsc_treeview_react_id,
             name: "Accounts",
-            // when: netlify_vsc_treeview_context_netlifyEnable,
+            when: when_clauses.config_netlify_experimental_enable,
           },
         ],
       },

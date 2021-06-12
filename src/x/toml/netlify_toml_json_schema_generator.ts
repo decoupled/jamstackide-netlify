@@ -46,10 +46,14 @@ export function netlify_toml_json_schema_generate() {
       redirects: {
         type: "array",
         items: $ref("Redirect"),
+        "x-docs":
+          "https://docs.netlify.com/configure-builds/file-based-configuration/#redirects",
       },
       context: $ref("ContextMap"),
       headers: {
         type: "array",
+        "x-docs":
+          "https://docs.netlify.com/configure-builds/file-based-configuration/#headers",
         items: {
           type: "object",
           title: "HeaderSet",
@@ -70,6 +74,8 @@ export function netlify_toml_json_schema_generate() {
       Functions: {
         type: "object",
         description: `Configuration for Netlify Functions. [Docs](https://docs.netlify.com/configure-builds/file-based-configuration/#functions)`,
+        "x-docs":
+          "https://docs.netlify.com/configure-builds/file-based-configuration/#functions",
         properties: {
           directory: {
             type: "string",
@@ -185,6 +191,8 @@ including production CI builds, Netlify CLI and the JavaScript client.
       Build: {
         type: "object",
         description: build_description,
+        "x-docs":
+          "https://docs.netlify.com/configure-builds/file-based-configuration/#build-settings",
         properties: {
           base: {
             type: "string",
@@ -198,6 +206,8 @@ including production CI builds, Netlify CLI and the JavaScript client.
           environment: $ref("Env"),
           processing: $ref("Processing"),
           edge_handlers: {
+            "x-docs":
+              "https://docs.netlify.com/configure-builds/file-based-configuration/#edge-handlers",
             type: "string",
             description: `Custom path to your Edge Handlers directory`,
           },
@@ -205,6 +215,8 @@ including production CI builds, Netlify CLI and the JavaScript client.
             type: "string",
             description:
               "Bash command that will be run from the base directory to determine whether the site needs rebuilding or not",
+            "x-docs":
+              "https://docs.netlify.com/configure-builds/file-based-configuration/#ignore-builds",
           },
         },
         // required: ["command"],
@@ -213,6 +225,8 @@ including production CI builds, Netlify CLI and the JavaScript client.
         type: "array",
         items: $ref("Plugin"),
         description: "Build Plugins",
+        "x-docs":
+          "https://docs.netlify.com/configure-builds/file-based-configuration/#build-plugins",
         title: "Plugins",
       },
       Plugin: {
@@ -236,6 +250,8 @@ including production CI builds, Netlify CLI and the JavaScript client.
       },
       Processing: {
         type: "object",
+        "x-docs":
+          "https://docs.netlify.com/configure-builds/file-based-configuration/#post-processing",
         properties: {
           skip_processing: { type: "boolean" },
           css: {
@@ -273,6 +289,8 @@ including production CI builds, Netlify CLI and the JavaScript client.
       Dev: {
         type: "object",
         description: "Configuration for Netlify Dev",
+        "x-docs":
+          "https://docs.netlify.com/configure-builds/file-based-configuration/#netlify-dev",
         properties: {
           command: {
             type: "string",
