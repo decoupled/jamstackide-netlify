@@ -21,7 +21,6 @@ import { TreeviewDocsW } from "../treeview/docs/TreeviewDocsW"
 import { ReactTreeviewW } from "../../x/netlify/vsc/treeview/react/ReactTreeviewW"
 import { NetlifyOAuthManager } from "../../x/netlify/vsc/NetlifyOAuthManager"
 import { ConfigTreeviewW } from "../../x/netlify/vsc/treeview/react/config/ConfigTreeviewW"
-import { TreeviewOutlineW } from "../treeview/outline/TreeviewOutlineW"
 import { TreeviewWorkflowW } from "../treeview/workflow/TreeviewWorkflowW"
 import { Debugging } from "../debugging/Debugging"
 import { TaploUpdateW } from "../../x/taplo/TaploUpdateW"
@@ -183,7 +182,6 @@ export const autowire__impl = ___autowire__(
         "TreeviewDocsW",
         "ReactTreeviewW",
         "ConfigTreeviewW",
-        "TreeviewOutlineW",
         "TreeviewWorkflowW",
       ],
       impl: TreeviewModules,
@@ -215,13 +213,6 @@ export const autowire__impl = ___autowire__(
       isSingleton: false,
       args: ["ExtensionContext"],
       impl: ConfigTreeviewW,
-    },
-    {
-      out: "TreeviewOutlineW",
-      isConstructor: true,
-      isSingleton: false,
-      args: ["ExtensionContext", "NetlifyLSPClientBuffer"],
-      impl: TreeviewOutlineW,
     },
     {
       out: "TreeviewWorkflowW",

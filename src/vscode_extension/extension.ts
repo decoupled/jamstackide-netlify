@@ -5,6 +5,7 @@ import { language_server_build_target } from "src/language_server/language_serve
 import vscode from "vscode"
 import merge from "webpack-merge"
 import { commands_create_function_contributes } from "./commands/CreateFunctionCommand"
+import { configuration_contributes } from "./configuration/contributes"
 import { develop_locally_contributes } from "./dev/contributes"
 import { autowire } from "./di/autowire"
 import { VSCodeProjectW } from "./di/VSCodeProjectW"
@@ -87,6 +88,7 @@ function contributes() {
       ],
     },
     commands_contributes(),
+    configuration_contributes(),
   ])
 }
 

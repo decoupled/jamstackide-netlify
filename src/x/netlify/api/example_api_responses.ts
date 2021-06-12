@@ -95,6 +95,7 @@ export const listSites = [
         endpoint: "https://netlify-builds3.firebaseio.com",
         path: "/builds/5f35b1befa10e1009b644d8c/log",
         token:
+          // this token is invalid, btw
           "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ2IjowLCJpYXQiOjE1OTczNTk1NzMsImQiOnsidWlkIjoiIn19.DBS5Gsh4mOud4HsM0x44MUCWP2SZnJNtqjbbtAL0480",
       },
       title: null,
@@ -749,6 +750,7 @@ export const getSite = {
       endpoint: "https://netlify-builds3.firebaseio.com",
       path: "/builds/5f35b1befa10e1009b644d8c/log",
       token:
+        // this token is invalid, btw
         "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ2IjowLCJpYXQiOjE1OTczNTkzNDYsImQiOnsidWlkIjoiIn19.pyn-gbe0lnOM8Mz05QE9K_Qr14rHwayIp8CXeNzozeo",
     },
     title: null,
@@ -1318,6 +1320,7 @@ const siteDeployExample = {
     endpoint: "https://netlify-builds1.firebaseio.com",
     path: "/deploys/5e55bfaa1036fdb7aa9759ab/log",
     token:
+      // this token is invalid, btw
       "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ2IjowLCJpYXQiOjE1OTczMDE4NDQsImQiOnsidWlkIjoiIn19.WhJnAVuOoKcHiAYsA1qCPHxuKLYxQhnjy_QFSDZgLrc",
   },
   title: null,

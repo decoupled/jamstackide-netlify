@@ -1,4 +1,4 @@
-import { vscode_TextEditor_watch } from "../etc/vscode_TextEditor_watch"
+import { vscode_TextEditor_watch } from "../../vscode/vscode_TextEditor_watch"
 import * as vscode from "vscode"
 
 export class RedirectsFileW {

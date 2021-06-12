@@ -11,13 +11,12 @@ import {
   InitializeResult,
   ProposedFeatures,
   TextDocuments,
-  TextDocumentSyncKind,
+  TextDocumentSyncKind
 } from "vscode-languageserver/node"
 import { FileSystemWithLSPDocumentStore } from "x/fs/FileSystemWithLSPDocumentStore"
 import { Project_create } from "x/netlify/model/Project_create"
 import { CommandsManager } from "./commands"
 import { DiagnosticsManager } from "./diagnostics"
-import { OutlineManager } from "./outline"
 
 const SUPPRESS_ERRORS = false
 
@@ -72,8 +71,6 @@ export class NetlifyLanguageServer {
     // they are smart enough to short-circuit if this.projectRoot is not ready
     this.diagnostics.start()
     this.commands.start()
-    this.outline.start()
-    // this.xmethods.start()
 
     connection.onCodeAction(async ({ context, textDocument: { uri } }) => {
       const actions: CodeAction[] = []
@@ -168,12 +165,6 @@ export class NetlifyLanguageServer {
   @lazy() get commands() {
     return new CommandsManager(this)
   }
-  @lazy() get outline() {
-    return new OutlineManager(this)
-  }
-  // @lazy() get xmethods() {
-  //   return new XMethodsManager(this)
-  // }
   @lazy() get host() {
     return new FileSystemWithLSPDocumentStore(this.documents)
   }
