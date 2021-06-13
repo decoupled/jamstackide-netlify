@@ -239,9 +239,7 @@ const commands = {
 
 export function commands_create_function_contributes() {
   return {
-    contributes: {
-      commands: [...values(commands)],
-    },
+    commands: [...values(commands)],
   } as const
 }
 

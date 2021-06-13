@@ -19,5 +19,5 @@ export function menus_contributes() {
     //menu_def_logged_out,
     menu_def_workflow,
   ]
-  return merge(defs.map(menudef_json))
+  return merge(defs.map(menudef_json)).contributes
 }

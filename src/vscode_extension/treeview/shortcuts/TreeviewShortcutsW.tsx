@@ -1,8 +1,8 @@
-import { Singleton, TreeItem, TreeItem_render } from "lambdragon"
+import { Singleton, TreeItem_render } from "lambdragon"
 import React from "react"
-import { memo } from "x/decorators"
-import { vscode_ThemeIcon_memo as icon } from "x/vscode/vscode_ThemeIcon_memo"
 import vscode from "vscode"
+import { memo } from "x/decorators"
+import { icon, None, TreeItem } from "../deps"
 
 const treeview_shortcuts_id = "netlify.treeview.shortcuts"
 export class TreeviewShortcutsW implements Singleton {
@@ -14,7 +14,7 @@ export class TreeviewShortcutsW implements Singleton {
       <TreeItem
         label={label}
         iconPath={icon(icn)}
-        collapsibleState={vscode.TreeItemCollapsibleState.None}
+        collapsibleState={None}
         select={() => {
           if (typeof url === "string") {
             vscode.env.openExternal(vscode.Uri.parse(url))
@@ -46,23 +46,14 @@ const links = [
 ] as const
 
 export function treeview_docs_contributes() {
-  const c1 = treeview_docs_contributes_()
-  return c1
-  // return merge(c1, DevServerUI_contributes(), menus_contributes())
-}
-
-function treeview_docs_contributes_() {
   return {
-    contributes: {
-      views: {
-        netlify: [
-          {
-            id: treeview_shortcuts_id,
-            name: "Shortcuts",
-            // when: redwoodjs_vsc_enabled,
-          },
-        ],
-      },
+    views: {
+      netlify: [
+        {
+          id: treeview_shortcuts_id,
+          name: "Shortcuts",
+        },
+      ],
     },
-  }
+  } as const
 }

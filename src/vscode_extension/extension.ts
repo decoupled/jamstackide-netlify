@@ -53,7 +53,7 @@ function main() {
     async activate(ctx: vscode.ExtensionContext) {
       const clipath = USE_LOCAL_CLI
         ? NetlifyCLIPath_createDevTime()
-        : await NetlifyCLIPath_createForExtension(ctx)
+        : NetlifyCLIPath_createForExtension(ctx)
       for (const workspaceFolder of vscode.workspace.workspaceFolders ?? []) {
         // use lambdragon's "autowire" to create an instance of VSCodeProjectW
         // it will "inject" all dependencies, transitively
@@ -78,20 +78,18 @@ function main() {
 function contributes() {
   return merge([
     treeview_contributes(),
-    commands_create_function_contributes().contributes,
-    develop_locally_contributes().contributes,
+    commands_create_function_contributes(),
+    develop_locally_contributes(),
     {
       languages: [
         {
           id: "netlifyredirects",
-          // "extensions": [".py"],
           aliases: ["Netlify Redirects File"],
           filenames: ["_redirects"],
           // "configuration": "./language-configuration.json"
         },
         {
           id: "netlifyheaders",
-          // "extensions": [".py"],
           aliases: ["Netlify Headers File"],
           filenames: ["_headers"],
           // "configuration": "./language-configuration.json"

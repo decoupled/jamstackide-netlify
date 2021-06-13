@@ -6,10 +6,10 @@ import { treeview_workflow_contributes } from "./workflow/contributes"
 
 export function treeview_contributes() {
   return merge([
-    treeview_docs_contributes().contributes,
-    netlify_vsc_treeview_react_contributes().contributes,
-    netlify_vsc_treeview_config_contributes().contributes,
-    treeview_workflow_contributes().contributes,
+    treeview_docs_contributes(),
+    netlify_vsc_treeview_react_contributes(),
+    netlify_vsc_treeview_config_contributes(),
+    treeview_workflow_contributes(),
     {
       viewsContainers: {
         activitybar: [

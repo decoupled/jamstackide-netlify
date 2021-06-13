@@ -202,7 +202,7 @@ export function menus_contributes() {
     menu_def__docs,
     menu_def__edit__docs,
   ]
-  return merge({}, ...defs.map(TreeItem_Menu_to_json))
+  return merge({}, ...defs.map(TreeItem_Menu_to_json)).contributes
 }
 
 {

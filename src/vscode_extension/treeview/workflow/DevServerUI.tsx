@@ -150,7 +150,7 @@ export function DevServerUI_contributes() {
     menudef_json(menu_def_stopped),
     menudef_json(menu_def_starting),
     menudef_json(menu_def_running)
-  )
+  ).contributes
 }
 
 export class DevServerUIModel_mock implements DevServerUIModel {

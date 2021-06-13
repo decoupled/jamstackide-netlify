@@ -15,16 +15,14 @@ export function treeview_workflow_contributes() {
 
 function treeview_workflow_contributes_() {
   return {
-    contributes: {
-      views: {
-        netlify: [
-          {
-            id: treeview_workflow_id,
-            name: "Workflow",
-            when: when_clauses.config_netlify_experimental_enable,
-          },
-        ],
-      },
+    views: {
+      netlify: [
+        {
+          id: treeview_workflow_id,
+          name: "Workflow",
+          when: when_clauses.config_netlify_experimental_enable,
+        },
+      ],
     },
   }
 }
