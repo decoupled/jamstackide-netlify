@@ -2,8 +2,8 @@ import { ArrayLike } from "src/x/Array/ArrayLike"
 import { memo } from "src/x/decorators"
 import { ExtendedDiagnostic } from "src/x/vscode-languageserver-types/lsp_extensions"
 import * as lsp from "vscode-languageserver"
-import { FileNode, FilePath } from "./base"
 import { IFileSystem } from "x/fs/IFileSystem"
+import { FileNode, FilePath } from "./base"
 export class HeadersFile extends FileNode {
   constructor(filePath: FilePath, fs: IFileSystem) {
     super(filePath, fs)
@@ -19,9 +19,10 @@ export class HeadersFile extends FileNode {
         },
       },
     }
-    return [d]
+    return []
   }
   @memo() getSymbols() {
+    // TODO: just a reminder that we need to do this
     const range = {
       start: { line: 2, character: 2 },
       end: { line: 2, character: 17 },

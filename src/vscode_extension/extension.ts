@@ -28,7 +28,7 @@ export const netlify_vscode_extension_build_target = new VSCodeExtension({
   activationEvents: ["*"],
   publisher: "decoupled",
   name: CODENAME,
-  version: "0.0.7",
+  version: "0.0.10",
   displayName: CODENAME,
   description: CODENAME,
   categories: ["Other"],

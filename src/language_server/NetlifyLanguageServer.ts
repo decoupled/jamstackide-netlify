@@ -11,7 +11,7 @@ import {
   InitializeResult,
   ProposedFeatures,
   TextDocuments,
-  TextDocumentSyncKind
+  TextDocumentSyncKind,
 } from "vscode-languageserver/node"
 import { FileSystemWithLSPDocumentStore } from "x/fs/FileSystemWithLSPDocumentStore"
 import { Project_create } from "x/netlify/model/Project_create"
@@ -100,11 +100,11 @@ export class NetlifyLanguageServer {
           range,
           command: {
             command: "netlify.xxx",
-            title: "Show Resolved Config",
+            title: "Show Outline",
             arguments: [uri],
           },
         }
-        return [d]
+        return []
       }
 
       return []
