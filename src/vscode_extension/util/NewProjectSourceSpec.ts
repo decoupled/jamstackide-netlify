@@ -1,7 +1,7 @@
 import { join } from "path"
-import { fs_findAvailableDirAppendNumber } from "src/x/fs/fs_findAvailableDirAppendNumber"
-import { GitURL } from "src/x/git/GitURL"
-import { YarnCreatePackageName } from "src/x/yarn/YarnCreatePackageName"
+import { fs_findAvailableDirAppendNumber } from "x/fs/fs_findAvailableDirAppendNumber"
+import { GitURL } from "x/git/GitURL"
+import { YarnCreatePackageName } from "x/yarn/YarnCreatePackageName"
 
 export type NewProjectSourceSpecString = string
 export type NewProjectSourceSpec = YarnCreatePackageName | GitURL

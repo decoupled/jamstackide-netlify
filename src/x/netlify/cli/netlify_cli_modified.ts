@@ -2,7 +2,7 @@ import execa from "execa"
 import { pathExists } from "fs-extra"
 import { memoize } from "lodash"
 import { join } from "path"
-import { degit_with_retries } from "src/x/degit/degit_with_retries"
+import { degit_with_retries } from "x/degit/degit_with_retries"
 import vscode from "vscode"
 import { crypto_filenameFriendlyHash } from "x/crypto/crypto_filenameFriendlyHash"
 //https://github.com/decoupled/netlify-cli/tree/aldonline-ide-features

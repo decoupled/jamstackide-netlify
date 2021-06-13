@@ -1,6 +1,6 @@
 import execa from "execa"
-import { YarnCreatePackageName } from "src/x/yarn/YarnCreatePackageName"
-import { yarn_or_npm } from "src/x/yarn/yarn_or_npm"
+import { YarnCreatePackageName } from "x/yarn/YarnCreatePackageName"
+import { yarn_or_npm } from "x/yarn/yarn_or_npm"
 import vscode from "vscode"
 import { TargetDirSpec } from "../util/TargetDirSpec"
 import { TargetDirSpec_resolve_vsc } from "../util/TargetDirSpec_resolve_vsc"

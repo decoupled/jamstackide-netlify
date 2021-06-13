@@ -4,7 +4,7 @@ import * as vscode from "vscode"
 import { Connection as LSPConnection } from "vscode-languageserver/node"
 import { Command, Location } from "vscode-languageserver-types"
 
-import { lazy, memo } from "src/x/decorators"
+import { lazy, memo } from "x/decorators"
 import { ProviderResult_normalize } from "./vscode/vscode_ProviderResult"
 
 export type VSCodeWindowMethods = Pick<

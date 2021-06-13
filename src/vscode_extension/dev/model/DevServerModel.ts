@@ -1,12 +1,12 @@
 import { computed, observable } from "mobx"
 import { now } from "mobx-utils"
 import vscode from "vscode"
-import { wait } from "src/x/Promise/wait"
-import { WrappedCommand } from "src/x/vscode/Terminal/shell_wrapper/shell_wrapper_run"
-import { vscode_window_createTerminal_andRun } from "src/x/vscode/vscode_window_createTerminal_andRun"
+import { wait } from "x/Promise/wait"
+import { WrappedCommand } from "x/vscode/Terminal/shell_wrapper/shell_wrapper_run"
+import { vscode_window_createTerminal_andRun } from "x/vscode/vscode_window_createTerminal_andRun"
 import { DevServerStatus, DevServerUIModel } from "../ui/DevServerUI"
 import { ProjectModel } from "./ProjectModel"
-import { URLWatcher } from "src/x/http/URLWatcher"
+import { URLWatcher } from "x/http/URLWatcher"
 
 export class DevServerModel implements DevServerUIModel {
   constructor(private project: ProjectModel) {}

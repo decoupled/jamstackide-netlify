@@ -1,5 +1,5 @@
-import { debounce, memo } from "src/x/decorators"
-import { ExtendedDiagnostic_groupByUri } from "src/x/vscode-languageserver-types/lsp_extensions"
+import { debounce, memo } from "x/decorators"
+import { ExtendedDiagnostic_groupByUri } from "x/vscode-languageserver-types/lsp_extensions"
 import { NetlifyLanguageServer } from "./NetlifyLanguageServer"
 
 const REFRESH_DIAGNOSTICS_INTERVAL = 1000

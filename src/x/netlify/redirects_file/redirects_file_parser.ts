@@ -1,8 +1,8 @@
-import { lazy, memo } from "src/x/decorators"
+import { lazy, memo } from "x/decorators"
 import {
   netlify_redirect_parser_from_source,
   NetlifyRedirectParserResult,
-} from "src/x/netlify-redirect-parser/netlify_redirect_parser"
+} from "x/netlify-redirect-parser/netlify_redirect_parser"
 import * as lsp from "vscode-languageserver-types"
 
 class File {

@@ -1,7 +1,7 @@
 import { Singleton, TreeItem, TreeItem_render } from "lambdragon"
 import React from "react"
-import { memo } from "src/x/decorators"
-import { vscode_ThemeIcon_memo as icon } from "src/x/vscode/vscode_ThemeIcon_memo"
+import { memo } from "x/decorators"
+import { vscode_ThemeIcon_memo as icon } from "x/vscode/vscode_ThemeIcon_memo"
 import vscode from "vscode"
 
 const treeview_shortcuts_id = "netlify.treeview.shortcuts"

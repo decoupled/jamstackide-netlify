@@ -1,7 +1,7 @@
 import command_exists from "command-exists"
 import { existsSync } from "fs-extra"
 import { join } from "path"
-import { Array_filter_async } from "src/x/Array/Array_filter_async"
+import { Array_filter_async } from "x/Array/Array_filter_async"
 
 /**
  * returns the command string you should call

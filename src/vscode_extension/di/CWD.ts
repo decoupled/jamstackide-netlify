@@ -1,4 +1,4 @@
-import { lazy } from "src/x/decorators"
+import { lazy } from "x/decorators"
 import vscode from "vscode"
 
 export class CWD {

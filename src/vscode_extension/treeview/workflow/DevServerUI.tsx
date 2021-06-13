@@ -1,5 +1,5 @@
 import React from "react"
-import { wait } from "src/x/Promise/wait"
+import { wait } from "x/Promise/wait"
 import vscode from "vscode"
 import merge from "webpack-merge"
 import {

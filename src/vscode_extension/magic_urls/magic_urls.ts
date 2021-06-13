@@ -1,6 +1,6 @@
 import { Singleton } from "lambdragon"
 import { parse } from "querystring"
-import { vscode_window_registerUriHandler_multi } from "src/x/vscode/vscode_window_registerUriHandler_multi"
+import { vscode_window_registerUriHandler_multi } from "x/vscode/vscode_window_registerUriHandler_multi"
 import vscode from "vscode"
 import { DevelopLocallyServiceW } from "../dev/develop_locally"
 import { ExtraOpts } from "../dev/types"

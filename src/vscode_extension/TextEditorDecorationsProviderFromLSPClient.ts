@@ -1,4 +1,4 @@
-import { DecorationData } from "src/x/netlify/etc/DecorationData"
+import { DecorationData } from "x/netlify/etc/DecorationData"
 import * as vscode from "vscode"
 import { NetlifyLSPClientBuffer } from "./lsp_client/NetlifyLSPClientBuffer"
 

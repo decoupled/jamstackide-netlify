@@ -1,7 +1,7 @@
-import { ArrayLike, ArrayLike_normalize } from "src/x/Array/ArrayLike"
-import { lazy, memo } from "src/x/decorators"
-import { URL_fromFile } from "src/x/url/URL_fromFile"
-import { ExtendedDiagnostic } from "src/x/vscode-languageserver-types/lsp_extensions"
+import { ArrayLike, ArrayLike_normalize } from "x/Array/ArrayLike"
+import { lazy, memo } from "x/decorators"
+import { URL_fromFile } from "x/url/URL_fromFile"
+import { ExtendedDiagnostic } from "x/vscode-languageserver-types/lsp_extensions"
 import { DocumentUri } from "vscode-languageserver-types"
 import { IFileSystem } from "../../fs/IFileSystem"
 

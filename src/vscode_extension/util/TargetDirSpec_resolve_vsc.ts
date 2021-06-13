@@ -1,5 +1,5 @@
 import { join } from "path"
-import { fs_findAvailableDirAppendNumber } from "src/x/fs/fs_findAvailableDirAppendNumber"
+import { fs_findAvailableDirAppendNumber } from "x/fs/fs_findAvailableDirAppendNumber"
 import vscode from "vscode"
 import { TargetDirSpec } from "./TargetDirSpec"
 

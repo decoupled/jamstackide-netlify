@@ -1,5 +1,5 @@
 import { computed, observable, reaction, when } from "mobx"
-import { URLWatcher } from "src/x/http/URLWatcher"
+import { URLWatcher } from "x/http/URLWatcher"
 import { ProjectModel } from "./ProjectModel"
 import opn from "open"
 import { browser_preview } from "../browser_preview"

@@ -1,5 +1,5 @@
 import vscode from "vscode"
-import { Map_getOrCreate } from "src/x/Map/getOrCreate"
+import { Map_getOrCreate } from "x/Map/getOrCreate"
 
 export interface vscode_TextEditor_setDecorations_pivot_Item {
   decorationType: vscode.TextEditorDecorationType

@@ -1,6 +1,6 @@
 import { Singleton, TreeItem_render } from "lambdragon"
 import React from "react"
-import { memo } from "src/x/decorators"
+import { memo } from "x/decorators"
 import vscode from "vscode"
 import { RootUI } from "./RootUI"
 import { treeview_workflow_id } from "./treeview_workflow_id"

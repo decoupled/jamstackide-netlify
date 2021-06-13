@@ -1,8 +1,8 @@
-import { lsp_Range__vscode_Range } from "src/x/lsp__vscode/lsp_Range__vscode_Range"
+import { lsp_Range__vscode_Range } from "x/lsp__vscode/lsp_Range__vscode_Range"
 import {
   vscode_TextEditor_setDecorations_pivot,
   vscode_TextEditor_setDecorations_pivot_Item,
-} from "src/x/vscode/vscode_TextEditor_setDecorations_pivot"
+} from "x/vscode/vscode_TextEditor_setDecorations_pivot"
 import * as vscode from "vscode"
 import { DecorationData_is } from "../etc/DecorationData"
 import {

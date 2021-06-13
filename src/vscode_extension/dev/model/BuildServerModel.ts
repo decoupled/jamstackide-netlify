@@ -1,7 +1,7 @@
 import { computed, observable } from "mobx"
-import { wait } from "src/x/Promise/wait"
-import { WrappedCommand } from "src/x/vscode/Terminal/shell_wrapper/shell_wrapper_run"
-import { vscode_window_createTerminal_andRun } from "src/x/vscode/vscode_window_createTerminal_andRun"
+import { wait } from "x/Promise/wait"
+import { WrappedCommand } from "x/vscode/Terminal/shell_wrapper/shell_wrapper_run"
+import { vscode_window_createTerminal_andRun } from "x/vscode/vscode_window_createTerminal_andRun"
 import vscode from "vscode"
 import { ProjectModel } from "./ProjectModel"
 

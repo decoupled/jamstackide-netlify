@@ -1,5 +1,5 @@
 import * as vscode from "vscode"
-import { lazy, memo } from "src/x/decorators"
+import { lazy, memo } from "x/decorators"
 import { HeadersFile, Comment, Path, Header } from "./headers_file_parser"
 
 class HeadersFileCompletionsBuilder {

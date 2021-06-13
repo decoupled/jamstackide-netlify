@@ -1,8 +1,8 @@
 import { Singleton } from "lambdragon"
 import { userInfo } from "os"
 import { sep } from "path"
-import { lazy } from "src/x/decorators"
-import { vscode_extensions_getExtensionID } from "src/x/vscode/vscode_extensions_getExtensionID"
+import { lazy } from "x/decorators"
+import { vscode_extensions_getExtensionID } from "x/vscode/vscode_extensions_getExtensionID"
 import vscode from "vscode"
 import TelemetryReporter from "vscode-extension-telemetry"
 

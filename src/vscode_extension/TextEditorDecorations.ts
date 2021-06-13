@@ -1,7 +1,7 @@
 import { DIFactory } from "lambdragon"
 import { Throttle } from "lodash-decorators"
-import { MapWithLifecycle } from "src/x/Map/MapWithLifecycle"
-import { vscode_TextEditor_setDecorations_pivot } from "src/x/vscode/vscode_TextEditor_setDecorations_pivot"
+import { MapWithLifecycle } from "x/Map/MapWithLifecycle"
+import { vscode_TextEditor_setDecorations_pivot } from "x/vscode/vscode_TextEditor_setDecorations_pivot"
 import * as vscode from "vscode"
 import { TextEditorDecorationsProvider } from "./TextEditorDecorationsProvider"
 

@@ -1,6 +1,6 @@
 import vscode from "vscode"
 import * as lsp from "vscode-languageserver-types"
-import { lsp_Diagnostic__vscode_Diagnostic } from "src/x/lsp__vscode/lsp_Diagnostic__vscode_Diagnostic"
+import { lsp_Diagnostic__vscode_Diagnostic } from "x/lsp__vscode/lsp_Diagnostic__vscode_Diagnostic"
 import object_hash from "object-hash"
 
 export function vscode_languages_SmartDiagnosticsCollection(name: string) {

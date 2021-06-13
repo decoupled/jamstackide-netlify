@@ -1,4 +1,4 @@
-import { memo } from "src/x/decorators"
+import { memo } from "x/decorators"
 import vscode from "vscode"
 import {
   LanguageClient,

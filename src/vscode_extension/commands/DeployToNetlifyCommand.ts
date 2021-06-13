@@ -1,7 +1,7 @@
 import { DIFactory } from "lambdragon"
 import { values } from "lodash"
 import { basename } from "path"
-import { iter } from "src/x/Iterable/iter"
+import { iter } from "x/Iterable/iter"
 import vscode from "vscode"
 import { lazy, memo } from "x/decorators"
 import { NetlifyAPIWrapper } from "../../x/netlify/api/netlify_api"

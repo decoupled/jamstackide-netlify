@@ -1,7 +1,7 @@
 import { emptyDirSync } from "fs-extra"
 import { VSCE_TOKEN } from "src/secrets"
-import { crypto_filenameFriendlyHash } from "src/x/crypto/crypto_filenameFriendlyHash"
-import { degit_with_retries } from "src/x/degit/degit_with_retries"
+import { crypto_filenameFriendlyHash } from "x/crypto/crypto_filenameFriendlyHash"
+import { degit_with_retries } from "x/degit/degit_with_retries"
 import { netlify_vscode_extension_build_target as extension } from "./extension"
 
 {

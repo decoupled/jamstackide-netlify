@@ -1,6 +1,6 @@
 import vscode from "vscode"
 import { vscode_TextDocument_fullTextRange } from "./vscode_TextDocument_fullTextRange"
-import { lazy, memo } from "src/x/decorators"
+import { lazy, memo } from "x/decorators"
 
 /**
  * A simple datastructure that represents a "patch"
