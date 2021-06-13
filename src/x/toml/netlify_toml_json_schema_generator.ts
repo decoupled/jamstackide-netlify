@@ -1,10 +1,9 @@
+import Ajv from "ajv"
 import { outputFileSync, readJSONSync } from "fs-extra"
 import hsc from "http-status-codes"
 import _ from "lodash"
 import { join } from "path"
 import { iso3166_countries_jsonSchema } from "x/iso3166/iso3166"
-
-const Ajv = require("ajv")
 
 {
   // run this playground to generate the JSON schema, load it into AJV, and then validate an example netlify.toml
@@ -346,7 +345,7 @@ including production CI builds, Netlify CLI and the JavaScript client.
           initKeys: ["command"],
         },
       },
-      Condition_Country: iso3166_countries_jsonSchema("Country"),
+      Condition_Country: iso3166_countries_jsonSchema("Country", "both"),
     },
   }
   return removeUndefinedProps(schema)

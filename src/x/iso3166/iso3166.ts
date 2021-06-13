@@ -5,18 +5,30 @@ export interface Country {
   numeric: string
 }
 
-export function iso3166_countries_jsonSchema(description?: string) {
+export function iso3166_countries_jsonSchema(
+  description?: string,
+  k: "uc" | "lc" | "both" = "lc"
+) {
   const countries = iso3166()
+  let docs = countries.map((x) => x.country)
+  let enum_ = countries.map((x) => x.alpha2)
+  if (k === "uc") enum_ = enum_.map((x) => x.toUpperCase())
+  if (k === "lc") enum_ = enum_.map((x) => x.toLowerCase())
+  if (k === "both") {
+    docs = docs.map((x) => [x, x]).flat()
+    enum_ = enum_.map((x) => [x.toLowerCase(), x.toUpperCase()]).flat()
+  }
+
   return {
     type: "array",
     items: {
       "x-taplo": {
         docs: {
-          enumValues: countries.map((x) => x.country),
+          enumValues: docs,
         },
       },
       type: "string",
-      enum: countries.map((x) => x.alpha2.toLowerCase()),
+      enum: enum_,
     },
     uniqueItems: true,
     description,
