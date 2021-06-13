@@ -1,10 +1,7 @@
 /**
- * where to write something
+ * Specifies where to create a new project
  */
-export type TargetDirSpecification =
-  | SpecificTargetDir
-  | AutoTargetDir
-  | ChooseTargetDir
+export type TargetDirSpec = SpecificTargetDir | AutoTargetDir | ChooseTargetDir
 
 /**
  * a specific folder. no questions asked to the user

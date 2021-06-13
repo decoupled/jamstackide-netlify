@@ -3,12 +3,12 @@ import { fs_findAvailableDirAppendNumber } from "src/x/fs/fs_findAvailableDirApp
 import { GitURL } from "src/x/git/GitURL"
 import { YarnCreatePackageName } from "src/x/yarn/YarnCreatePackageName"
 
-export type NewJamstackProjectSourceString = string
-export type NewJamstackProjectSource = YarnCreatePackageName | GitURL
+export type NewProjectSourceSpecString = string
+export type NewProjectSourceSpec = YarnCreatePackageName | GitURL
 
-export function NewJamstackProjectSource_parse(
-  str: NewJamstackProjectSourceString
-): NewJamstackProjectSource {
+export function NewProjectSourceSpec_parse(
+  str: NewProjectSourceSpecString
+): NewProjectSourceSpec {
   if (str.startsWith("create-") && !str.includes("/")) {
     return YarnCreatePackageName.parse(str)
   } else {
@@ -17,7 +17,7 @@ export function NewJamstackProjectSource_parse(
 }
 
 {
-  const p = NewJamstackProjectSource_parse
+  const p = NewProjectSourceSpec_parse
   p("https://github.com/foo/bar") instanceof GitURL
   p("git@github.com:redwoodjs/redwood.git") instanceof GitURL
   p("https://github.com/foo/bar.git") instanceof GitURL
@@ -35,8 +35,8 @@ export function NewJamstackProjectSource_parse(
  * @param source
  * @param root
  */
-export function NewJamstackProjectSource_autoPickDir(
-  source: NewJamstackProjectSource,
+export function NewProjectSourceSpec_autoPickDir(
+  source: NewProjectSourceSpec,
   root: string
 ) {
   const basename = source instanceof GitURL ? source.name : source.shortName

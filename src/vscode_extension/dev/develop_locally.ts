@@ -4,12 +4,12 @@ import { Command } from "vscode-languageserver-types"
 import { memo } from "x/decorators"
 import { wait } from "x/Promise/wait"
 import {
-  NewJamstackProjectSource,
-  NewJamstackProjectSourceString,
-  NewJamstackProjectSource_autoPickDir,
-  NewJamstackProjectSource_parse,
-} from "../util/NewJamstackProjectSource"
-import { NewJamstackProjectSource_prompt } from "../util/NewJamstackProjectSource_prompt"
+  NewProjectSourceSpec,
+  NewProjectSourceSpecString,
+  NewProjectSourceSpec_autoPickDir,
+  NewProjectSourceSpec_parse,
+} from "../util/NewProjectSourceSpec"
+import { NewProjectSourceSpec_prompt } from "../util/NewProjectSourceSpec_prompt"
 import { commands } from "./commands"
 import { init_hook_activate, init_hook_set_and_open } from "./init_hook"
 import { materialize_project } from "./materialize_project"
@@ -29,7 +29,7 @@ export class DevelopLocallyServiceW implements Singleton {
   private setup() {
     vscode.commands.registerCommand(
       commands.develop_locally.command,
-      (opts?: NewJamstackProjectSourceString | DevelopLocallyOpts) => {
+      (opts?: NewProjectSourceSpecString | DevelopLocallyOpts) => {
         const opts2 =
           typeof opts === "object"
             ? opts
@@ -64,7 +64,7 @@ class DevelopLocally {
     const { ctx } = this
 
     if (opts.action === "FromCommandInvocation") {
-      const source = await NewJamstackProjectSource_prompt()
+      const source = await NewProjectSourceSpec_prompt()
       if (!source) return
       reload_and_init({ source, openInNewWindow: true, ctx })
       return
@@ -72,8 +72,8 @@ class DevelopLocally {
 
     if (opts.action === "FromNetlifyExplorer") {
       const source = opts.source
-        ? NewJamstackProjectSource_parse(opts.source)
-        : await NewJamstackProjectSource_prompt()
+        ? NewProjectSourceSpec_parse(opts.source)
+        : await NewProjectSourceSpec_prompt()
       if (!source) return
       reload_and_init({ source, openInNewWindow: true, ctx })
       return
@@ -81,8 +81,8 @@ class DevelopLocally {
 
     if (opts.action === "FromMagicURL") {
       const source = opts.source
-        ? NewJamstackProjectSource_parse(opts.source)
-        : await NewJamstackProjectSource_prompt()
+        ? NewProjectSourceSpec_parse(opts.source)
+        : await NewProjectSourceSpec_prompt()
       if (!source) return
       const wfs = vscode.workspace.workspaceFolders ?? []
       const openInNewWindow = wfs.length > 0
@@ -98,7 +98,7 @@ class DevelopLocally {
     if (opts.action === "InitAfterReload") {
       const { workspaceUri, extraOpts } = opts
       const wf = requireAtLeastOneOpenWorkspace(workspaceUri)
-      const source = NewJamstackProjectSource_parse(opts.source)
+      const source = NewProjectSourceSpec_parse(opts.source)
 
       hideAll()
 
@@ -138,7 +138,7 @@ async function reload_and_init({
   ctx,
   extraOpts,
 }: {
-  source: NewJamstackProjectSource
+  source: NewProjectSourceSpec
   dir?: string
   openInNewWindow?: boolean
   ctx: vscode.ExtensionContext
@@ -155,7 +155,7 @@ async function reload_and_init({
     }
   }
   const dir2 =
-    dir ?? NewJamstackProjectSource_autoPickDir(source, netlify_projects_dir())
+    dir ?? NewProjectSourceSpec_autoPickDir(source, netlify_projects_dir())
   const cmd = {
     command: commands.develop_locally.command,
     arguments: [

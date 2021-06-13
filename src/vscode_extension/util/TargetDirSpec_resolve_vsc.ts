@@ -1,13 +1,13 @@
 import { join } from "path"
-import vscode from "vscode"
 import { fs_findAvailableDirAppendNumber } from "src/x/fs/fs_findAvailableDirAppendNumber"
-import { TargetDirSpecification } from "./TargetDirSpecification"
+import vscode from "vscode"
+import { TargetDirSpec } from "./TargetDirSpec"
 
-export async function TargetDirSpecification_resolve_vsc({
+export async function TargetDirSpec_resolve_vsc({
   targetDir,
   autoNamePrefix,
 }: {
-  targetDir: TargetDirSpecification
+  targetDir: TargetDirSpec
   autoNamePrefix: string
 }) {
   if (targetDir.kind === "specific") return targetDir.dir

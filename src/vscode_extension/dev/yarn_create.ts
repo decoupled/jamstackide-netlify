@@ -2,12 +2,12 @@ import execa from "execa"
 import { YarnCreatePackageName } from "src/x/yarn/YarnCreatePackageName"
 import { yarn_or_npm } from "src/x/yarn/yarn_or_npm"
 import vscode from "vscode"
-import { TargetDirSpecification } from "../util/TargetDirSpecification"
-import { TargetDirSpecification_resolve_vsc } from "../util/TargetDirSpecification_resolve_vsc"
+import { TargetDirSpec } from "../util/TargetDirSpec"
+import { TargetDirSpec_resolve_vsc } from "../util/TargetDirSpec_resolve_vsc"
 
 interface Opts {
   packageName: YarnCreatePackageName
-  targetDir: TargetDirSpecification
+  targetDir: TargetDirSpec
 }
 export async function yarn_create_dry(opts: Opts) {
   const { packageName, targetDir } = opts
@@ -15,7 +15,7 @@ export async function yarn_create_dry(opts: Opts) {
   if (!tool) {
     return
   }
-  const dest = await TargetDirSpecification_resolve_vsc({
+  const dest = await TargetDirSpec_resolve_vsc({
     targetDir,
     autoNamePrefix: packageName.shortName,
   })

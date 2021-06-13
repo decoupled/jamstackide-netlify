@@ -5,8 +5,8 @@ import { lazy, memo } from "x/decorators"
 import { degit_with_retries } from "x/degit/degit_with_retries"
 import { GitURL } from "x/git/GitURL"
 import { vscode_run } from "x/vscode/vscode_run"
-import { TargetDirSpecification } from "../util/TargetDirSpecification"
-import { TargetDirSpecification_resolve_vsc } from "../util/TargetDirSpecification_resolve_vsc"
+import { TargetDirSpec } from "../util/TargetDirSpec"
+import { TargetDirSpec_resolve_vsc } from "../util/TargetDirSpec_resolve_vsc"
 
 interface Opts {
   gitUrl: GitURL
@@ -14,7 +14,7 @@ interface Opts {
    * will use npx degit instead of git clone (must faster, but disconnects from repo)
    */
   degit?: boolean
-  targetDir: TargetDirSpecification
+  targetDir: TargetDirSpec
 }
 
 export function clone_repo(opts: Opts) {
@@ -35,7 +35,7 @@ class CloneRepo {
 
   @memo() private async resolvedTargetDir() {
     const { targetDir } = this.opts
-    return await TargetDirSpecification_resolve_vsc({
+    return await TargetDirSpec_resolve_vsc({
       targetDir,
       autoNamePrefix: this.opts.gitUrl.name,
     })

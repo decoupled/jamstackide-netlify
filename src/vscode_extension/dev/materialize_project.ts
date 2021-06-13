@@ -3,8 +3,8 @@ import { fs_stashDirContents } from "x/fs/fs_stashDirContents"
 import { fs_stashJSONFile } from "x/fs/fs_stashJSONFile"
 import { GitURL } from "x/git/GitURL"
 import { vscode_run } from "x/vscode/vscode_run"
-import { NewJamstackProjectSource } from "../util/NewJamstackProjectSource"
-import { TargetDirSpecification } from "../util/TargetDirSpecification"
+import { NewProjectSourceSpec } from "../util/NewProjectSourceSpec"
+import { TargetDirSpec } from "../util/TargetDirSpec"
 import { clone_repo } from "./clone_repo"
 import { install_deps } from "./install_deps"
 import { ExtraOpts } from "./types"
@@ -12,11 +12,11 @@ import { yarn_create_dry } from "./yarn_create"
 
 export async function materialize_project(opts: {
   dir: string
-  source: NewJamstackProjectSource
+  source: NewProjectSourceSpec
   extraOpts: ExtraOpts
 }) {
   const { dir, source, extraOpts } = opts
-  const targetDir: TargetDirSpecification = {
+  const targetDir: TargetDirSpec = {
     kind: "specific",
     dir,
   }

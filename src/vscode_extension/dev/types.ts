@@ -1,4 +1,4 @@
-import { NewJamstackProjectSourceString } from "../util/NewJamstackProjectSource"
+import { NewProjectSourceSpecString } from "../util/NewProjectSourceSpec"
 
 export type DevelopLocallyOpts =
   | FromMagicURL
@@ -8,7 +8,7 @@ export type DevelopLocallyOpts =
 
 export interface FromMagicURL {
   action: "FromMagicURL"
-  source?: NewJamstackProjectSourceString
+  source?: NewProjectSourceSpecString
   extraOpts?: ExtraOpts
 }
 
@@ -40,17 +40,17 @@ export interface ExtraOpts {
 
 export interface FromNetlifyExplorer {
   action: "FromNetlifyExplorer"
-  source: NewJamstackProjectSourceString
+  source: NewProjectSourceSpecString
 }
 
 export interface FromCommandInvocation {
   action: "FromCommandInvocation"
-  source?: NewJamstackProjectSourceString
+  source?: NewProjectSourceSpecString
 }
 
 export interface InitAfterReload {
   action: "InitAfterReload"
-  source: NewJamstackProjectSourceString
+  source: NewProjectSourceSpecString
   workspaceUri: string
   extraOpts?: ExtraOpts
 }
