@@ -4,7 +4,7 @@ import { memo } from "src/x/decorators"
 import { vscode_ThemeIcon_memo as icon } from "src/x/vscode/vscode_ThemeIcon_memo"
 import vscode from "vscode"
 
-const treeview_shortcuts_id = "netlify.treeview.docs"
+const treeview_shortcuts_id = "netlify.treeview.shortcuts"
 export class TreeviewShortcutsW implements Singleton {
   constructor() {
     this.render()
@@ -37,12 +37,12 @@ const links = [
     "issues",
     "https://github.com/netlify/project-vscode-extension/issues",
   ],
-  ["Ping!", "search", () => vscode.window.showInformationMessage("ping!")],
-  [
-    "Debug Functions",
-    "debug",
-    () => vscode.window.showInformationMessage("debug functions"),
-  ],
+  // ["Ping!", "search", () => vscode.window.showInformationMessage("ping!")],
+  // [
+  //   "Debug Functions",
+  //   "debug",
+  //   () => vscode.window.showInformationMessage("debug functions"),
+  // ],
 ] as const
 
 export function treeview_docs_contributes() {
