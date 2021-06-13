@@ -7,7 +7,7 @@ export type TargetDirSpecification =
   | ChooseTargetDir
 
 /**
- * a specific folder. no questions asked
+ * a specific folder. no questions asked to the user
  */
 export interface SpecificTargetDir {
   kind: "specific"

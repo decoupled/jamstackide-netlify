@@ -1,15 +1,8 @@
-import { existsSync, removeSync } from "fs-extra"
 import { Singleton } from "lambdragon"
-import { join } from "path"
-import { GitURL } from "src/x/git/GitURL"
-import { npm__yarn__install_dry } from "src/x/npm__yarn/npm__yarn__install"
-import { wait } from "src/x/Promise/wait"
-import { shell_wrapper_run_or_fail } from "src/x/vscode/Terminal/shell_wrapper/shell_wrapper_run"
-import { vscode_run } from "src/x/vscode/vscode_run"
-import { vscode_window_createTerminal_andRun } from "src/x/vscode/vscode_window_createTerminal_andRun"
 import vscode, { Uri } from "vscode"
 import { Command } from "vscode-languageserver-types"
 import { memo } from "x/decorators"
+import { wait } from "x/Promise/wait"
 import {
   NewJamstackProjectSource,
   NewJamstackProjectSourceString,
@@ -17,10 +10,9 @@ import {
   NewJamstackProjectSource_parse,
 } from "../util/NewJamstackProjectSource"
 import { NewJamstackProjectSource_prompt } from "../util/NewJamstackProjectSource_prompt"
-import { TargetDirSpecification } from "../util/TargetDirSpecification"
-import { clone_repo } from "./clone_repo"
 import { commands } from "./commands"
 import { init_hook_activate, init_hook_set_and_open } from "./init_hook"
+import { materialize_project } from "./materialize_project"
 import { netlify_projects_dir } from "./netlify_projects_dir"
 import { start_dev } from "./start_dev"
 import {
@@ -29,14 +21,12 @@ import {
   FromCommandInvocation,
   InitAfterReload,
 } from "./types"
-import { yarn_create_dry } from "./yarn_create"
 
 export class DevelopLocallyServiceW implements Singleton {
   constructor(private ctx: vscode.ExtensionContext) {
     this.setup()
   }
   private setup() {
-    init_hook_activate(this.ctx)
     vscode.commands.registerCommand(
       commands.develop_locally.command,
       (opts?: NewJamstackProjectSourceString | DevelopLocallyOpts) => {
@@ -50,6 +40,7 @@ export class DevelopLocallyServiceW implements Singleton {
         this.start(opts2)
       }
     )
+    init_hook_activate()
   }
   start(opts: DevelopLocallyOpts) {
     develop_locally(opts, this.ctx)
@@ -115,48 +106,11 @@ class DevelopLocally {
       // workbench.action.terminal.toggleTerminal
 
       // TODO: open animation (for now this is totally disconnected)
-      // jamstackide_dev_animation_open(this.ctx)
+      // dev_animation_open(this.ctx)
 
-      const targetDir: TargetDirSpecification = {
-        kind: "specific",
-        dir: wf.uri.fsPath,
-      }
-      // fetch code
+      await materialize_project({ dir: wf.uri.fsPath, source, extraOpts })
 
-      // delete the .netlify-vscode folder if present
-      // otherwise "git clone" and "yarn create" won't work
-      removeSync(join(wf.uri.fsPath, ".netlify-vscode"))
-
-      if (source instanceof GitURL) {
-        const clone_opts = {
-          gitUrl: source,
-          targetDir,
-          degit: extraOpts?.degit,
-        }
-        await clone_repo(clone_opts)
-        // const rr = await clone_repo_dry(clone_opts)
-        // if (!rr) return
-        // await run({ cmd: rr })
-        // await jamstackide_shell_wrapper_run_or_fail(rr, cmd => {
-        //   vscode_window_createTerminal_andRun({ cmd })
-        // })
-        //await npm__yarn__install(wf.uri.fsPath)
-        const ok = await install_deps({ dir: wf.uri.fsPath, extraOpts })
-        if (!ok) return
-      } else {
-        // yarn create
-        const opts = {
-          packageName: source,
-          targetDir,
-        }
-        //await yarn_create(opts)
-        const rr = await yarn_create_dry(opts)
-        if (!rr) return
-        const cmdstr2 = rr.cmd + " " + rr.dest
-        await vscode_run({ cmd: cmdstr2 })
-      }
       restartEverything()
-
       // start dev
       await start_dev({ uri: wf.uri, ctx: this.ctx, extraOpts })
       return
@@ -175,53 +129,6 @@ async function restartEverything() {
   try {
     await vscode.commands.executeCommand("typescript.restartTsServer")
   } catch (e) {}
-}
-
-async function install_deps_dry(opts: {
-  dir: string
-  extraOpts?: ExtraOpts
-}): Promise<string[] | undefined> {
-  const { extraOpts, dir } = opts
-  if (extraOpts?.install) {
-    const install_cmd = extraOpts.install
-    // some known commands are whitelisted
-    if (install_cmd === "bundle install") {
-      // https://jekyllrb.com/tutorials/using-jekyll-with-bundler/
-      // install dependencies locally to avoid permission issues
-      // TODO: add this line to .gitignore
-      return bundle_install_cmd()
-    } else {
-      vscode.window.showWarningMessage(
-        `custom install commands not implemented yet: ${install_cmd}`
-      )
-      return
-    }
-  } else {
-    // guess
-    const gemfile = join(dir, "Gemfile")
-    if (existsSync(gemfile)) {
-      return bundle_install_cmd()
-    }
-    const npmi = await npm__yarn__install_dry(dir)
-    return npmi ? [npmi] : undefined
-  }
-}
-
-function bundle_install_cmd() {
-  // TODO: check for bundle installation
-  const line1 = `bundle config set --local path '.vendor/bundle'`
-  const line2 = "bundle install"
-  return [line1, line2]
-}
-
-async function install_deps(opts: { dir: string; extraOpts?: ExtraOpts }) {
-  const cmds = await install_deps_dry(opts)
-  if (!cmds) return false
-  for (const cmd of cmds)
-    await shell_wrapper_run_or_fail(cmd, (cmd) => {
-      vscode_window_createTerminal_andRun({ cmd, cwd: opts.dir })
-    })
-  return true
 }
 
 async function reload_and_init({
@@ -263,10 +170,6 @@ async function reload_and_init({
   } as Command
   init_hook_set_and_open(dir2, cmd, openInNewWindow)
 }
-
-// function devLaunchMarkerForDir(dir: string): string {
-//   return join(dir, ".netlify-vscode", ".dev")
-// }
 
 function requireAtLeastOneOpenWorkspace(uri: string) {
   const wf = vscode.workspace.workspaceFolders?.find(

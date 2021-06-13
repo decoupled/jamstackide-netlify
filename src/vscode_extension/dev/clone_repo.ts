@@ -1,18 +1,17 @@
 import * as fs from "fs-extra"
-import { ensureDirSync } from "fs-extra"
-import { lazy, memo } from "src/x/decorators"
 import { dirname, join } from "path"
-import { degit_with_retries } from "src/x/degit/degit_with_retries"
-import { GitURL } from "src/x/git/GitURL"
-import { vscode_run } from "src/x/vscode/vscode_run"
 import vscode from "vscode"
+import { lazy, memo } from "x/decorators"
+import { degit_with_retries } from "x/degit/degit_with_retries"
+import { GitURL } from "x/git/GitURL"
+import { vscode_run } from "x/vscode/vscode_run"
 import { TargetDirSpecification } from "../util/TargetDirSpecification"
 import { TargetDirSpecification_resolve_vsc } from "../util/TargetDirSpecification_resolve_vsc"
 
 interface Opts {
   gitUrl: GitURL
   /**
-   * will use npx degit instead of git lone (must faster, but disconnects from repo)
+   * will use npx degit instead of git clone (must faster, but disconnects from repo)
    */
   degit?: boolean
   targetDir: TargetDirSpecification
@@ -68,7 +67,7 @@ class CloneRepo {
     const { repo_url } = this
     const destFolder = await this.resolvedTargetDir()
     if (!destFolder) return
-    ensureDirSync(destFolder)
+    await fs.ensureDir(destFolder)
     if (this.opts.degit) {
       return `npx degit ${repo_url} ${destFolder}`
     }
@@ -81,15 +80,16 @@ class CloneRepo {
 }
 
 async function actual_clone(repo: string, dest: string, degit?: boolean) {
-  ensureDirSync(dirname(dest))
+  await fs.ensureDir(dirname(dest))
   if (degit) {
     try {
       // fastest way to clone and degit is to use "degit"
       await degit_with_retries(repo, dest)
     } catch (e) {
       await vscode_run({ cmd: `git clone --depth 1 ${repo} ${dest}` })
-      const dotgit = join(dest, ".git")
-      if (fs.existsSync(dotgit)) await fs.remove(dotgit)
+      try {
+        await fs.unlink(join(dest, ".git"))
+      } catch (e) {}
     }
   } else {
     // otherwise just git clone

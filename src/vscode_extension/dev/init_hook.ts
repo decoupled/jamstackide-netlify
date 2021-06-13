@@ -8,28 +8,30 @@ import { join } from "path"
 import vscode from "vscode"
 import { Command } from "vscode-languageserver-types"
 
-export function init_hook_activate(ctx: vscode.ExtensionContext) {
+export function init_hook_activate() {
   init_hook_run_all()
 }
 
 function init_hook_run_all() {
   for (const wf of vscode.workspace.workspaceFolders ?? []) {
-    const ff = fff(wf.uri.fsPath)
-    if (existsSync(ff)) {
-      const cmd: Command = readJSONSync(ff)
-      if (Command.is(cmd)) {
-        outputJSONSync(ff, {}) // unlinking can be unsafe
-        vscode.commands.executeCommand(cmd.command, ...(cmd.arguments ?? []))
-      } else {
-        //console.log("invalid command in .jamstackide/.init", cmd)
-      }
-    }
+    const cmd = init_hook_get(wf.uri.fsPath)
+    if (cmd)
+      vscode.commands.executeCommand(cmd.command, ...(cmd.arguments ?? []))
   }
 }
 
 export function init_hook_set(dir: string, cmd: Command) {
   ensureDirSync(dir)
-  outputJSONSync(fff(dir), cmd)
+  outputJSONSync(init_hook_filename(dir), cmd)
+}
+
+function init_hook_get(dir: string, andInvalidate = true): Command | undefined {
+  const ff = init_hook_filename(dir)
+  if (!existsSync(ff)) return
+  const cmd: Command = readJSONSync(ff)
+  if (!Command.is(cmd)) return
+  if (andInvalidate) outputJSONSync(ff, {}) // unlinking can be unsafe
+  return cmd
 }
 
 export async function init_hook_set_and_open(
@@ -50,10 +52,6 @@ export async function init_hook_set_and_open(
   }
 }
 
-// export function init_hook_get(dir: string): Command | undefined {
-
-// }
-
-function fff(dir: string) {
+function init_hook_filename(dir: string) {
   return join(dir, ".netlify/vscode-extension/init")
 }

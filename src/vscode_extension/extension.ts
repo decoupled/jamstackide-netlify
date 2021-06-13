@@ -16,6 +16,7 @@ import {
 import icon from "./static/netlify_vscode_logo.png"
 import { treeview_contributes } from "./treeview/contributes"
 import { when_clauses } from "./util/when_clauses"
+import { VERSION } from "./VERSION"
 
 /**
  * we'll publish under a codename for now
@@ -28,7 +29,7 @@ export const netlify_vscode_extension_build_target = new VSCodeExtension({
   activationEvents: ["*"],
   publisher: "decoupled",
   name: CODENAME,
-  version: "0.0.10",
+  version: VERSION,
   displayName: CODENAME,
   description: CODENAME,
   categories: ["Other"],

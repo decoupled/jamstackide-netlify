@@ -6,7 +6,6 @@ import { wait } from "x/Promise/wait"
 import { vscode_run } from "x/vscode/vscode_run"
 import vscode from "vscode"
 import waitPort from "wait-port"
-// import { jamstackide_vsc_treeview_get } from "../treeview/jamstackide_vsc_treeview"
 import { browser_preview } from "./browser_preview"
 import { ExtraOpts } from "./types"
 
@@ -21,13 +20,11 @@ export async function start_dev(opts: Opts) {
 
   // focus on the explorer view
   vscode.commands.executeCommand("workbench.view.explorer")
-  // try to focus the jamstack treeview
-  // jamstackide_vsc_treeview_get(ctx).reveal()
 
   const cmds: string[] = []
 
+  return
   // analyze
-  throw new Error("TODO")
   const settings = null as any // await netlify_dev_dry_settings(uri.fsPath)
   let use_netlify_dev = true
 
