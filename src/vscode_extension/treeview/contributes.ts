@@ -16,7 +16,6 @@ export function treeview_contributes() {
           {
             id: "netlify",
             title: "Netlify",
-            // icon: "netlify_logomark.svg",
             icon: "assets/icons2/netlify.svg",
           },
         ],

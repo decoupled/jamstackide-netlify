@@ -1,6 +1,7 @@
 import { reaction, transaction } from "mobx"
 import { now } from "mobx-utils"
 import React from "react"
+import { NetlifyCLIWrapper } from "src/vscode_extension/NetlifyCLIWrapper"
 import { CheckboxUI } from "src/vscode_extension/treeview/workflow/CheckboxUI"
 import * as toml from "toml"
 import vscode from "vscode"
@@ -32,6 +33,7 @@ add these as issues:
 @observer
 export class ConfigRoot extends React.Component<{
   ctx: vscode.ExtensionContext
+  cli: NetlifyCLIWrapper
 }> {
   componentDidMount = () => {
     reaction(

@@ -13,7 +13,15 @@ It is published only so we can develop some features that require a published ex
 - `> Netlify: Create Header...`
   - Status: WIP (depends on `netlify.toml` support)
 - `> Netlify: Debug...`
-  - Status: WIP
+  - Starts full-stack debugging
+
+# Debugging
+
+## Full-Stack (functions + web)
+
+- `> Netlify: Debug`
+
+## `> Netlify: Debug Functions
 
 # Open in VSCode
 

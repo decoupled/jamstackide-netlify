@@ -3,6 +3,7 @@ import vscode from "vscode"
 import { netlify_cli_modified_install_vscode } from "x/netlify/cli/netlify_cli_modified"
 
 export interface NetlifyCLIPath {
+  standard(): Promise<string>
   withIDESupport(): Promise<string>
   withFunctionsDebuggingSupport(): Promise<string>
 }
@@ -14,6 +15,9 @@ export function NetlifyCLIPath_createForExtension(
   // it will keep downloading in the background
   const modified = getModified()
   return {
+    standard() {
+      return modified
+    },
     withFunctionsDebuggingSupport() {
       return modified
     },
@@ -27,8 +31,11 @@ export function NetlifyCLIPath_createForExtension(
   }
 }
 
-export function NetlifyCLIPath_createDevTime() {
+export function NetlifyCLIPath_createDevTime(): NetlifyCLIPath {
   return {
+    async standard() {
+      return local_aldo
+    },
     async withFunctionsDebuggingSupport() {
       return local_aldo
     },
@@ -38,4 +45,4 @@ export function NetlifyCLIPath_createDevTime() {
   }
 }
 
-const local_aldo = "`/Users/aldo/com.github/decoupled/netlify-cli/bin/run`"
+const local_aldo = "/Users/aldo/com.github/decoupled/netlify-cli/bin/run"

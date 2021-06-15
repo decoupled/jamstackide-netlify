@@ -6,6 +6,7 @@ import vscode from "vscode"
 import merge from "webpack-merge"
 import { commands_create_function_contributes } from "./commands/CreateFunctionCommand"
 import { configuration_contributes } from "./configuration/contributes"
+import { debugging_contributes } from "./debugging/contributes"
 import { develop_locally_contributes } from "./dev/contributes"
 import { autowire } from "./di/autowire"
 import { VSCodeProjectW } from "./di/VSCodeProjectW"
@@ -80,6 +81,7 @@ function contributes() {
     treeview_contributes(),
     commands_create_function_contributes(),
     develop_locally_contributes(),
+    debugging_contributes(),
     {
       languages: [
         {
@@ -130,8 +132,8 @@ function commands_contributes() {
   }
   return {
     menus: {
-      "explorer/context": [...cc("7_modification")],
-      "editor/context": [...cc("1_modification")],
+      "explorer/context": [...cc("2_netlify")],
+      "editor/context": [...cc("2_netlify")],
     },
     commands: values(command_ids),
   }

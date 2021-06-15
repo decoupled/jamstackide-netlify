@@ -29,6 +29,39 @@ export const menu_def_logged_in = menudef({
   },
 })
 
+export const menu_def_site2 = menudef({
+  id: base + ".menu_def_site2",
+  commands: {
+    unlink: {
+      title: "unlink site",
+      icon: "$(debug-disconnect)",
+      group: "inline",
+    },
+    unlink2: {
+      title: "unlink site",
+      icon: "$(debug-disconnect)",
+    },
+    preview: {
+      title: "open",
+      icon: "$(open-preview)",
+      group: "inline",
+    },
+    preview2: {
+      title: "open",
+      icon: "$(open-preview)",
+    },
+    admin: {
+      title: "admin",
+      icon: "$(settings-gear)",
+      group: "inline",
+    },
+    admin2: {
+      title: "admin",
+      icon: "$(settings-gear)",
+    },
+  },
+})
+
 export const menu_def_add = menudef({
   id: base + ".menu_def_add",
   commands: {

@@ -1,11 +1,6 @@
-const base = "decoupled.netlify.commands"
+const base = "netlify.commands"
 const category = "Netlify"
 export const netlify_vsc_commands = {
-  debug: {
-    command: base + ".debug",
-    title: "Debug",
-    category,
-  },
   login: {
     command: base + ".login",
     title: "Login to your Netlify account...",

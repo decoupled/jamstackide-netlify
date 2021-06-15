@@ -204,7 +204,7 @@ export const autowire__impl = ___autowire__(
       out: "ConfigTreeviewW",
       isConstructor: true,
       isSingleton: false,
-      args: ["ExtensionContext"],
+      args: ["ExtensionContext", "NetlifyCLIWrapper"],
       impl: ConfigTreeviewW,
     },
     {
@@ -217,8 +217,8 @@ export const autowire__impl = ___autowire__(
     {
       out: "Debugging",
       isConstructor: true,
-      isSingleton: false,
-      args: ["NetlifyCLIPath"],
+      isSingleton: true,
+      args: ["NetlifyCLIPath", "CWD"],
       impl: Debugging,
     },
     {

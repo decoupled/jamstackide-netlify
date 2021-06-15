@@ -8,8 +8,10 @@ import { crypto_filenameFriendlyHash } from "x/crypto/crypto_filenameFriendlyHas
 //https://github.com/decoupled/netlify-cli/tree/aldonline-ide-features
 
 // const repo = "decoupled/netlify-cli#aldonline-ide-features"
-const repo = "decoupled/netlify-cli#2e1b1388730dab07b45a2e5d0b11a6262824ec9d"
 
+const hash1 = "2e1b1388730dab07b45a2e5d0b11a6262824ec9d"
+const hash2 = "366964f9e87df215b84c472f3c5a1b5c2c43c4a1"
+const repo = `decoupled/netlify-cli#${hash2}`
 {
   const rr = await netlify_cli_modified_install_2(
     repo,

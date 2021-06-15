@@ -5,11 +5,13 @@ import { netlify_vsc_treeview_config_id } from "./treeview_id"
 import vscode from "vscode"
 import { computed, reaction } from "mobx"
 import { vscode_mobx } from "x/vscode/vscode_mobx"
-
+import { NetlifyCLIWrapper } from "src/vscode_extension/NetlifyCLIWrapper"
+import { Main } from "./main"
 export class ConfigTreeviewW {
-  constructor(ctx: vscode.ExtensionContext) {
-    const root = <ConfigRoot ctx={ctx} />
-    const tree = TreeItem_render(netlify_vsc_treeview_config_id, root)
+  constructor(ctx: vscode.ExtensionContext, cli: NetlifyCLIWrapper) {
+    const root = <ConfigRoot ctx={ctx} cli={cli} />
+    const root2 = <Main ctx={ctx} cli={cli} />
+    const tree = TreeItem_render(netlify_vsc_treeview_config_id, root2)
     reaction(
       () => this.active_netlify_toml_doc,
       (doc) => {
