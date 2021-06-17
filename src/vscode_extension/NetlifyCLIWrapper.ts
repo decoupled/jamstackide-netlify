@@ -1,6 +1,5 @@
 import execa from "execa"
 import { pathExists } from "fs-extra"
-import { Throttle } from "lodash-decorators"
 import { BaseError } from "make-error"
 import { computed } from "mobx"
 import { now } from "mobx-utils"
@@ -36,7 +35,7 @@ export class NetlifyCLIWrapper {
     })
     return JSON.parse(res.stdout)
   }
-  @Throttle(1000)
+  // @Throttle(300)
   async status(cwd: string): Promise<NetlifyCLIStatusResult> {
     try {
       const res = await this._run(cwd, ["status", "--json"])
@@ -81,6 +80,9 @@ export class NetlifyCLIWrapper {
   }
   async login_inTerminal(cwd: string) {
     vscode_window_createTerminal_andRun({ cmd: "netlify login", cwd: cwd })
+  }
+  async logout_inTerminal(cwd: string) {
+    vscode_window_createTerminal_andRun({ cmd: "netlify logout", cwd: cwd })
   }
   private async _run(cwd: string, args: string[]) {
     const pp = await this.clipath.standard()
@@ -158,10 +160,10 @@ const netlify_test_site = "/Users/aldo/com.github/decoupled/netlify-test-site"
     )
   } catch (e) {
     if (e instanceof NetlifyCLINotLinkedError) {
-      console.log(e.message)
+      console.log(e)
     }
     if (e instanceof NetlifyCLINotAuthError) {
-      console.log(e.message)
+      console.log(e)
     }
   }
   // const status = await cliw.status(netlify_test_site)

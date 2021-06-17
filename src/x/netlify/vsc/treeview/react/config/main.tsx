@@ -2,7 +2,7 @@ import { join } from "path"
 import React from "react"
 import { NetlifyCLIWrapper } from "src/vscode_extension/NetlifyCLIWrapper"
 import vscode from "vscode"
-import { computed, observer, TreeItem } from "../deps"
+import { computed, observer, TreeItem, Expanded } from "../deps"
 import { NetlifyTOMLUI } from "./NetlifyTOMLUI"
 import { StatusUI } from "./StatusUI"
 import { now } from "mobx-utils"
@@ -22,15 +22,15 @@ export class Main extends React.Component<{
     const { ctx, cli } = this.props
     if (num === 0) {
       return (
-        <>
+        <Root>
           <TreeItem label="no workspace folders..." />
-        </>
+        </Root>
       )
     }
     if (num === 1) {
       const wf = vscode.workspace.workspaceFolders[0]
       return (
-        <>
+        <Root>
           <WorkspaceFolderUI
             key={wf.uri.toString()}
             ctx={ctx}
@@ -38,7 +38,7 @@ export class Main extends React.Component<{
             wf={wf}
             isSingleWorkspace={true}
           />
-        </>
+        </Root>
       )
     }
 
@@ -56,7 +56,7 @@ export class Main extends React.Component<{
         />
       )
     })
-    return <>{...folders}</>
+    return <Root>{...folders}</Root>
   }
 }
 
@@ -84,4 +84,9 @@ class WorkspaceFolderUI extends React.Component<{
       </TreeItem>
     )
   }
+}
+
+const Root = (props: { children: any }) => {
+  return <TreeItem collapsibleState={Expanded}>{props.children}</TreeItem>
+  // return <>{props.children}</>
 }

@@ -1,13 +1,16 @@
 import { Singleton, TreeItem_render } from "lambdragon"
 import React from "react"
-import { memo } from "x/decorators"
+import { experimental_enabled } from "src/vscode_extension/util/experimental_enabled"
 import vscode from "vscode"
+import { memo } from "x/decorators"
 import { RootUI } from "./RootUI"
 import { treeview_workflow_id } from "./treeview_workflow_id"
 
 export class TreeviewWorkflowW implements Singleton {
   constructor(private ctx: vscode.ExtensionContext) {
-    this.render()
+    if (experimental_enabled()) {
+      this.render()
+    }
   }
   @memo() private render() {
     return TreeItem_render(treeview_workflow_id, <RootUI ctx={this.ctx} />)

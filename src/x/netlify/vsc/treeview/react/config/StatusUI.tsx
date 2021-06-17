@@ -15,23 +15,23 @@ export class StatusUI extends React.Component<{
   cli: NetlifyCLIWrapper
   wf: vscode.WorkspaceFolder
 }> {
-  componentDidMount() {
-    // this.fetchAndUpdateStatus()
-  }
-  async fetchAndUpdateStatus() {
-    try {
-      this.status = await this.props.cli.status(this.props.wf.uri.fsPath)
-    } catch (e) {
-      this.status = e
-    } finally {
-      setTimeout(() => this.fetchAndUpdateStatus(), 5000)
-    }
-  }
-  @observable status:
-    | NetlifyCLIStatusResult
-    | NetlifyCLINotAuthError
-    | NetlifyCLINotLinkedError
-    | undefined
+  // componentDidMount() {
+  //   // this.fetchAndUpdateStatus()
+  // }
+  // async fetchAndUpdateStatus() {
+  //   try {
+  //     this.status = await this.props.cli.status(this.props.wf.uri.fsPath)
+  //   } catch (e) {
+  //     this.status = e
+  //   } finally {
+  //     setTimeout(() => this.fetchAndUpdateStatus(), 5000)
+  //   }
+  // }
+  // @observable status:
+  //   | NetlifyCLIStatusResult
+  //   | NetlifyCLINotAuthError
+  //   | NetlifyCLINotLinkedError
+  //   | undefined
 
   get status2() {
     return this.props.cli.forDir(this.props.wf.uri.fsPath).status.get()
@@ -56,13 +56,13 @@ export class StatusUI extends React.Component<{
       <>
         <TreeItem
           iconPath={icon("account")}
-          key="1"
           menu={this.__menu}
           description=""
           label={s.data.account.Name}
           collapsibleState={None}
         />
-        <SiteUI key="2" cli={cli} siteData={s.data.siteData} wf={wf} />
+        {/* <TreeItem key="2" label="Hehe" collapsibleState={None} /> */}
+        <SiteUI cli={cli} siteData={s.data.siteData} wf={wf} />
       </>
     )
   }
@@ -77,39 +77,38 @@ export class StatusUI extends React.Component<{
     this.props.cli.link_inTerminal(cwd)
   }
 
-  private empty = (
-    <TreeItem key="2" label="" description="" collapsibleState={None} />
-  )
+  empty() {
+    return <TreeItem label="..." collapsibleState={None} />
+  }
 
   render() {
     // const s = this.status
     const s = this.status2
+    console.log("this.status2 ", this.status2)
     if (s instanceof NetlifyCLINotAuthError) {
       return (
         <>
           <TreeItem
-            key="1"
             iconPath={icon("account")}
             label="Login to Netlify"
             select={this.__login}
             description=""
             collapsibleState={None}
           />
-          {this.empty}
+          {this.empty()}
         </>
       )
     } else if (s instanceof NetlifyCLINotLinkedError) {
       return (
         <>
           <TreeItem
-            key="1"
             iconPath={icon("link")}
             label="Link a Netlify site to this project"
             collapsibleState={None}
             description=""
             select={this.__link}
           />
-          {this.empty}
+          {this.empty()}
         </>
       )
     } else if (s instanceof NetlifyCLIStatusResult) {
@@ -118,13 +117,12 @@ export class StatusUI extends React.Component<{
       return (
         <>
           <TreeItem
-            key="1"
             label=""
             description={""}
             iconPath={undefined}
             collapsibleState={None}
           />
-          {this.empty}
+          {this.empty()}
         </>
       )
     }
@@ -154,18 +152,21 @@ class SiteUI extends React.Component<{
     })
   }
   render() {
-    const { "site-name": name, "site-url": url } = this.props.siteData
-    return (
-      <TreeItem
-        iconPath={icon("globe")}
-        menu={this.menu}
-        key="2"
-        label="site"
-        description={name}
-        collapsibleState={None}
-        select={() => opn(url)}
-      />
-    )
+    try {
+      const { "site-name": name, "site-url": url } = this.props.siteData
+      return (
+        <TreeItem
+          iconPath={icon("globe")}
+          menu={this.menu}
+          label="site"
+          description={name}
+          collapsibleState={None}
+          select={() => opn(url)}
+        />
+      )
+    } catch (e) {
+      console.log(e)
+    }
   }
 }
 

@@ -3,6 +3,7 @@ import React from "react"
 import { NetlifyCLIWrapper } from "src/vscode_extension/NetlifyCLIWrapper"
 import { icon } from "src/vscode_extension/treeview/deps"
 import { CheckboxUI } from "src/vscode_extension/treeview/workflow/CheckboxUI"
+import { experimental_enabled } from "src/vscode_extension/util/experimental_enabled"
 import vscode from "vscode"
 import { lazy } from "x/decorators"
 import { computed, Expanded, menu, None, observer, TreeItem } from "../deps"
@@ -33,11 +34,7 @@ export class NetlifyTOMLUI extends React.Component<{
   }
   @computed get experimental_enabled() {
     now(500)
-    return (
-      vscode.workspace
-        .getConfiguration("netlify.experimental")
-        .get("enabled") === true
-    )
+    return experimental_enabled()
   }
 
   render_content() {

@@ -3,6 +3,7 @@ import { now } from "mobx-utils"
 import React from "react"
 import { NetlifyCLIWrapper } from "src/vscode_extension/NetlifyCLIWrapper"
 import { CheckboxUI } from "src/vscode_extension/treeview/workflow/CheckboxUI"
+import { experimental_enabled } from "src/vscode_extension/util/experimental_enabled"
 import * as toml from "toml"
 import vscode from "vscode"
 import { lazy } from "x/decorators"
@@ -129,9 +130,7 @@ export class ConfigRoot extends React.Component<{
   @computed get experimental_enabled() {
     now(500)
     return (
-      vscode.workspace
-        .getConfiguration("netlify.experimental")
-        .get("enabled") === true
+      experimental_enabled()
     )
   }
   render() {
