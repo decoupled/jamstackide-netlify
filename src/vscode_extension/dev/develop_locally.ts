@@ -1,8 +1,8 @@
 import { Singleton } from "lambdragon"
 import vscode, { Uri } from "vscode"
 import { Command } from "vscode-languageserver-types"
-import { memo } from "x/decorators"
-import { wait } from "x/Promise/wait"
+import { memo } from "@decoupled/xlib"
+import { wait } from "@decoupled/xlib"
 import {
   NewProjectSourceSpec,
   NewProjectSourceSpecString,

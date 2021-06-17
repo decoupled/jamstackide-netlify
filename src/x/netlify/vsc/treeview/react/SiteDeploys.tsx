@@ -1,5 +1,5 @@
+import { memo } from "@decoupled/xlib"
 import React from "react"
-import { memo } from "x/decorators"
 import * as api from "../../../api/netlify_api"
 import { icon, observable, observer, TreeItem } from "./deps"
 import { SiteDeploy } from "./SiteDeploy"

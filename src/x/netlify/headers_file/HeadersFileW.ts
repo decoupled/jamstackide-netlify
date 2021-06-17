@@ -1,15 +1,15 @@
-import { lsp_Range__vscode_Range } from "x/lsp__vscode/lsp_Range__vscode_Range"
 import {
+  Range_iso,
   vscode_TextEditor_setDecorations_pivot,
   vscode_TextEditor_setDecorations_pivot_Item,
-} from "x/vscode/vscode_TextEditor_setDecorations_pivot"
+  vscode_TextEditor_watch,
+} from "@decoupled/xlib"
 import * as vscode from "vscode"
 import { DecorationData_is } from "../etc/DecorationData"
 import {
   vscode_decoration_types_all,
   vscode_decoration_types_find,
 } from "../etc/vscode_decoration_types"
-import { vscode_TextEditor_watch } from "../../vscode/vscode_TextEditor_watch"
 import { headers_file_autocomplete } from "./headers_file_autocomplete"
 import { headers_file_parser } from "./headers_file_parser"
 
@@ -31,7 +31,7 @@ export class HeadersFileW {
             if (decorationType)
               yield {
                 decorationType,
-                rangeOrOptions: lsp_Range__vscode_Range(r.range),
+                rangeOrOptions: Range_iso.reverseGet(r.range),
               }
           }
       }

@@ -1,6 +1,6 @@
+import { lazy } from "@decoupled/xlib"
 import React from "react"
 import vscode from "vscode"
-import { lazy } from "x/decorators"
 import * as api from "../../../api/netlify_api"
 import { menu, observer, TreeItem } from "./deps"
 import { menu_def_snippet } from "./menus"

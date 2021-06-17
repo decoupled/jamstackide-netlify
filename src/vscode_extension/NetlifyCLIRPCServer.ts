@@ -1,8 +1,11 @@
-import { Singleton } from "lambdragon"
+import {
+  AddressInfo_cast_getPort_orThrow,
+  lazy,
+  memo,
+  vscode_Uri_smartParse,
+} from "@decoupled/xlib"
 import express from "express"
-import { lazy, memo } from "x/decorators"
-import { AddressInfo_cast_getPort_orThrow } from "x/net/AddressInfo"
-import { vscode_Uri_smartParse } from "x/vscode/vscode_Uri_smartParse"
+import { Singleton } from "lambdragon"
 import vscode from "vscode"
 
 const NETLIFY_VSCODE_RPC = "NETLIFY_VSCODE_RPC"

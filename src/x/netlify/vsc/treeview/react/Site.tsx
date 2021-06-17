@@ -1,7 +1,7 @@
+import { lazy } from "@decoupled/xlib"
 import React from "react"
 import { develop_locally } from "src/vscode_extension/dev/develop_locally"
 import vscode from "vscode"
-import { lazy } from "x/decorators"
 import * as api from "../../../api/netlify_api"
 import { icon, menu, None, observer, TreeItem } from "./deps"
 import { LinkUI } from "./LinkUI"

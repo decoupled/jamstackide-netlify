@@ -26,10 +26,10 @@
     redis "^2.7.1"
     uuid "^3.3.2"
 
-"@decoupled/xlib@^0.0.1":
-  version "0.0.1"
-  resolved "https://registry.yarnpkg.com/@decoupled/xlib/-/xlib-0.0.1.tgz#89905b24464b6d6c3db7be49b9d17b5d031b0f76"
-  integrity sha512-oMqLhuwji/PVpA06PzLGsgjlo6LLilflea5kZIJllxeF15uFui5rENbvPIb9BjVCKwdefds4wxUsh0Uf7jg5eQ==
+"@decoupled/xlib@^0.0.5":
+  version "0.0.5"
+  resolved "https://registry.yarnpkg.com/@decoupled/xlib/-/xlib-0.0.5.tgz#510b883ff02fd17124d4895b5ad41b39073424b3"
+  integrity sha512-xCHJxTdDepnfFj4saS6YN1u90Ye6rrOuayj8rLPhQ14f6XAaqKu6eIoQ70yXdI10LAooiNEmsF7hDWtSlIIhrw==
   dependencies:
     fkill "^7.0.1"
     fs-extra "^7.0.1"

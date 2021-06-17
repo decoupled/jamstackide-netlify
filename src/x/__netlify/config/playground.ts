@@ -2,7 +2,7 @@ import getNetlifyConfig from "@netlify/config"
 import { existsSync, readFileSync } from "fs-extra"
 import { join } from "path"
 import * as toml from "toml"
-import { memo } from "x/decorators"
+import { memo } from "@decoupled/xlib"
 import { TreeItem2, TreeItemCollapsibleState2 } from "x/vscode"
 
 {

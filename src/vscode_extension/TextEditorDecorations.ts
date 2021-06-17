@@ -1,8 +1,8 @@
+import { vscode_TextEditor_setDecorations_pivot } from "@decoupled/xlib"
 import { DIFactory } from "lambdragon"
 import { Throttle } from "lodash-decorators"
-import { MapWithLifecycle } from "x/Map/MapWithLifecycle"
-import { vscode_TextEditor_setDecorations_pivot } from "x/vscode/vscode_TextEditor_setDecorations_pivot"
 import * as vscode from "vscode"
+import { Map_WithLifecycle } from "@decoupled/xlib"
 import { TextEditorDecorationsProvider } from "./TextEditorDecorationsProvider"
 
 export class TextEditorDecorations {
@@ -18,7 +18,7 @@ export class TextEditorDecorations {
   }
 
   private start(): void {
-    const cache = new MapWithLifecycle<
+    const cache = new Map_WithLifecycle<
       vscode.TextEditor,
       SingleTextEditorDecorations
     >({

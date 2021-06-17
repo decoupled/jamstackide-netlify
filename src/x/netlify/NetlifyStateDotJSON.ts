@@ -1,4 +1,4 @@
-import { lazy } from "x/decorators"
+import { lazy } from "@decoupled/xlib"
 import { isEqual } from "lodash"
 import { join } from "path"
 import { readJSONSync, outputJSONSync } from "fs-extra"

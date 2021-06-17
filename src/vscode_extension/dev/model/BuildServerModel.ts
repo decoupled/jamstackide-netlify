@@ -1,7 +1,5 @@
+import { vscode_window_createTerminal_andRun, wait, WrappedShellCommand } from "@decoupled/xlib"
 import { computed, observable } from "mobx"
-import { wait } from "x/Promise/wait"
-import { WrappedCommand } from "x/vscode/Terminal/shell_wrapper/shell_wrapper_run"
-import { vscode_window_createTerminal_andRun } from "x/vscode/vscode_window_createTerminal_andRun"
 import vscode from "vscode"
 import { ProjectModel } from "./ProjectModel"
 
@@ -13,7 +11,7 @@ export class BuildServerModel {
   @observable status: BuildServerStatus = "init"
 
   @observable
-  private cmdWrapper: WrappedCommand | undefined
+  private cmdWrapper: WrappedShellCommand | undefined
   @observable
   private terminal: vscode.Terminal | undefined
 
@@ -28,7 +26,7 @@ export class BuildServerModel {
     if (this.status === "running") return
     if (!this.devCommand) return
     this.status = "running"
-    this.cmdWrapper = new WrappedCommand(this.devCommand)
+    this.cmdWrapper = new WrappedShellCommand(this.devCommand)
     this.terminal = await this.cmdWrapper.run(async (cmd) =>
       vscode_window_createTerminal_andRun({
         cmd,

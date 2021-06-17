@@ -1,6 +1,5 @@
+import { fs_patchJSON, fs_updateJSON } from "@decoupled/xlib"
 import { join } from "path"
-import { fs_patchJSON } from "x/fs/fs_patchJSON"
-import { fs_updateJSON } from "x/fs/fs_updateJSON"
 import { netlify_toml_json_schema_generate } from "x/toml/netlify_toml_json_schema_generator"
 
 {

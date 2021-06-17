@@ -1,6 +1,6 @@
+import { memo } from "@decoupled/xlib"
 import React from "react"
 import vscode from "vscode"
-import { memo } from "x/decorators"
 import * as api from "../../../api/netlify_api"
 import { icon, menu, observable, observer, TreeItem } from "./deps"
 import { menu_def_sites } from "./menus"

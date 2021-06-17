@@ -1,7 +1,7 @@
+import { Map_getOrCreate } from "@decoupled/xlib"
 import _ from "lodash"
 import * as mobx from "mobx"
 import * as mobxUtil from "mobx-utils"
-import { getOrCreate } from "x/Map/getOrCreate"
 
 /**
  * suspends and waits for expr() to be ready
@@ -76,7 +76,7 @@ class Computation<T, P> {
 
   await_<U>(expr: () => Promise<U>): U {
     const index = this.exprCount++
-    const op = getOrCreate(this.cache, index, () =>
+    const op = Map_getOrCreate(this.cache, index, () =>
       mobxUtil.fromPromise(expr())
     )
     return op.case({

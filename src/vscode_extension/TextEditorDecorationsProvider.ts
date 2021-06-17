@@ -1,10 +1,10 @@
+import { vscode_TextEditor_setDecorations_pivot_Item } from "@decoupled/xlib"
+import * as vscode from "vscode"
 import { lsp_Range__vscode_Range } from "x/lsp__vscode/lsp_Range__vscode_Range"
 import {
   vscode_decoration_types_all,
-  vscode_decoration_types_find,
+  vscode_decoration_types_find
 } from "x/netlify/etc/vscode_decoration_types"
-import { vscode_TextEditor_setDecorations_pivot_Item } from "x/vscode/vscode_TextEditor_setDecorations_pivot"
-import * as vscode from "vscode"
 import { TextEditorDecorationsProviderFromLSPClient } from "./TextEditorDecorationsProviderFromLSPClient"
 
 export class TextEditorDecorationsProvider {

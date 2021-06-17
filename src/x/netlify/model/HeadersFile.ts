@@ -1,8 +1,7 @@
-import { ArrayLike } from "x/Array/ArrayLike"
-import { memo } from "x/decorators"
-import { ExtendedDiagnostic } from "x/vscode-languageserver-types/lsp_extensions"
+import { ArrayLike, memo } from "@decoupled/xlib"
 import * as lsp from "vscode-languageserver"
 import { IFileSystem } from "x/fs/IFileSystem"
+import { ExtendedDiagnostic } from "x/vscode-languageserver-types/lsp_extensions"
 import { FileNode, FilePath } from "./base"
 export class HeadersFile extends FileNode {
   constructor(filePath: FilePath, fs: IFileSystem) {

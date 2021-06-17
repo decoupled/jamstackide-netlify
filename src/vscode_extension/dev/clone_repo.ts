@@ -1,10 +1,10 @@
+import { vscode_run } from "@decoupled/xlib"
 import * as fs from "fs-extra"
 import { dirname, join } from "path"
 import vscode from "vscode"
-import { lazy, memo } from "x/decorators"
+import { lazy, memo } from "@decoupled/xlib"
 import { degit_with_retries } from "x/degit/degit_with_retries"
 import { GitURL } from "x/git/GitURL"
-import { vscode_run } from "x/vscode/vscode_run"
 import { TargetDirSpec } from "../util/TargetDirSpec"
 import { TargetDirSpec_resolve_vsc } from "../util/TargetDirSpec_resolve_vsc"
 

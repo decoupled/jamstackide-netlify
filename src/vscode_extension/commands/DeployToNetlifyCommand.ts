@@ -1,13 +1,11 @@
+import { iter, lazy, memo, vscode_Uri_smartParse } from "@decoupled/xlib"
 import { DIFactory } from "lambdragon"
 import { values } from "lodash"
 import { basename } from "path"
-import { iter } from "x/Iterable/iter"
 import vscode from "vscode"
-import { lazy, memo } from "x/decorators"
 import { NetlifyAPIWrapper } from "../../x/netlify/api/netlify_api"
 import { NetlifyStateDotJSON } from "../../x/netlify/NetlifyStateDotJSON"
 import { NetlifyOAuthManager } from "../../x/netlify/vsc/NetlifyOAuthManager"
-import { vscode_Uri_smartParse } from "../../x/vscode/vscode_Uri_smartParse"
 
 const commands = {
   deploy: {

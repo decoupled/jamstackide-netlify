@@ -1,6 +1,6 @@
-export { TreeItem_Menu_create as menu, TreeItem } from "lambdragon"
-export { vscode_ThemeIcon_memo as icon } from "x/vscode/vscode_ThemeIcon_memo"
-export { observable, computed } from "mobx"
+export { vscode_ThemeIcon_memo as icon } from "@decoupled/xlib"
+export { TreeItem, TreeItem_Menu_create as menu } from "lambdragon"
+export { computed, observable } from "mobx"
 export { observer } from "mobx-react"
 
 import { ComponentPropsWithoutRef } from "react"

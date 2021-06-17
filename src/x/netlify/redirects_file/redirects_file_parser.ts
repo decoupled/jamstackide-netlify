@@ -1,4 +1,4 @@
-import { lazy, memo } from "x/decorators"
+import { lazy, memo } from "@decoupled/xlib"
 import {
   netlify_redirect_parser_from_source,
   NetlifyRedirectParserResult,

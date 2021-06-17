@@ -1,7 +1,7 @@
+import { Promise_withTimeout } from "@decoupled/xlib"
 import fetch from "isomorphic-fetch"
-import { memo } from "x/decorators"
-import { observable, when, computed } from "mobx"
-import { Promise_withTimeout } from "x/Promise/Promise_withTimeout"
+import { computed, observable, when } from "mobx"
+import { memo } from "@decoupled/xlib"
 
 export interface URLWatcherOpts {
   url: string

@@ -1,4 +1,5 @@
-import { debounce, memo } from "x/decorators"
+import { memo } from "@decoupled/xlib"
+import { debounce } from "x/decorators"
 import { ExtendedDiagnostic_groupByUri } from "x/vscode-languageserver-types/lsp_extensions"
 import { NetlifyLanguageServer } from "./NetlifyLanguageServer"
 

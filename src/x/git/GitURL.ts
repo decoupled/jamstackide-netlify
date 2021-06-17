@@ -1,4 +1,4 @@
-import { lazy } from "x/decorators"
+import { lazy } from "@decoupled/xlib"
 import git_url_parse from "git-url-parse"
 import { parse as url_parse } from "url"
 

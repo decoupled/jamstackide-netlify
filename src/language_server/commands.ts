@@ -1,4 +1,4 @@
-import { lazy, memo } from "x/decorators"
+import { lazy, memo } from "@decoupled/xlib"
 import { ExecuteCommandOptions } from "vscode-languageserver"
 import { NetlifyLanguageServer } from "./NetlifyLanguageServer"
 

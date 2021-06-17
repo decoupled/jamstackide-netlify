@@ -1,9 +1,8 @@
+import { vscode_run } from "@decoupled/xlib"
 import * as fs from "fs-extra"
 import { join } from "path"
 import vscode from "vscode"
 import { npm__yarn__install_dry } from "x/npm__yarn/npm__yarn__install"
-import { shell_wrapper_run_or_fail } from "x/vscode/Terminal/shell_wrapper/shell_wrapper_run"
-import { vscode_window_createTerminal_andRun } from "x/vscode/vscode_window_createTerminal_andRun"
 import { ExtraOpts } from "./types"
 
 export async function install_deps(opts: {
@@ -12,10 +11,7 @@ export async function install_deps(opts: {
 }) {
   const cmds = await install_deps_dry(opts)
   if (!cmds) return false
-  for (const cmd of cmds)
-    await shell_wrapper_run_or_fail(cmd, (cmd) => {
-      vscode_window_createTerminal_andRun({ cmd, cwd: opts.dir })
-    })
+  for (const cmd of cmds) await vscode_run({ cmd, cwd: opts.dir })
   return true
 }
 

@@ -1,8 +1,11 @@
-import { ArrayLike, ArrayLike_normalize } from "x/Array/ArrayLike"
-import { lazy, memo } from "x/decorators"
-import { URL_fromFile } from "x/url/URL_fromFile"
-import { ExtendedDiagnostic } from "x/vscode-languageserver-types/lsp_extensions"
+import {
+  ArrayLike,
+  ArrayLike_normalize,
+  URLString_fromFile,
+} from "@decoupled/xlib"
 import { DocumentUri } from "vscode-languageserver-types"
+import { lazy, memo } from "@decoupled/xlib"
+import { ExtendedDiagnostic } from "x/vscode-languageserver-types/lsp_extensions"
 import { IFileSystem } from "../../fs/IFileSystem"
 
 export type IDEStuff = any
@@ -33,7 +36,7 @@ export abstract class FileNode extends ModelNode {
     super()
   }
   @lazy() get uri(): DocumentUri {
-    return URL_fromFile(this.filePath)
+    return URLString_fromFile(this.filePath)
   }
   @memo() readFileSync(): string {
     return this.host.readFileSync(this.filePath)

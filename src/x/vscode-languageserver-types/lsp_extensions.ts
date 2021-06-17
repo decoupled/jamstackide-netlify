@@ -1,3 +1,4 @@
+import { URLString_fromFile as URL_fromFile } from "@decoupled/xlib"
 import lc from "line-column"
 import { groupBy, mapValues, uniqBy } from "lodash"
 import * as tsm from "ts-morph"
@@ -15,7 +16,6 @@ import {
   WorkspaceChange,
   WorkspaceEdit,
 } from "vscode-languageserver-types"
-import { URL_fromFile } from "../url/URL_fromFile"
 
 export function Range_contains(range: Range, pos: Position): boolean {
   if (Position_compare(range.start, pos) === "greater") return false

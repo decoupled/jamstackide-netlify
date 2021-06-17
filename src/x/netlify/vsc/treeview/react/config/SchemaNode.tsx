@@ -1,6 +1,6 @@
+import { lazy } from "@decoupled/xlib"
 import React from "react"
 import vscode from "vscode"
-import { lazy } from "x/decorators"
 import { menu, None, TreeItem, TreeItemProps } from "../deps"
 import {
   menu_def_add,

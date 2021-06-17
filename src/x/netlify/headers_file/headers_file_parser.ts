@@ -1,4 +1,4 @@
-import { lazy } from "x/decorators"
+import { lazy } from "@decoupled/xlib"
 import * as lsp from "vscode-languageserver-types"
 import {
   DecorationData_make as dec,

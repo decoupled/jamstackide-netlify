@@ -1,13 +1,15 @@
+import {
+  memo,
+  vscode_QuickPick_await,
+  vscode_window_createTerminal_andRun,
+} from "@decoupled/xlib"
 import { Singleton } from "lambdragon"
 import { values } from "lodash"
-import { memo } from "x/decorators"
-import { netlify_events_meta } from "x/netlify/events/netlify_events_meta"
-import { vscode_QuickPick_await } from "x/vscode/vscode_QuickPick_await"
-import { vscode_window_createTerminal_andRun } from "x/vscode/vscode_window_createTerminal_andRun"
 import vscode from "vscode"
+import { netlify_events_meta } from "x/netlify/events/netlify_events_meta"
 import { CWD } from "../di/CWD"
-import { NetlifyCLIRPCServer } from "../NetlifyCLIRPCServer"
 import { NetlifyCLIPath } from "../NetlifyCLIPath"
+import { NetlifyCLIRPCServer } from "../NetlifyCLIRPCServer"
 import { NetlifyCLIWrapper } from "../NetlifyCLIWrapper"
 
 export class CreateFunctionCommand implements Singleton {

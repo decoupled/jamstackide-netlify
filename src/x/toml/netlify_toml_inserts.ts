@@ -1,4 +1,4 @@
-import { vscode_workspace_applyEdit2 } from "x/vscode/vscode_workspace_applyEdit2"
+import { vscode_workspace_applyEdit2 } from "@decoupled/xlib"
 import { TOMLHelper } from "./toml_parse_nodes"
 import * as lsp from "vscode-languageserver-types"
 import vscode from "vscode"

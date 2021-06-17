@@ -1,6 +1,6 @@
 import moment from "moment"
 import NetlifyAPI from "netlify"
-import { lazy, memo } from "x/decorators"
+import { lazy, memo } from "@decoupled/xlib"
 import {
   R_getCurrentUser,
   R_getSite,

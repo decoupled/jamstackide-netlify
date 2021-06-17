@@ -1,4 +1,4 @@
-import { lazy } from "x/decorators"
+import { lazy } from "@decoupled/xlib"
 import vscode from "vscode"
 
 export class CWD {

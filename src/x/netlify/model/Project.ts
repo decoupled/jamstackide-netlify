@@ -1,6 +1,6 @@
 import { DIFactory } from "lambdragon"
 import { join } from "path"
-import { memo } from "x/decorators"
+import { memo } from "@decoupled/xlib"
 import { get_origin_push_url } from "x/git/get_origin_push_url"
 import { IFileSystem } from "x/fs/IFileSystem"
 import { FilePath, ModelNode } from "./base"

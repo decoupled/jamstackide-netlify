@@ -1,13 +1,12 @@
+import { lazy, vscode_workspace_applyEdit2 } from "@decoupled/xlib"
 import * as fs from "fs-extra"
 import { reaction, transaction } from "mobx"
 import { now } from "mobx-utils"
 import * as toml from "toml"
 import vscode from "vscode"
-import { lazy } from "x/decorators"
 import { netlify_toml_inserts_insertPath_vscode } from "x/toml/netlify_toml_inserts"
 import { toml_parse_find_node_2 } from "x/toml/toml_parse_nodes"
 import { vscode_mobx } from "x/vscode/vscode_mobx"
-import { vscode_workspace_applyEdit2 } from "x/vscode/vscode_workspace_applyEdit2"
 import { computed, observable } from "../deps"
 
 export class NetlifyTOMLUIModel {

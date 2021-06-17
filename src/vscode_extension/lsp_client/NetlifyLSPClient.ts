@@ -1,4 +1,4 @@
-import { memo } from "x/decorators"
+import { memo } from "@decoupled/xlib"
 import vscode from "vscode"
 import {
   LanguageClient,

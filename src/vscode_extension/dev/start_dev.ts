@@ -1,11 +1,11 @@
+import { vscode_run } from "@decoupled/xlib"
 import command_exists from "command-exists"
 import { existsSync } from "fs-extra"
 import { join } from "path"
 import { getPortPromise } from "portfinder"
-import { wait } from "x/Promise/wait"
-import { vscode_run } from "x/vscode/vscode_run"
 import vscode from "vscode"
 import waitPort from "wait-port"
+import { wait } from "@decoupled/xlib"
 import { browser_preview } from "./browser_preview"
 import { ExtraOpts } from "./types"
 

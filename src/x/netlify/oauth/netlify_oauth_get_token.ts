@@ -2,7 +2,7 @@ import express from "express"
 import { observable, when } from "mobx"
 import { nanoid } from "nanoid"
 import open from "open"
-import { memo } from "x/decorators"
+import { memo } from "@decoupled/xlib"
 import { netlify_oauth_build_authorize_url } from "../oauth/netlify_oauth_build_authorize_url"
 import { NetlifyOAuthConfig } from "./config/types"
 

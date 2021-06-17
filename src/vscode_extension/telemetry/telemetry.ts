@@ -1,10 +1,10 @@
+import { vscode_extensions_getExtensionID } from "@decoupled/xlib"
 import { Singleton } from "lambdragon"
 import { userInfo } from "os"
 import { sep } from "path"
-import { lazy } from "x/decorators"
-import { vscode_extensions_getExtensionID } from "x/vscode/vscode_extensions_getExtensionID"
 import vscode from "vscode"
 import TelemetryReporter from "vscode-extension-telemetry"
+import { lazy } from "@decoupled/xlib"
 
 // most code taken from: https://github.com/Almenon/AREPL-vscode/blob/master/src/areplUtilities.ts
 

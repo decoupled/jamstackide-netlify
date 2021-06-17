@@ -1,12 +1,14 @@
+import {
+  vscode_window_createTerminal_andRun,
+  wait,
+  WrappedShellCommand,
+} from "@decoupled/xlib"
 import { computed, observable } from "mobx"
 import { now } from "mobx-utils"
 import vscode from "vscode"
-import { wait } from "x/Promise/wait"
-import { WrappedCommand } from "x/vscode/Terminal/shell_wrapper/shell_wrapper_run"
-import { vscode_window_createTerminal_andRun } from "x/vscode/vscode_window_createTerminal_andRun"
+import { URLWatcher } from "x/http/URLWatcher"
 import { DevServerStatus, DevServerUIModel } from "../ui/DevServerUI"
 import { ProjectModel } from "./ProjectModel"
-import { URLWatcher } from "x/http/URLWatcher"
 
 export class DevServerModel implements DevServerUIModel {
   constructor(private project: ProjectModel) {}
@@ -22,12 +24,12 @@ export class DevServerModel implements DevServerUIModel {
     return this.cmdWrapper?.isRunning === true
   }
   @observable
-  private cmdWrapper: WrappedCommand | undefined
+  private cmdWrapper: WrappedShellCommand | undefined
   @observable
   private terminal: vscode.Terminal | undefined
   async start() {
     if (this.cmdWrapper) return
-    this.cmdWrapper = new WrappedCommand(this.devCommand)
+    this.cmdWrapper = new WrappedShellCommand(this.devCommand)
     this.terminal = await this.cmdWrapper.run(async (cmd) =>
       vscode_window_createTerminal_andRun({
         cmd,

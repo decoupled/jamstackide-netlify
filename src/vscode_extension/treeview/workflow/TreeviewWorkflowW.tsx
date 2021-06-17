@@ -2,7 +2,7 @@ import { Singleton, TreeItem_render } from "lambdragon"
 import React from "react"
 import { experimental_enabled } from "src/vscode_extension/util/experimental_enabled"
 import vscode from "vscode"
-import { memo } from "x/decorators"
+import { memo } from "@decoupled/xlib"
 import { RootUI } from "./RootUI"
 import { treeview_workflow_id } from "./treeview_workflow_id"
 

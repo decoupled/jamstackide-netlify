@@ -1,5 +1,5 @@
 import React from "react"
-import { memo } from "x/decorators"
+import { memo } from "@decoupled/xlib"
 import * as api from "../../../api/netlify_api"
 import { icon, menu, observable, observer, TreeItem } from "./deps"
 import { menu_def_add } from "./menus"

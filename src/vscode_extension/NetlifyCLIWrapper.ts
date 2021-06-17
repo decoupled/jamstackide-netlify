@@ -1,12 +1,12 @@
+import { vscode_window_createTerminal_andRun } from "@decoupled/xlib"
 import execa from "execa"
 import { pathExists } from "fs-extra"
 import { BaseError } from "make-error"
 import { computed } from "mobx"
 import { now } from "mobx-utils"
-import { memo } from "x/decorators"
+import { memo } from "@decoupled/xlib"
 import { netlify_cli_local_config_json_read_hash } from "x/netlify/cli/netlify_cli_local_config_json_path"
 import * as syncify from "x/syncify/syncify_mobx"
-import { vscode_window_createTerminal_andRun } from "x/vscode/vscode_window_createTerminal_andRun"
 import { NetlifyCLIPath, NetlifyCLIPath_createDevTime } from "./NetlifyCLIPath"
 export class NetlifyCLINotLinkedError extends BaseError {
   constructor(message: string) {

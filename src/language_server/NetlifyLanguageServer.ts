@@ -1,7 +1,4 @@
-import { lazy, memo } from "x/decorators"
-import { headers_file_parser22 } from "x/netlify/headers_file/headers_file_parser"
-import { URL_toFile } from "x/url/URL_fromFile"
-import { ExtendedDiagnostic_findRelevantQuickFixes } from "x/vscode-languageserver-types/lsp_extensions"
+import { lazy, memo, URLString_toFile as URL_toFile } from "@decoupled/xlib"
 import { TextDocument } from "vscode-languageserver-textdocument"
 import * as lsp from "vscode-languageserver-types"
 import { CodeAction } from "vscode-languageserver-types"
@@ -14,7 +11,9 @@ import {
   TextDocumentSyncKind,
 } from "vscode-languageserver/node"
 import { FileSystemWithLSPDocumentStore } from "x/fs/FileSystemWithLSPDocumentStore"
+import { headers_file_parser22 } from "x/netlify/headers_file/headers_file_parser"
 import { Project_create } from "x/netlify/model/Project_create"
+import { ExtendedDiagnostic_findRelevantQuickFixes } from "x/vscode-languageserver-types/lsp_extensions"
 import { CommandsManager } from "./commands"
 import { DiagnosticsManager } from "./diagnostics"
 

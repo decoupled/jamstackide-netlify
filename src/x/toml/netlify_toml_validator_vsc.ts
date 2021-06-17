@@ -1,7 +1,7 @@
+import { vscode_languages_SmartDiagnosticsCollection } from "@decoupled/xlib"
 import { readFileSync } from "fs-extra"
 import { basename } from "path"
 import * as vscode from "vscode"
-import { vscode_languages_SmartDiagnosticsCollection } from "../vscode/vscode_languages_SmartDiagnosticsCollection"
 import { netlify_toml_validator_get_diagnostics } from "./netlify_toml_validator"
 
 export async function netlify_toml_validator_vsc(ctx: vscode.ExtensionContext) {

@@ -1,3 +1,4 @@
+import { lazy } from "@decoupled/xlib"
 import { reaction, transaction } from "mobx"
 import { now } from "mobx-utils"
 import React from "react"
@@ -6,7 +7,6 @@ import { CheckboxUI } from "src/vscode_extension/treeview/workflow/CheckboxUI"
 import { experimental_enabled } from "src/vscode_extension/util/experimental_enabled"
 import * as toml from "toml"
 import vscode from "vscode"
-import { lazy } from "x/decorators"
 import { netlify_toml_inserts_insertPath_vscode } from "x/toml/netlify_toml_inserts"
 import { toml_parse_find_node_2 } from "x/toml/toml_parse_nodes"
 import { vscode_mobx } from "x/vscode/vscode_mobx"
@@ -129,9 +129,7 @@ export class ConfigRoot extends React.Component<{
   }
   @computed get experimental_enabled() {
     now(500)
-    return (
-      experimental_enabled()
-    )
+    return experimental_enabled()
   }
   render() {
     if (!this.active_netlify_toml_doc)

@@ -1,10 +1,10 @@
+import { crypto_filenameFriendlyHash } from "@decoupled/xlib"
 import execa from "execa"
 import { pathExists } from "fs-extra"
 import { memoize } from "lodash"
 import { join } from "path"
-import { degit_with_retries } from "x/degit/degit_with_retries"
 import vscode from "vscode"
-import { crypto_filenameFriendlyHash } from "x/crypto/crypto_filenameFriendlyHash"
+import { degit_with_retries } from "x/degit/degit_with_retries"
 //https://github.com/decoupled/netlify-cli/tree/aldonline-ide-features
 
 // const repo = "decoupled/netlify-cli#aldonline-ide-features"

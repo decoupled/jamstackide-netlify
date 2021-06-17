@@ -1,5 +1,5 @@
 import React from "react"
-import { memo } from "x/decorators"
+import { memo } from "@decoupled/xlib"
 import * as api from "../../../api/netlify_api"
 import { AccountSettings_PaymentMethods_Method } from "./AccountSettings_PaymentMethods_Method"
 import { icon, observable, observer, TreeItem } from "./deps"
