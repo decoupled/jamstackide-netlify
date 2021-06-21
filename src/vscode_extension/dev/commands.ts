@@ -1,7 +1,8 @@
+import { netlify_ids } from "../util/netlify_ids"
+
 export const commands = {
-  // this is a public facing command
   develop_locally: {
-    command: "netlify.develop_locally",
+    command: netlify_ids.netlify.commands.develop_locally.$id,
     title: "Fetch and Develop Locally",
     category: "Netlify",
   },

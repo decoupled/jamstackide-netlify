@@ -15,24 +15,6 @@ export class StatusUI extends React.Component<{
   cli: NetlifyCLIWrapper
   wf: vscode.WorkspaceFolder
 }> {
-  // componentDidMount() {
-  //   // this.fetchAndUpdateStatus()
-  // }
-  // async fetchAndUpdateStatus() {
-  //   try {
-  //     this.status = await this.props.cli.status(this.props.wf.uri.fsPath)
-  //   } catch (e) {
-  //     this.status = e
-  //   } finally {
-  //     setTimeout(() => this.fetchAndUpdateStatus(), 5000)
-  //   }
-  // }
-  // @observable status:
-  //   | NetlifyCLIStatusResult
-  //   | NetlifyCLINotAuthError
-  //   | NetlifyCLINotLinkedError
-  //   | undefined
-
   get status2() {
     return this.props.cli.forDir(this.props.wf.uri.fsPath).status.get()
   }
@@ -77,13 +59,13 @@ export class StatusUI extends React.Component<{
   }
 
   empty() {
-    return <TreeItem label="..." collapsibleState={None} />
+    return <TreeItem label="" collapsibleState={None} />
   }
 
   render() {
     // const s = this.status
     const s = this.status2
-    console.log("this.status2 ", this.status2)
+    // console.log("this.status2 ", this.status2)
     if (s instanceof NetlifyCLINotAuthError) {
       return (
         <>
@@ -130,7 +112,7 @@ export class StatusUI extends React.Component<{
 
 type SiteData = NetlifyCLIStatusResult["data"]["siteData"]
 
-class SiteUI extends React.Component<{
+export class SiteUI extends React.Component<{
   siteData: SiteData
   cli: NetlifyCLIWrapper
   wf: vscode.WorkspaceFolder

@@ -1,9 +1,9 @@
 import { values } from "lodash"
+import { netlify_ids } from "../util/netlify_ids"
 
-const base = "netlify.debug"
 export const commands = {
   debug: {
-    command: base + ".debug",
+    command: netlify_ids.netlify.commands.debug.$id,
     title: "Debug Functions",
     category: "Netlify",
   },

@@ -1,10 +1,10 @@
+import { memo } from "@decoupled/xlib"
 import { Singleton, TreeItem_render } from "lambdragon"
 import React from "react"
+import { netlify_ids } from "src/vscode_extension/util/netlify_ids"
 import vscode from "vscode"
-import { memo } from "@decoupled/xlib"
 import { icon, None, TreeItem } from "../deps"
 
-const treeview_shortcuts_id = "netlify.treeview.shortcuts"
 export class TreeviewShortcutsW implements Singleton {
   constructor() {
     this.render()
@@ -24,7 +24,7 @@ export class TreeviewShortcutsW implements Singleton {
         }}
       />
     ))
-    return TreeItem_render(treeview_shortcuts_id, <>{ll}</>)
+    return TreeItem_render(netlify_ids.netlify.views.shortcuts.$id, <>{ll}</>)
   }
 }
 
@@ -50,7 +50,7 @@ export function treeview_docs_contributes() {
     views: {
       netlify: [
         {
-          id: treeview_shortcuts_id,
+          id: netlify_ids.netlify.views.shortcuts.$id,
           name: "Shortcuts",
         },
       ],

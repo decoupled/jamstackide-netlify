@@ -10,7 +10,7 @@ import { icon_uri } from "../icon_uri"
 import { computed, Expanded, None, observer, TreeItem } from "./deps"
 import { menu_def2__docs } from "./menus"
 import { NetlifyTOMLUIModel } from "./NetlifyTOMLUIModel"
-import { SchemaNodeUI } from "./SchemaNode"
+import { SchemaNodeUI } from "./SchemaNodeUI"
 import { netlifyTOMLJSONSchema, openDocs } from "./util"
 
 @observer

@@ -16,6 +16,7 @@ import {
 } from "./NetlifyCLIPath"
 import icon from "./static/netlify_vscode_logo.png"
 import { treeview_contributes } from "./treeview/contributes"
+import { netlify_ids } from "./util/netlify_ids"
 import { when_clauses } from "./util/when_clauses"
 import { VERSION } from "./VERSION"
 
@@ -153,22 +154,22 @@ function redirects_commands() {
 
 const command_ids = {
   add_redirect: {
-    command: "netlify.add_redirect",
+    command: netlify_ids.netlify.commands.add_redirect.$id,
     title: "Add Redirect",
     category: "Netlify",
   },
   add_context: {
-    command: "netlify.add_context",
+    command: netlify_ids.netlify.commands.add_context.$id,
     title: "Add Context",
     category: "Netlify",
   },
   add_custom_header: {
-    command: "netlify.add_custom_header",
+    command: netlify_ids.netlify.commands.add_custom_header.$id,
     title: "Add Custom Header",
     category: "Netlify",
   },
   add_edge_handler: {
-    command: "netlify.add_edge_handler",
+    command: netlify_ids.netlify.commands.add_edge_handler.$id,
     title: "Add Edge Handler",
     category: "Netlify",
   },

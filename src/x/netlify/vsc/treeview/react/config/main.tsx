@@ -3,7 +3,7 @@ import { join } from "path"
 import React from "react"
 import { NetlifyCLIWrapper } from "src/vscode_extension/NetlifyCLIWrapper"
 import vscode from "vscode"
-import { computed, Expanded, observer, TreeItem } from "./deps"
+import { computed, observer, TreeItem } from "./deps"
 import { NetlifyTOMLUI } from "./NetlifyTOMLUI"
 import { StatusUI } from "./StatusUI"
 

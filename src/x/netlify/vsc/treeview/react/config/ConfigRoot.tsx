@@ -20,7 +20,7 @@ import {
   TreeItem,
 } from "./deps"
 import { menu_def2__docs } from "./menus"
-import { SchemaNodeUI } from "./SchemaNode"
+import { SchemaNodeUI } from "./SchemaNodeUI"
 import { netlifyTOMLJSONSchema, openDocs } from "./util"
 
 /*

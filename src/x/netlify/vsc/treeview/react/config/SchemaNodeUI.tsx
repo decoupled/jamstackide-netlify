@@ -1,92 +1,28 @@
-import { lazy } from "@decoupled/xlib"
 import React from "react"
 import vscode from "vscode"
 import { None, TreeItem, TreeItemProps } from "./deps"
-import {
-  menu_def2__add,
-  menu_def2__add__docs,
-  menu_def2__docs,
-  menu_def2__edit,
-  menu_def2__edit__docs,
-} from "./menus"
-import { label_description, openDocs } from "./util"
-
-/*
-add these as issues:
-- show hint/description when value is not set
-*/
-
-class SchemaNodeUI_MenuHelper {
-  constructor(private props: { schema: any; value: any }) {}
-}
+import { SchemaNodeUI_MenuHelper } from "./SchemaNodeUI_MenuHelper"
+import { TOMLPath } from "./types"
+import { label_description } from "./util"
 
 type OverridesFromParent = Partial<Pick<TreeItemProps, "tooltip">>
+
 export class SchemaNodeUI extends React.Component<
   {
     schema: any
     value: any
     label?: string
     description?: string
-    path: (string | number)[]
-    onSelect?: (path: (string | number)[]) => void
-    onEdit?: (path: (string | number)[]) => void
+    path: TOMLPath
+    onSelect?: (path: TOMLPath) => void
+    onEdit?: (path: TOMLPath) => void
   } & OverridesFromParent
 > {
-  @lazy() get __menu_add() {
-    return menu_def2__add.create({
-      add: () => {
-        if (this.props.schema.title === "Plugins") {
-        } else {
-          vscode.window.showInformationMessage("add!")
-        }
-      },
-    })
+  get menu() {
+    return this.menuHelper.menu
   }
-
-  @lazy() get __menu_def__add__docs() {
-    return menu_def2__add__docs.create({
-      add: () => {
-        if (this.props.schema.title === "Plugins") {
-        } else {
-          vscode.window.showInformationMessage("add!")
-        }
-      },
-      docs: () => {
-        this.openDocs()
-      },
-    })
-  }
-
-  @lazy() get __menu_def__docs() {
-    return menu_def2__docs.create({
-      docs: () => {
-        this.openDocs()
-      },
-    })
-  }
-
-  private openDocs() {
-    const docs = this.props.schema["x-docs"]
-    if (typeof docs === "string") openDocs(docs)
-  }
-
-  @lazy() get __menu_def__edit__docs() {
-    return menu_def2__edit__docs.create({
-      edit: () => {
-        this.props.onEdit?.(this.props.path)
-      },
-      docs: () => {
-        this.openDocs()
-      },
-    })
-  }
-
-  @lazy() get __menu_edit() {
-    return menu_def2__edit.create({
-      edit: () => {
-        this.props.onEdit?.(this.props.path)
-      },
-    })
+  get menuHelper() {
+    return new SchemaNodeUI_MenuHelper(this.props)
   }
   private __onSelect = () => {
     this.props.onSelect?.(this.props.path)
@@ -104,39 +40,7 @@ export class SchemaNodeUI extends React.Component<
   get isRoot(): boolean {
     return this.props.path.length === 0
   }
-  get menu__is__add(): boolean {
-    const { schema } = this.props
-    if (schema.type === "array") return true
-    if (schema.additionalProperties) return true
-    return false
-  }
-  get menu__is__edit(): boolean {
-    const { schema, value } = this.props
-    if (schema.type === "array") {
-      return false
-    } else if (schema.type === "object") {
-      if (typeof value === "undefined") {
-        return true
-      }
-      return false
-    } else {
-      return true
-    }
-  }
-  get menu__is__docs(): boolean {
-    const { schema } = this.props
-    return !!schema["x-docs"]
-  }
-  get menu() {
-    if (this.menu__is__add && this.menu__is__docs)
-      return this.__menu_def__add__docs
-    if (this.menu__is__edit && this.menu__is__docs)
-      return this.__menu_def__edit__docs
-    if (this.menu__is__edit) return this.__menu_edit
-    if (this.menu__is__add) return this.__menu_add
-    if (this.menu__is__docs) return this.__menu_def__docs
-    return undefined
-  }
+
   render_object(): React.ReactNode {
     const {
       schema,

@@ -1,117 +1,123 @@
+import { netlify_ids } from "src/vscode_extension/util/netlify_ids"
 import merge from "webpack-merge"
 import { TreeItemMenu } from "./deps"
 
-const base = "netlify.treeview.config.menus"
+const m2 = netlify_ids.netlify.menus2
+
+const add = {
+  title: "Add...",
+  icon: "$(add)",
+  group: "inline",
+} as const
+
+const docs = {
+  title: "Open Documentation",
+  icon: "$(question)",
+  group: "inline",
+} as const
+
+const edit = {
+  title: "Edit...",
+  icon: "$(edit)",
+  group: "inline",
+} as const
 
 export const menu_def2__add = new TreeItemMenu({
-  id: base + ".menu_def_add",
+  id: m2.add.$id,
   commands: {
-    add: {
-      title: "Add...",
-      icon: "$(add)",
-      group: "inline",
-    },
+    add,
   },
 })
 
 export const menu_def2__add__docs = new TreeItemMenu({
-  id: base + ".menu__add__docs",
+  id: m2.add__docs.$id,
   commands: {
-    add: {
-      title: "Add...",
-      icon: "$(add)",
-      group: "inline",
-    },
-    docs: {
-      title: "Open Documentation",
-      icon: "$(question)",
-      group: "inline",
-    },
+    add,
+    docs,
   },
 })
 
 export const menu_def2__docs = new TreeItemMenu({
-  id: base + ".menu__docs",
+  id: m2.docs.$id,
   commands: {
-    docs: {
-      title: "Open Documentation",
-      icon: "$(question)",
-      group: "inline",
-    },
+    docs,
   },
 })
 
 export const menu_def2__edit = new TreeItemMenu({
-  id: base + ".menu_def_edit",
+  id: m2.edit.$id,
   commands: {
-    edit: {
-      title: "edit...",
-      icon: "$(edit)",
-      group: "inline",
-    },
+    edit,
   },
 })
 
 export const menu_def2__edit__docs = new TreeItemMenu({
-  id: base + ".menu__edit__docs",
+  id: m2.edit__docs.$id,
   commands: {
-    edit: {
-      title: "edit...",
-      icon: "$(edit)",
-      group: "inline",
-    },
-    docs: {
-      title: "Open Documentation",
-      icon: "$(question)",
-      group: "inline",
-    },
+    edit,
+    docs,
   },
 })
 
 export const menu_def2__logged_in = new TreeItemMenu({
-  id: base + ".menu_def_logged_in",
+  id: m2.logged_in.$id,
   commands: {
     logout: {
-      title: "log out from this account",
+      title: "Log out from this Account",
       icon: "$(debug-disconnect)",
       group: "inline",
     },
     logout2: {
-      title: "log out from this account",
+      title: "Log out from this Account",
       icon: "$(debug-disconnect)",
     },
   },
 })
 
 export const menu_def2__site2 = new TreeItemMenu({
-  id: base + ".menu_def_site2",
+  id: m2.site2.$id,
   commands: {
     unlink: {
-      title: "unlink site",
+      title: "Unlink site",
       icon: "$(debug-disconnect)",
       group: "inline",
     },
     unlink2: {
-      title: "unlink site",
+      title: "Unlink site",
       icon: "$(debug-disconnect)",
     },
     preview: {
-      title: "open",
+      title: "Open",
       icon: "$(open-preview)",
       group: "inline",
     },
     preview2: {
-      title: "open",
+      title: "Open",
       icon: "$(open-preview)",
     },
     admin: {
-      title: "admin",
+      title: "Admin",
       icon: "$(settings-gear)",
       group: "inline",
     },
     admin2: {
-      title: "admin",
+      title: "Admin",
       icon: "$(settings-gear)",
+    },
+  },
+})
+
+export const menu_def2__functions = new TreeItemMenu({
+  id: m2.functions.$id,
+  commands: {
+    add,
+    add2: {
+      icon: "$(add)",
+      title: "Add Function Configuration",
+    },
+    create_new_function: {
+      icon: "$(add)",
+      title: "Create new Function",
     },
   },
 })
@@ -125,6 +131,7 @@ export function menus_contributes() {
     menu_def2__edit__docs,
     menu_def2__logged_in,
     menu_def2__site2,
+    menu_def2__functions,
   ]
   return merge({}, ...defs.map((d) => d.contributes()))
 }

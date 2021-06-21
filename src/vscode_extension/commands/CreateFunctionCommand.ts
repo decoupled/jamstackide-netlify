@@ -11,6 +11,7 @@ import { CWD } from "../di/CWD"
 import { NetlifyCLIPath } from "../NetlifyCLIPath"
 import { NetlifyCLIRPCServer } from "../NetlifyCLIRPCServer"
 import { NetlifyCLIWrapper } from "../NetlifyCLIWrapper"
+import { netlify_ids } from "../util/netlify_ids"
 
 export class CreateFunctionCommand implements Singleton {
   constructor(
@@ -231,9 +232,9 @@ type FunctionType = "sync" | "background" | "event" | "template"
 
 // https://docs.netlify.com/functions/overview/
 
-const commands = {
+export const commands = {
   create_function: {
-    command: "netlify.create_function",
+    command: netlify_ids.netlify.commands.create_function.$id,
     title: "Create Function...",
     category: "Netlify",
   },

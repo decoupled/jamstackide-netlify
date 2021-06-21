@@ -1,10 +1,11 @@
-import merge from "webpack-merge"
 import { TreeItem_Menu_def as menudef, TreeItem_Menu_to_json } from "lambdragon"
+import { netlify_ids } from "src/vscode_extension/util/netlify_ids"
+import merge from "webpack-merge"
 
-const base = "netlify.treeview.menus"
+const m = netlify_ids.netlify.menus
 
 export const menu_def_authenticating = menudef({
-  id: base + ".menu_def_authenticating",
+  id: m.authenticating.$id,
   commands: {
     retry: {
       title: "Retry",
@@ -15,7 +16,7 @@ export const menu_def_authenticating = menudef({
 })
 
 export const menu_def_logged_in = menudef({
-  id: base + ".menu_def_logged_in",
+  id: m.logged_in.$id,
   commands: {
     logout: {
       title: "log out from this account",
@@ -30,7 +31,7 @@ export const menu_def_logged_in = menudef({
 })
 
 export const menu_def_site2 = menudef({
-  id: base + ".menu_def_site2",
+  id: m.site2.$id,
   commands: {
     unlink: {
       title: "unlink site",
@@ -63,7 +64,7 @@ export const menu_def_site2 = menudef({
 })
 
 export const menu_def_add = menudef({
-  id: base + ".menu_def_add",
+  id: m.add.$id,
   commands: {
     add: {
       title: "Add...",
@@ -74,7 +75,7 @@ export const menu_def_add = menudef({
 })
 
 export const menu_def__add__docs = menudef({
-  id: base + ".menu__add__docs",
+  id: m.add__docs.$id,
   commands: {
     add: {
       title: "Add...",
@@ -90,7 +91,7 @@ export const menu_def__add__docs = menudef({
 })
 
 export const menu_def__docs = menudef({
-  id: base + ".menu__docs",
+  id: m.docs.$id,
   commands: {
     docs: {
       title: "Open Documentation",
@@ -101,7 +102,7 @@ export const menu_def__docs = menudef({
 })
 
 export const menu_def_snippet = menudef({
-  id: base + ".menu_def_snippet",
+  id: m.snippet.$id,
   commands: {
     rename: {
       title: "Rename Snippet...",
@@ -115,7 +116,7 @@ export const menu_def_snippet = menudef({
 })
 
 export const menu_def_edit = menudef({
-  id: base + ".menu_def_edit",
+  id: m.edit.$id,
   commands: {
     edit: {
       title: "edit...",
@@ -126,7 +127,7 @@ export const menu_def_edit = menudef({
 })
 
 export const menu_def__edit__docs = menudef({
-  id: base + ".menu__edit__docs",
+  id: m.edit__docs.$id,
   commands: {
     edit: {
       title: "edit...",
@@ -142,7 +143,7 @@ export const menu_def__edit__docs = menudef({
 })
 
 export const menu_def_sites = menudef({
-  id: base + ".menu_def_sites",
+  id: m.sites.$id,
   commands: {
     search: {
       title: "search",
@@ -158,7 +159,7 @@ export const menu_def_sites = menudef({
 })
 
 export const menu_def_site = menudef({
-  id: base + ".menu_def_site",
+  id: m.site.$id,
   commands: {
     delete: {
       title: "Delete Site...",
@@ -177,7 +178,7 @@ export const menu_def_site = menudef({
 })
 
 export const menu_def_deploy_published = menudef({
-  id: base + ".menu_def_deploy_published",
+  id: m.deploy_published.$id,
   commands: {
     preview: {
       title: "preview",
@@ -188,7 +189,7 @@ export const menu_def_deploy_published = menudef({
 })
 
 export const menu_def_deploy = menudef({
-  id: base + ".menu_def_deploy",
+  id: m.deploy.$id,
   commands: {
     preview: {
       title: "preview",
@@ -208,7 +209,7 @@ export const menu_def_deploy = menudef({
 })
 
 export const menu_def_forms = menudef({
-  id: base + ".menu_def_forms",
+  id: m.forms.$id,
   commands: {
     doc: {
       title: "View Documentation",
