@@ -1,4 +1,4 @@
-import { TreeItem_render } from "lambdragon"
+import { vscode_react_TreeItem_render } from "@decoupled/xlib"
 import { computed, reaction } from "mobx"
 import * as React from "react"
 import { NetlifyCLIWrapper } from "src/vscode_extension/NetlifyCLIWrapper"
@@ -13,10 +13,13 @@ export class ConfigTreeviewW {
     const root = <ConfigRoot ctx={ctx} cli={cli} />
     const root2 = <Main ctx={ctx} cli={cli} />
 
-    const tree = TreeItem_render(netlify_vsc_treeview_config_id, root2)
+    const tree = vscode_react_TreeItem_render(
+      netlify_vsc_treeview_config_id,
+      root2
+    )
     setInterval(() => {
       console.log(tree.toJSON())
-      // tree.refresh()
+      tree.refresh()
     }, 5000)
     reaction(
       () => this.active_netlify_toml_doc,

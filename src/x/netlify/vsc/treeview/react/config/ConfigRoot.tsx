@@ -10,17 +10,16 @@ import vscode from "vscode"
 import { netlify_toml_inserts_insertPath_vscode } from "x/toml/netlify_toml_inserts"
 import { toml_parse_find_node_2 } from "x/toml/toml_parse_nodes"
 import { vscode_mobx } from "x/vscode/vscode_mobx"
+import { icon_uri } from "../icon_uri"
 import {
   computed,
   Expanded,
-  menu,
   None,
   observable,
   observer,
   TreeItem,
-} from "../deps"
-import { icon_uri } from "../icon_uri"
-import { menu_def__docs } from "../menus"
+} from "./deps"
+import { menu_def2__docs } from "./menus"
 import { SchemaNodeUI } from "./SchemaNode"
 import { netlifyTOMLJSONSchema, openDocs } from "./util"
 
@@ -119,7 +118,7 @@ export class ConfigRoot extends React.Component<{
   }
 
   @lazy() get netlify_toml_menu() {
-    return menu(menu_def__docs, {
+    return menu_def2__docs.create({
       docs: () => {
         openDocs(
           "https://docs.netlify.com/configure-builds/file-based-configuration/"

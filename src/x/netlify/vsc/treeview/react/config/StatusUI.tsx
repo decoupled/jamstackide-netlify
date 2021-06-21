@@ -6,8 +6,8 @@ import {
   NetlifyCLIWrapper,
 } from "src/vscode_extension/NetlifyCLIWrapper"
 import vscode from "vscode"
-import { icon, menu, None, observable, observer, TreeItem } from "../deps"
-import { menu_def_logged_in, menu_def_site2 } from "../menus"
+import { icon, None, observer, TreeItem } from "./deps"
+import { menu_def2__logged_in, menu_def2__site2 } from "./menus"
 
 @observer
 export class StatusUI extends React.Component<{
@@ -41,7 +41,7 @@ export class StatusUI extends React.Component<{
     return this.props.wf.uri.fsPath
   }
 
-  private __menu = menu(menu_def_logged_in, {
+  private __menu = menu_def2__logged_in.create({
     logout: () => {
       this.props.cli.logout(this.cwd)
     },
@@ -61,7 +61,6 @@ export class StatusUI extends React.Component<{
           label={s.data.account.Name}
           collapsibleState={None}
         />
-        {/* <TreeItem key="2" label="Hehe" collapsibleState={None} /> */}
         <SiteUI cli={cli} siteData={s.data.siteData} wf={wf} />
       </>
     )
@@ -141,8 +140,16 @@ class SiteUI extends React.Component<{
     const { "site-url": url, "admin-url": adminURL } = siteData
     const admin = () => opn(adminURL)
     const preview = () => opn(url)
-    const unlink = () => cli.unlink_inTerminal(wf.uri.fsPath)
-    return menu(menu_def_site2, {
+    const unlink = async () => {
+      const res = await vscode.window.showWarningMessage(
+        "Are you sure you want to 'unlink' the Netlify site from this project?",
+        "YES",
+        "NO"
+      )
+      if (res !== "YES") return
+      cli.unlink_inTerminal(wf.uri.fsPath)
+    }
+    return menu_def2__site2.create({
       admin,
       admin2: admin,
       preview,

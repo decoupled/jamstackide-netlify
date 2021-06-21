@@ -1,20 +1,24 @@
 import { lazy } from "@decoupled/xlib"
 import React from "react"
 import vscode from "vscode"
-import { menu, None, TreeItem, TreeItemProps } from "../deps"
+import { None, TreeItem, TreeItemProps } from "./deps"
 import {
-  menu_def_add,
-  menu_def_edit,
-  menu_def__add__docs,
-  menu_def__docs,
-  menu_def__edit__docs,
-} from "../menus"
+  menu_def2__add,
+  menu_def2__add__docs,
+  menu_def2__docs,
+  menu_def2__edit,
+  menu_def2__edit__docs,
+} from "./menus"
 import { label_description, openDocs } from "./util"
 
 /*
 add these as issues:
 - show hint/description when value is not set
 */
+
+class SchemaNodeUI_MenuHelper {
+  constructor(private props: { schema: any; value: any }) {}
+}
 
 type OverridesFromParent = Partial<Pick<TreeItemProps, "tooltip">>
 export class SchemaNodeUI extends React.Component<
@@ -29,7 +33,7 @@ export class SchemaNodeUI extends React.Component<
   } & OverridesFromParent
 > {
   @lazy() get __menu_add() {
-    return menu(menu_def_add, {
+    return menu_def2__add.create({
       add: () => {
         if (this.props.schema.title === "Plugins") {
         } else {
@@ -40,7 +44,7 @@ export class SchemaNodeUI extends React.Component<
   }
 
   @lazy() get __menu_def__add__docs() {
-    return menu(menu_def__add__docs, {
+    return menu_def2__add__docs.create({
       add: () => {
         if (this.props.schema.title === "Plugins") {
         } else {
@@ -54,7 +58,7 @@ export class SchemaNodeUI extends React.Component<
   }
 
   @lazy() get __menu_def__docs() {
-    return menu(menu_def__docs, {
+    return menu_def2__docs.create({
       docs: () => {
         this.openDocs()
       },
@@ -67,7 +71,7 @@ export class SchemaNodeUI extends React.Component<
   }
 
   @lazy() get __menu_def__edit__docs() {
-    return menu(menu_def__edit__docs, {
+    return menu_def2__edit__docs.create({
       edit: () => {
         this.props.onEdit?.(this.props.path)
       },
@@ -78,7 +82,7 @@ export class SchemaNodeUI extends React.Component<
   }
 
   @lazy() get __menu_edit() {
-    return menu(menu_def_edit, {
+    return menu_def2__edit.create({
       edit: () => {
         this.props.onEdit?.(this.props.path)
       },

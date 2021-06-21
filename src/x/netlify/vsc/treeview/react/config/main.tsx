@@ -1,11 +1,11 @@
+import { now } from "mobx-utils"
 import { join } from "path"
 import React from "react"
 import { NetlifyCLIWrapper } from "src/vscode_extension/NetlifyCLIWrapper"
 import vscode from "vscode"
-import { computed, observer, TreeItem, Expanded } from "../deps"
+import { computed, Expanded, observer, TreeItem } from "./deps"
 import { NetlifyTOMLUI } from "./NetlifyTOMLUI"
 import { StatusUI } from "./StatusUI"
-import { now } from "mobx-utils"
 
 @observer
 export class Main extends React.Component<{
@@ -87,6 +87,6 @@ class WorkspaceFolderUI extends React.Component<{
 }
 
 const Root = (props: { children: any }) => {
-  return <TreeItem collapsibleState={Expanded}>{props.children}</TreeItem>
-  // return <>{props.children}</>
+  // return <TreeItem collapsibleState={Expanded}>{props.children}</TreeItem>
+  return <>{props.children}</>
 }

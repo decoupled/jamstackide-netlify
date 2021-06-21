@@ -7,7 +7,7 @@ import vscode from "vscode"
 import { netlify_toml_inserts_insertPath_vscode } from "x/toml/netlify_toml_inserts"
 import { toml_parse_find_node_2 } from "x/toml/toml_parse_nodes"
 import { vscode_mobx } from "x/vscode/vscode_mobx"
-import { computed, observable } from "../deps"
+import { computed, observable } from "./deps"
 
 export class NetlifyTOMLUIModel {
   constructor(private filePath: string) {

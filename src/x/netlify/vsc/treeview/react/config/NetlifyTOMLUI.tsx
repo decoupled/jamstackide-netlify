@@ -6,9 +6,9 @@ import { icon } from "src/vscode_extension/treeview/deps"
 import { CheckboxUI } from "src/vscode_extension/treeview/workflow/CheckboxUI"
 import { experimental_enabled } from "src/vscode_extension/util/experimental_enabled"
 import vscode from "vscode"
-import { computed, Expanded, menu, None, observer, TreeItem } from "../deps"
 import { icon_uri } from "../icon_uri"
-import { menu_def__docs } from "../menus"
+import { computed, Expanded, None, observer, TreeItem } from "./deps"
+import { menu_def2__docs } from "./menus"
 import { NetlifyTOMLUIModel } from "./NetlifyTOMLUIModel"
 import { SchemaNodeUI } from "./SchemaNode"
 import { netlifyTOMLJSONSchema, openDocs } from "./util"
@@ -24,7 +24,7 @@ export class NetlifyTOMLUI extends React.Component<{
   }
 
   @lazy() get netlify_toml_menu() {
-    return menu(menu_def__docs, {
+    return menu_def2__docs.create({
       docs: () => {
         openDocs(
           "https://docs.netlify.com/configure-builds/file-based-configuration/"
