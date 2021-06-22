@@ -23,6 +23,7 @@ import { ConfigTreeviewW } from "../../x/netlify/vsc/treeview/react/config/Confi
 import { TreeviewWorkflowW } from "../treeview/workflow/TreeviewWorkflowW"
 import { Debugging } from "../debugging/Debugging"
 import { TaploUpdateW } from "../../x/taplo/TaploUpdateW"
+import { RightClickCommands } from "../commands/RightClickCommands"
 
 export const autowire__impl = ___autowire__(
   "VSCodeProjectW",
@@ -41,6 +42,7 @@ export const autowire__impl = ___autowire__(
         "TreeviewModules",
         "Debugging",
         "TaploUpdateW",
+        "RightClickCommands",
       ],
       impl: VSCodeProjectW,
     },
@@ -227,6 +229,13 @@ export const autowire__impl = ___autowire__(
       isSingleton: false,
       args: ["CWD"],
       impl: TaploUpdateW,
+    },
+    {
+      out: "RightClickCommands",
+      isConstructor: true,
+      isSingleton: false,
+      args: [],
+      impl: RightClickCommands,
     },
   ]
 )

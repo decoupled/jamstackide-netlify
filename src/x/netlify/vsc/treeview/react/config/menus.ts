@@ -87,21 +87,21 @@ export const menu_def2__site2 = new TreeItemMenu({
       icon: "$(debug-disconnect)",
     },
     preview: {
-      title: "Open",
+      title: "Open in Browser",
       icon: "$(open-preview)",
       group: "inline",
     },
     preview2: {
-      title: "Open",
+      title: "Open in Browser",
       icon: "$(open-preview)",
     },
     admin: {
-      title: "Admin",
+      title: "Open Admin (on the Netlify App)",
       icon: "$(settings-gear)",
       group: "inline",
     },
     admin2: {
-      title: "Admin",
+      title: "Open Admin (on the Netlify App)",
       icon: "$(settings-gear)",
     },
   },

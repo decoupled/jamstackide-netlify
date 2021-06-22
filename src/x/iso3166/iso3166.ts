@@ -1,3 +1,5 @@
+import * as jst from "x/json_schema/json_schema_typings"
+
 export interface Country {
   country: string
   alpha2: string
@@ -8,7 +10,7 @@ export interface Country {
 export function iso3166_countries_jsonSchema(
   description?: string,
   k: "uc" | "lc" | "both" = "lc"
-) {
+): jst.T_array {
   const countries = iso3166()
   let docs = countries.map((x) => x.country)
   let enum_ = countries.map((x) => x.alpha2)

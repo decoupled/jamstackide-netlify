@@ -16,6 +16,7 @@ export class SchemaNodeUI extends React.Component<
     path: TOMLPath
     onSelect?: (path: TOMLPath) => void
     onEdit?: (path: TOMLPath) => void
+    filePath: string
   } & OverridesFromParent
 > {
   get menu() {
@@ -64,6 +65,7 @@ export class SchemaNodeUI extends React.Component<
       if (!schema2) continue
       const elm = (
         <SchemaNodeUI
+          filePath={this.props.filePath}
           key={"key:" + k}
           schema={schema2}
           value={value2}
@@ -110,6 +112,7 @@ export class SchemaNodeUI extends React.Component<
     const elms = value.map((value2, i) => {
       return (
         <SchemaNodeUI
+          filePath={this.props.filePath}
           onSelect={onSelect}
           key={i}
           schema={schema2}

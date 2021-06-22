@@ -2,6 +2,7 @@
 import { RedirectsFileW } from "x/netlify/redirects_file/RedirectsFileW"
 import { TaploUpdateW } from "x/taplo/TaploUpdateW"
 import { CreateFunctionCommand } from "../commands/CreateFunctionCommand"
+import { RightClickCommands } from "../commands/RightClickCommands"
 import { Debugging } from "../debugging/Debugging"
 import { NetlifyLSPClientManager } from "../lsp_client/NetlifyLSPClientManager"
 import { MagicURLsW } from "../magic_urls/magic_urls"
@@ -20,6 +21,7 @@ export class VSCodeProjectW {
     _dddd: MagicURLsW,
     _treeviews: TreeviewModules,
     _debugging: Debugging,
-    _taplo: TaploUpdateW
+    _taplo: TaploUpdateW,
+    _rightClick: RightClickCommands
   ) {}
 }

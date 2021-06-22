@@ -1,10 +1,10 @@
 import { VSCodeExtension } from "lambdragon"
-import { values } from "lodash"
 import { join } from "path"
 import { language_server_build_target } from "src/language_server/language_server"
 import vscode from "vscode"
 import merge from "webpack-merge"
 import { commands_create_function_contributes } from "./commands/CreateFunctionCommand"
+import { right_click_commands_contributes } from "./commands/RightClickCommands"
 import { configuration_contributes } from "./configuration/contributes"
 import { debugging_contributes } from "./debugging/contributes"
 import { develop_locally_contributes } from "./dev/contributes"
@@ -16,8 +16,6 @@ import {
 } from "./NetlifyCLIPath"
 import icon from "./static/netlify_vscode_logo.png"
 import { treeview_contributes } from "./treeview/contributes"
-import { netlify_ids } from "./util/netlify_ids"
-import { when_clauses } from "./util/when_clauses"
 import { VERSION } from "./VERSION"
 
 /**
@@ -73,10 +71,6 @@ function main() {
   }
 }
 
-{
-  commands_contributes()
-}
-
 function contributes() {
   return merge([
     treeview_contributes(),
@@ -99,78 +93,7 @@ function contributes() {
         },
       ],
     },
-    commands_contributes(),
+    right_click_commands_contributes(),
     configuration_contributes(),
   ])
-}
-
-// https://code.visualstudio.com/api/references/contribution-points#Sorting-of-groups
-function commands_contributes() {
-  function cc(group: string) {
-    return [
-      ...netlify_toml_commands().map((cmd) => {
-        return {
-          when: when_clauses.is_netlify_toml,
-          command: cmd.command,
-          group,
-        }
-      }),
-      ...headers_commands().map((cmd) => {
-        return {
-          when: when_clauses.is_headers,
-          command: cmd.command,
-          group,
-        }
-      }),
-      ...redirects_commands().map((cmd) => {
-        return {
-          when: when_clauses.is_redirects,
-          command: cmd.command,
-          group,
-        }
-      }),
-    ]
-  }
-  return {
-    menus: {
-      "explorer/context": [...cc("2_netlify")],
-      "editor/context": [...cc("2_netlify")],
-    },
-    commands: values(command_ids),
-  }
-}
-
-function netlify_toml_commands() {
-  return values(command_ids)
-}
-
-function headers_commands() {
-  return [command_ids.add_custom_header]
-}
-
-function redirects_commands() {
-  return [command_ids.add_redirect]
-}
-
-const command_ids = {
-  add_redirect: {
-    command: netlify_ids.netlify.commands.add_redirect.$id,
-    title: "Add Redirect",
-    category: "Netlify",
-  },
-  add_context: {
-    command: netlify_ids.netlify.commands.add_context.$id,
-    title: "Add Context",
-    category: "Netlify",
-  },
-  add_custom_header: {
-    command: netlify_ids.netlify.commands.add_custom_header.$id,
-    title: "Add Custom Header",
-    category: "Netlify",
-  },
-  add_edge_handler: {
-    command: netlify_ids.netlify.commands.add_edge_handler.$id,
-    title: "Add Edge Handler",
-    category: "Netlify",
-  },
 }

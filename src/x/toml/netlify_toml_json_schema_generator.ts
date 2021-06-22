@@ -1,10 +1,14 @@
+import * as xlib from "@decoupled/xlib"
 import Ajv from "ajv"
 import { outputFileSync, readJSONSync } from "fs-extra"
 import hsc from "http-status-codes"
 import _ from "lodash"
 import { join } from "path"
+import { netlify_ids } from "src/vscode_extension/util/netlify_ids"
 import { iso3166_countries_jsonSchema } from "x/iso3166/iso3166"
-
+import * as jst from "x/json_schema/json_schema_typings"
+import * as menus from "x/netlify/vsc/treeview/react/config/menus"
+import * as docs from "./netlify_toml_docs"
 {
   // run this playground to generate the JSON schema, load it into AJV, and then validate an example netlify.toml
   const ajv = new Ajv()
@@ -34,7 +38,7 @@ function example3_netlify_json() {
 }
 
 export function netlify_toml_json_schema_generate() {
-  const schema = {
+  const schema: jst.Doc = {
     $id: "https://netlify.com/netlif.toml.json",
     $schema: "http://json-schema.org/draft-07/schema",
     title: "Netlify Configuration File",
@@ -45,14 +49,29 @@ export function netlify_toml_json_schema_generate() {
       redirects: {
         type: "array",
         items: $ref("Redirect"),
-        "x-docs":
-          "https://docs.netlify.com/configure-builds/file-based-configuration/#redirects",
+        "x-docs": docs.urls.redirects,
+        "x-menu": ({ filePath, path, value }) => {
+          return menus.menu_def2__add__docs.create({
+            add: () => {
+              xlib
+                .vscode_()
+                .commands.executeCommand(
+                  netlify_ids.netlify.commands.add_redirect.$id,
+                  [filePath]
+                )
+            },
+            docs: () => {
+              xlib
+                .vscode_()
+                .env.openExternal(xlib.vscode_Uri_smartParse(docs.urls.headers))
+            },
+          })
+        },
       },
       context: $ref("ContextMap"),
       headers: {
         type: "array",
-        "x-docs":
-          "https://docs.netlify.com/configure-builds/file-based-configuration/#headers",
+        "x-docs": docs.urls.headers,
         items: {
           type: "object",
           title: "HeaderSet",
@@ -64,6 +83,23 @@ export function netlify_toml_json_schema_generate() {
             values: $ref("HeaderMap"),
           },
           required: ["for", "values"],
+        },
+        "x-menu": ({ filePath, path, value }) => {
+          return menus.menu_def2__add__docs.create({
+            add: () => {
+              xlib
+                .vscode_()
+                .commands.executeCommand(
+                  netlify_ids.netlify.commands.add_custom_header.$id,
+                  [filePath]
+                )
+            },
+            docs: () => {
+              xlib
+                .vscode_()
+                .env.openExternal(xlib.vscode_Uri_smartParse(docs.urls.headers))
+            },
+          })
         },
       },
       functions: $ref("Functions"),
@@ -81,25 +117,7 @@ export function netlify_toml_json_schema_generate() {
             description: "Sets a custom directory for Netlify Functions",
             pattern: file_regex(),
           },
-          node_bundler: {
-            type: "string",
-            enum: ["esbuild", "zisi"],
-            description: "The function bundling method used",
-            "x-taplo": {
-              docs: {
-                enumValues: [
-                  `[ESBuild](https://esbuild.github.io/) - an extremely fast bundler`,
-                  `
-[Zip it and Ship It](https://github.com/netlify/zip-it-and-ship-it)
-
-Creates Zip archives from Node.js, Go, and Rust programs. Those archives are ready to be uploaded to AWS Lambda.
-This library is used under the hood by several Netlify features,
-including production CI builds, Netlify CLI and the JavaScript client.
-                  `,
-                ],
-              },
-            },
-          },
+          node_bundler: node_bundler(),
           external_node_modules: $ref("Functions__external_node_modules"),
           included_files: $ref("Functions__included_files"),
         },
@@ -113,12 +131,12 @@ including production CI builds, Netlify CLI and the JavaScript client.
         },
       },
       Functions__external_node_modules: {
-        description: Functions__external_node_modules__d,
+        description: docs.Functions__external_node_modules__d,
         type: "array",
         items: { type: "string" },
       },
       Functions__included_files: {
-        description: Functions__included_files__d,
+        description: docs.Functions__included_files__d,
         type: "array",
         items: { type: "string" },
       },
@@ -175,13 +193,16 @@ including production CI builds, Netlify CLI and the JavaScript client.
         properties: {
           base: {
             type: "string",
-            description: build_base_description,
+            description: docs.build_base_description,
           },
           publish: {
             type: "string",
-            description: build_publish_description,
+            description: docs.build_publish_description,
           },
-          command: { type: "string", description: build_command_description },
+          command: {
+            type: "string",
+            description: docs.build_command_description,
+          },
           environment: $ref("Env"),
           plugins: $ref("Plugins"),
           processing: $ref("Processing"),
@@ -189,24 +210,26 @@ including production CI builds, Netlify CLI and the JavaScript client.
       },
       Build: {
         type: "object",
-        description: build_description,
+        description: docs.build_description,
         "x-docs":
           "https://docs.netlify.com/configure-builds/file-based-configuration/#build-settings",
         properties: {
           base: {
             type: "string",
-            description: build_base_description,
+            description: docs.build_base_description,
           },
           publish: {
             type: "string",
-            description: build_publish_description,
+            description: docs.build_publish_description,
           },
-          command: { type: "string", description: build_command_description },
+          command: {
+            type: "string",
+            description: docs.build_command_description,
+          },
           environment: $ref("Env"),
           processing: $ref("Processing"),
           edge_handlers: {
-            "x-docs":
-              "https://docs.netlify.com/configure-builds/file-based-configuration/#edge-handlers",
+            "x-docs": docs.urls.edge_handlers,
             type: "string",
             description: `Custom path to your Edge Handlers directory`,
           },
@@ -214,8 +237,7 @@ including production CI builds, Netlify CLI and the JavaScript client.
             type: "string",
             description:
               "Bash command that will be run from the base directory to determine whether the site needs rebuilding or not",
-            "x-docs":
-              "https://docs.netlify.com/configure-builds/file-based-configuration/#ignore-builds",
+            "x-docs": docs.urls.ignore_builds,
           },
         },
         // required: ["command"],
@@ -237,7 +259,10 @@ including production CI builds, Netlify CLI and the JavaScript client.
         },
         description: `[Docs](https://docs.netlify.com/configure-builds/build-plugins/#configure-settings)`,
         properties: {
-          package: { type: "string", description: Plugin_package_description },
+          package: {
+            type: "string",
+            description: docs.Plugin_package_description,
+          },
           inputs: $ref("PluginInputs"),
         },
         required: ["package"],
@@ -307,7 +332,7 @@ including production CI builds, Netlify CLI and the JavaScript client.
           },
           jwtRolePath: {
             type: "string",
-            description: Dev__jwtRolePath__d,
+            description: docs.Dev__jwtRolePath__d,
           },
           jwtSecret: {
             type: "string",
@@ -350,20 +375,23 @@ including production CI builds, Netlify CLI and the JavaScript client.
   }
   return removeUndefinedProps(schema)
 
-  function Context_(description?: string) {
+  function Context_(description?: string): jst.T_object {
     return {
       type: "object",
       description,
       properties: {
         base: {
           type: "string",
-          description: build_base_description,
+          description: docs.build_base_description,
         },
         publish: {
           type: "string",
-          description: build_publish_description,
+          description: docs.build_publish_description,
         },
-        command: { type: "string", description: build_command_description },
+        command: {
+          type: "string",
+          description: docs.build_command_description,
+        },
         environment: $ref("Env"),
         plugins: $ref("Plugins"),
         processing: $ref("Processing"),
@@ -371,7 +399,7 @@ including production CI builds, Netlify CLI and the JavaScript client.
     }
   }
 
-  function conditionArr(description?: string) {
+  function conditionArr(description?: string): jst.T_array {
     return {
       type: "array",
       items: { type: "string" },
@@ -380,7 +408,7 @@ including production CI builds, Netlify CLI and the JavaScript client.
       description,
     }
   }
-  function Redirect_(roleBased?: boolean) {
+  function Redirect_(roleBased?: boolean): jst.T_object {
     return {
       type: "object",
       title: "Redirect",
@@ -414,7 +442,10 @@ including production CI builds, Netlify CLI and the JavaScript client.
             },
           },
         },
-        force: { type: "boolean", description: Redirect_force_description },
+        force: {
+          type: "boolean",
+          description: docs.Redirect_force_description,
+        },
         query: {
           description: "query parameter mapping",
           type: "object",
@@ -445,36 +476,10 @@ including production CI builds, Netlify CLI and the JavaScript client.
     }
   }
 
-  function $ref(x: string) {
+  function $ref(x: string): jst.Ref {
     return { $ref: `#/definitions/${x}` }
   }
 }
-
-const build_base_description = `
-Directory to change to before starting a build.
-This is where we will look for package.json/.nvmrc/etc.
-If not set, defaults to the root directory.`.trim()
-
-const build_publish_description = `
-Directory that contains the deploy-ready HTML files and assets generated by
-the build. This is relative to the base directory if one has been set, or the
-root directory if a base has not been set"
-`.trim()
-
-const build_command_description = `Default build command`
-
-const build_description = `
-Settings in the [build] context are global and are applied to all contexts
-unless otherwise overridden by more specific contexts.`.trim()
-
-const Redirect_force_description = `By default, redirects won’t be applied if there’s a file with the same
-path as the one defined in the "from" property. Setting "force" to "true"
-will make the redirect rule take precedence over any existing files.`.trim()
-
-const Plugin_package_description = `
-* For a plugin installed from npm, the npm package name of the plugin.
-* For a local plugin, the path to a directory containing the plugin’s index.js and manifest.yml files. The package value for a local plugin must start with . or /.
-`.trim()
 
 function removeUndefinedProps(x: any) {
   if (typeof x !== "object") return x
@@ -488,25 +493,6 @@ function removeUndefinedProps(x: any) {
   }
   return x2
 }
-
-{
-  removeUndefinedProps({ x: { a: "a", b: undefined } })
-}
-
-const Functions__external_node_modules__d = `
-A list of Node.js modules that are copied to the bundled artifact
-without adjusting their source or references during the bundling process;
-only applies when \`node_bundler\` is set to \`esbuild\`.
-This property helps handle dependencies that can’t be inlined,
-such as modules with native add-ons.`.trim()
-
-const Functions__included_files__d = `
-A list of additional paths to include in the function bundle.
-Although our build system includes statically referenced files (like \`require("./some-file.js")\`) by default,
-included_files lets you specify additional files or directories and reference them dynamically in function code.
-You can use \`*\` to match any character or prefix an entry with \`!\` to exclude files.
-Paths are relative to the [base directory](https://docs.netlify.com/configure-builds/get-started/#definitions-1).
-`
 
 function file_regex() {
   return `
@@ -539,7 +525,7 @@ function httpStatusCodes() {
 
 function httpStatusCodesJSONSchema() {}
 
-function port(description?: string) {
+function port(description?: string): jst.T_integer {
   return {
     type: "integer",
     description,
@@ -548,13 +534,15 @@ function port(description?: string) {
   }
 }
 
-const fence = "```"
-
-const Dev__jwtRolePath__d = `
-The object path that points to role values for JWT-based redirects.
-
-Example:
-${fence} toml
-jwtRolePath = "app_metadata.authorization.roles"
-${fence}
-`.trim()
+function node_bundler(): jst.T_string {
+  return {
+    type: "string",
+    enum: ["esbuild", "zisi"],
+    description: "The function bundling method used",
+    "x-taplo": {
+      docs: {
+        enumValues: [docs.esbuild, docs.zisi],
+      },
+    },
+  }
+}

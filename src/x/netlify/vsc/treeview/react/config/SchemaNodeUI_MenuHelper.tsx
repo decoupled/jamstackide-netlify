@@ -10,12 +10,14 @@ import {
 } from "./menus"
 import { TOMLPath } from "./types"
 import { openDocs } from "./util"
+import * as jst from "x/json_schema/json_schema_typings"
 
 export class SchemaNodeUI_MenuHelper {
   constructor(
     private props: {
-      schema: any
+      schema: jst.TypeExprNoRefs
       value: any
+      filePath: string
       onEdit?: (path: TOMLPath) => void
       path: TOMLPath
     }
@@ -35,23 +37,13 @@ export class SchemaNodeUI_MenuHelper {
 
   get __menu_add() {
     return menu_def2__add.create({
-      add: () => {
-        if (this.props.schema.title === "Plugins") {
-        } else {
-          vscode.window.showInformationMessage("add!")
-        }
-      },
+      add: () => {},
     })
   }
 
   get __menu_def__add__docs() {
     return menu_def2__add__docs.create({
-      add: () => {
-        if (this.props.schema.title === "Plugins") {
-        } else {
-          vscode.window.showInformationMessage("add!")
-        }
-      },
+      add: () => {},
       docs: () => {
         this.openDocs()
       },
@@ -90,13 +82,14 @@ export class SchemaNodeUI_MenuHelper {
   }
 
   get menu__is__add(): boolean {
-    const { schema } = this.props
+    const schema = this.props.schema as any
     if (schema.type === "array") return true
     if (schema.additionalProperties) return true
     return false
   }
   get menu__is__edit(): boolean {
-    const { schema, value } = this.props
+    const schema = this.props.schema as any
+    const { value } = this.props
     if (schema.type === "array") {
       return false
     } else if (schema.type === "object") {
@@ -115,9 +108,27 @@ export class SchemaNodeUI_MenuHelper {
   get pathStr() {
     return this.props.path.join(".")
   }
+  get lastPath() {
+    return this.props.path.pop()
+  }
+  get x_menu() {
+    const s = this.props.schema
+    if (jst.TypeDef_is(s))
+      return s["x-menu"]?.({
+        filePath: this.props.filePath,
+        value: this.props.value as any,
+        path: this.props.path,
+      })
+  }
   get menu() {
+    // does the schema have a predefined x-menu?
+    const x_menu = this.x_menu
+    if (x_menu) return x_menu
+
     if (this.pathStr === "functions") {
       return this.__menu_def2__functions
+    }
+    if (this.lastPath === "edge_handlers") {
     }
 
     if (this.menu__is__add && this.menu__is__docs)

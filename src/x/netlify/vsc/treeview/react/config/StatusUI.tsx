@@ -39,8 +39,8 @@ export class StatusUI extends React.Component<{
         <TreeItem
           iconPath={icon("account")}
           menu={this.__menu}
-          description=""
-          label={s.data.account.Name}
+          label="account"
+          description={s.data.account.Name}
           collapsibleState={None}
         />
         <SiteUI cli={cli} siteData={s.data.siteData} wf={wf} />
@@ -112,6 +112,7 @@ export class StatusUI extends React.Component<{
 
 type SiteData = NetlifyCLIStatusResult["data"]["siteData"]
 
+@observer
 export class SiteUI extends React.Component<{
   siteData: SiteData
   cli: NetlifyCLIWrapper

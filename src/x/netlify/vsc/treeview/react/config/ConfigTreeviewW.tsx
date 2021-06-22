@@ -4,13 +4,11 @@ import * as React from "react"
 import { NetlifyCLIWrapper } from "src/vscode_extension/NetlifyCLIWrapper"
 import vscode from "vscode"
 import { vscode_mobx } from "x/vscode/vscode_mobx"
-import { ConfigRoot } from "./ConfigRoot"
 import { Main } from "./main"
 import { netlify_vsc_treeview_config_id } from "./treeview_id"
 
 export class ConfigTreeviewW {
   constructor(ctx: vscode.ExtensionContext, cli: NetlifyCLIWrapper) {
-    const root = <ConfigRoot ctx={ctx} cli={cli} />
     const root2 = <Main ctx={ctx} cli={cli} />
 
     const tree = vscode_react_TreeItem_render(
