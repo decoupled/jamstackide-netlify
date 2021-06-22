@@ -21,7 +21,7 @@ export class NetlifyTOMLUIModel {
           // alternative: we could use rxjs streams (+ mobx)
           transaction(() => {
             if (typeof txt !== "string") {
-              this.parsedDoc = undefined
+              this.parsedDoc = null
               this.isStale = false
               return
             }
@@ -40,7 +40,7 @@ export class NetlifyTOMLUIModel {
     )
     makeObservable(this)
   }
-  @observable parsedDoc: any = undefined
+  @observable parsedDoc: any = null
   /**
    * the parsed doc can be stale (if there is a syntax error, for example)
    */
@@ -98,7 +98,7 @@ export class NetlifyTOMLUIModel {
 
   openNode(pos: vscode.Position) {
     const selection = new vscode.Selection(pos, pos)
-    vscode.window.showTextDocument(this.uri, { selection })
+    vscode.window.showTextDocument(this.uri, { selection, preserveFocus: true })
     // editor.revealRange(
     //   new vscode.Range(pos, pos),
     //   vscode.TextEditorRevealType.InCenter
@@ -108,8 +108,8 @@ export class NetlifyTOMLUIModel {
   @lazy() get uri() {
     return vscode.Uri.file(this.filePath)
   }
-  focus = () => {
-    vscode.window.showTextDocument(this.uri)
+  focus = (preserveFocus = true) => {
+    vscode.window.showTextDocument(this.uri, { preserveFocus })
   }
   __onSelect = (path: (string | number)[]) => {
     this.focus()
@@ -127,10 +127,10 @@ export class NetlifyTOMLUIModel {
     }
   }
   __onEdit = (path: (string | number)[]) => {
-    this.focus()
     if (path.some((x) => typeof x !== "string")) {
       vscode.window.showWarningMessage("Editing TOML arrays not supported yet")
     }
+    this.focus(false)
     const editor = this.editor
     if (!editor) return
     netlify_toml_inserts_insertPath_vscode(editor, path as any)

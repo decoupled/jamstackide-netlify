@@ -10,16 +10,19 @@ export class RightClickCommands {
     vscode.commands.registerCommand(
       command_ids.add_redirect.command,
       async (maybeUri?: any) => {
-        if (isNetlifyTOML(maybeUri)) {
-          // three options here:
-          // 1. wizard
-          // 2. snippet
-          // const doc = await vscode.workspace.openTextDocument(maybeUri)
-          const editor = await vscode.window.showTextDocument(maybeUri)
-          const snip = new vscode.SnippetString(redirect_snippet)
-          const line = lineForInsert(editor.document.getText())
-          const pos = line ? new vscode.Position(line, 0) : undefined
-          editor.insertSnippet(snip, pos)
+        if (maybeUri) {
+          const uri = vscode_Uri_smartParse(maybeUri)
+          if (uri.fsPath.endsWith("netlify.toml")) {
+            // three options here:
+            // 1. wizard
+            // 2. snippet
+            // const doc = await vscode.workspace.openTextDocument(maybeUri)
+            const editor = await vscode.window.showTextDocument(maybeUri)
+            const snip = new vscode.SnippetString(redirect_snippet)
+            const line = lineForInsert(editor.document.getText())
+            const pos = line ? new vscode.Position(line, 0) : undefined
+            editor.insertSnippet(snip, pos)
+          }
         }
       }
     )

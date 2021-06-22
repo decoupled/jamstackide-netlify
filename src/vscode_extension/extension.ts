@@ -17,6 +17,7 @@ import {
 import icon from "./static/netlify_vscode_logo.png"
 import { treeview_contributes } from "./treeview/contributes"
 import { VERSION } from "./VERSION"
+import { configure } from "mobx"
 
 /**
  * we'll publish under a codename for now
@@ -51,6 +52,7 @@ const USE_LOCAL_CLI = false
 function main() {
   return {
     async activate(ctx: vscode.ExtensionContext) {
+      configure({ enforceActions: "never" })
       const clipath = USE_LOCAL_CLI
         ? NetlifyCLIPath_createDevTime()
         : NetlifyCLIPath_createForExtension(ctx)

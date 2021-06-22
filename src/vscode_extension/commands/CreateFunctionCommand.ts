@@ -88,7 +88,7 @@ const validateRepoURL = function (_url) {
     // but we verify that it exists
     breakIfNull(await this.functionsDir())
     const clipath = await this.clipath.withIDESupport()
-    const cmd = `${clipath} functions:create ${args}`
+    const cmd = `"${clipath}" functions:create ${args}`
     vscode_window_createTerminal_andRun({
       cmd,
       name: "netlify functions:create",

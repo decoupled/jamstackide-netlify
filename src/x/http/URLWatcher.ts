@@ -17,12 +17,12 @@ export class URLWatcher {
     this.start()
     makeObservable(this)
   }
-  @observable last_ok_time: number | undefined
+  @observable last_ok_time: number = -1
   @observable last_request_failed: boolean = false
   @observable stopped = false
   @computed get isOK(): boolean {
     if (this.stopped) return false
-    if (typeof this.last_ok_time === "undefined") return false
+    if (this.last_ok_time === -1) return false
     const elapsed = Date.now() - this.last_ok_time
     if (elapsed > this.opts.maxIdleTime) return false
     return true
