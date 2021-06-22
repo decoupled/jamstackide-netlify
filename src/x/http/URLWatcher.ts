@@ -1,6 +1,6 @@
 import { Promise_withTimeout } from "@decoupled/xlib"
 import fetch from "isomorphic-fetch"
-import { computed, observable, when } from "mobx"
+import { computed, observable, when, makeObservable } from "mobx"
 import { memo } from "@decoupled/xlib"
 
 export interface URLWatcherOpts {
@@ -15,6 +15,7 @@ export class URLWatcher {
   constructor(opts: URLWatcherOpts) {
     this.opts = { interval: 500, maxIdleTime: 1000, verbose: false, ...opts }
     this.start()
+    makeObservable(this)
   }
   @observable last_ok_time: number | undefined
   @observable last_request_failed: boolean = false

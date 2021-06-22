@@ -1,8 +1,20 @@
 import React from "react"
-import { computed, icon, None, observable, observer, TreeItem } from "../deps"
+import {
+  computed,
+  icon,
+  makeObservable,
+  None,
+  observable,
+  observer,
+  TreeItem,
+} from "../deps"
 
 @observer
 export class CheckboxUI extends React.Component<{ label: string }> {
+  constructor(props) {
+    super(props)
+    makeObservable(this)
+  }
   @observable checked = false
   @computed get icon() {
     return this.checked ? icon("check") : icon("chrome-maximize")

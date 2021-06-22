@@ -5,11 +5,11 @@ import {
   Collapsed,
   Expanded,
   icon,
-  menu,
   None,
   observable,
   observer,
   TreeItem,
+  makeObservable,
 } from "../deps"
 import { menu_def_workflow } from "./menus"
 import { StepDevelopUI } from "./StepDevelopUI"
@@ -20,6 +20,10 @@ export class WorkflowUI extends React.Component<{
   projectModel: ProjectModel
   ctx: vscode.ExtensionContext
 }> {
+  constructor(props) {
+    super(props)
+    makeObservable(this)
+  }
   @observable step = 0
 
   componentDidMount() {
@@ -111,7 +115,7 @@ export class WorkflowUI extends React.Component<{
     )
   }
 
-  private menu_workflow = menu(menu_def_workflow, {
+  private menu_workflow = menu_def_workflow.create({
     open_diagram: () => {
       console.log("open diagram!!")
     },

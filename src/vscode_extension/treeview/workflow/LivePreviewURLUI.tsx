@@ -1,8 +1,20 @@
 import React from "react"
-import { Expanded, icon, None, observable, observer, TreeItem } from "../deps"
+import {
+  Expanded,
+  icon,
+  None,
+  observable,
+  observer,
+  TreeItem,
+  makeObservable,
+} from "../deps"
 
 @observer
 export class LivePreviewURLUI extends React.Component {
+  constructor(props) {
+    super(props)
+    makeObservable(this)
+  }
   @observable enabled = false
   render() {
     return (

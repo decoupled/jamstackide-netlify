@@ -77,6 +77,6 @@ export interface T_boolean extends T_base<boolean> {
   type: "boolean"
 }
 
-export interface Ref<DefIDs extends string = string> {
-  $ref: `#/definitions/${DefIDs}`
+export interface Ref {
+  $ref: string //`#/definitions/${DefIDs}`
 }

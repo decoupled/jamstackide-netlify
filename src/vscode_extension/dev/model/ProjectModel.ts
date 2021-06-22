@@ -1,12 +1,14 @@
-import { memoize } from "lodash"
-import { observable, when } from "mobx"
 import { lazy } from "@decoupled/xlib"
+import { memoize } from "lodash"
+import { makeObservable, observable, when } from "mobx"
 import { BrowserModel } from "./BrowserModel"
 import { BuildServerModel } from "./BuildServerModel"
 import { DevServerModel } from "./DevServerModel"
 
 export class ProjectModel {
-  private constructor(public readonly dir: string) {}
+  private constructor(public readonly dir: string) {
+    makeObservable(this)
+  }
 
   @lazy() get web_port() {
     return 8888

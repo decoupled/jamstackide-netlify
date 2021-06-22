@@ -1,5 +1,5 @@
 import { vscode_react_TreeItem_render } from "@decoupled/xlib"
-import { computed, reaction } from "mobx"
+import { computed, makeObservable, reaction } from "mobx"
 import * as React from "react"
 import { NetlifyCLIWrapper } from "src/vscode_extension/NetlifyCLIWrapper"
 import vscode from "vscode"
@@ -9,6 +9,7 @@ import { netlify_vsc_treeview_config_id } from "./treeview_id"
 
 export class ConfigTreeviewW {
   constructor(ctx: vscode.ExtensionContext, cli: NetlifyCLIWrapper) {
+    makeObservable(this)
     const root2 = <Main ctx={ctx} cli={cli} />
 
     const tree = vscode_react_TreeItem_render(

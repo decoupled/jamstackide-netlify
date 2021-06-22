@@ -2,7 +2,7 @@ import { lazy } from "@decoupled/xlib"
 import React from "react"
 import vscode from "vscode"
 import * as api from "../../../api/netlify_api"
-import { menu, observer, TreeItem } from "./deps"
+import { observer, TreeItem } from "./deps"
 import { menu_def_snippet } from "./menus"
 
 @observer
@@ -17,7 +17,7 @@ export class SiteSnippet extends React.Component<{
   private onSelect = () => {
     vscode.window.showTextDocument(this.contentUri)
   }
-  private snippet__menu = menu(menu_def_snippet, {
+  private snippet__menu = menu_def_snippet.create({
     rename: () => {
       vscode.window.showInformationMessage("TODO: implement snippet.rename()")
     },

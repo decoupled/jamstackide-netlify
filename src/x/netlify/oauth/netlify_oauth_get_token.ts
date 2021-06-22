@@ -1,5 +1,5 @@
 import express from "express"
-import { observable, when } from "mobx"
+import { observable, when, makeObservable } from "mobx"
 import { nanoid } from "nanoid"
 import open from "open"
 import { memo } from "@decoupled/xlib"
@@ -24,7 +24,9 @@ type ResponseData = {
 
 const port = 47832
 class NetlifyOAuthFlow {
-  constructor(public config: NetlifyOAuthConfig) {}
+  constructor(public config: NetlifyOAuthConfig) {
+    makeObservable(this)
+  }
   state = nanoid()
   @observable data: ResponseData | undefined
 

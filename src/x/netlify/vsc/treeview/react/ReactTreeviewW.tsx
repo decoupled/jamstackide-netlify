@@ -1,4 +1,4 @@
-import { TreeItem_render } from "lambdragon"
+import { TreeItem_render } from "./deps"
 import * as React from "react"
 import { experimental_enabled } from "src/vscode_extension/util/experimental_enabled"
 import vscode from "vscode"
@@ -10,7 +10,7 @@ import { netlify_vsc_treeview_react_id } from "./treeview_id"
 
 export class ReactTreeviewW {
   constructor(ctx: vscode.ExtensionContext, tokens: NetlifyOAuthManager) {
-    if (experimental_enabled()) {
+    if (experimental_enabled() && false) {
       const root = (
         <Root
           getAPI={() => {

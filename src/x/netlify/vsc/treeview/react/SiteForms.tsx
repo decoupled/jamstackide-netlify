@@ -1,12 +1,16 @@
 import { memo } from "@decoupled/xlib"
 import React from "react"
 import * as api from "../../../api/netlify_api"
-import { icon, observable, observer, TreeItem } from "./deps"
+import { icon, observable, observer, TreeItem, makeObservable } from "./deps"
 import { SiteForm } from "./SiteForm"
 
 @observer
 export class SiteForms extends React.Component<{ site: api.NetlifySite }> {
   @observable data: api.NetlifySiteForm[] = []
+  constructor(props) {
+    super(props)
+    makeObservable(this)
+  }
   @memo() async fetch() {
     this.data = await this.props.site.forms()
   }

@@ -2,7 +2,14 @@ import React from "react"
 import vscode from "vscode"
 import * as api from "../../../api/netlify_api"
 import { AccountSettings } from "./AccountSettings"
-import { Expanded, icon, menu, observable, observer, TreeItem } from "./deps"
+import {
+  Expanded,
+  icon,
+  makeObservable,
+  observable,
+  observer,
+  TreeItem,
+} from "./deps"
 import { menu_def_logged_in } from "./menus"
 import { Sites } from "./Sites"
 @observer
@@ -11,12 +18,16 @@ export class Account extends React.Component<{
   logout: () => void
   ctx: vscode.ExtensionContext
 }> {
+  constructor(props) {
+    super(props)
+    makeObservable(this)
+  }
   @observable label: string | undefined
   async componentDidMount() {
     const u = await this.props.api.getCurrentUser()
     this.label = `${u.slug} (${u.full_name})`
   }
-  private menu_logged_in = menu(menu_def_logged_in, {
+  private menu_logged_in = menu_def_logged_in.create({
     logout: this.props.logout,
     logout2: this.props.logout,
   })

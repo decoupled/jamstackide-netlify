@@ -5,6 +5,10 @@ import { degit_with_retries } from "x/degit/degit_with_retries"
 import { netlify_vscode_extension_build_target as extension } from "./extension"
 
 {
+  console.log("aloha")
+}
+
+{
   extension.dev.publish({ marketplaceAuthToken: VSCE_TOKEN })
 }
 

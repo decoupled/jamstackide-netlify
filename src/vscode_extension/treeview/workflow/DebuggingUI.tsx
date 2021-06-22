@@ -1,8 +1,19 @@
 import React from "react"
-import { icon, None, observable, observer, TreeItem } from "../deps"
+import {
+  icon,
+  makeObservable,
+  None,
+  observable,
+  observer,
+  TreeItem,
+} from "../deps"
 
 @observer
 export class DebuggingUI extends React.Component {
+  constructor(props) {
+    super(props)
+    makeObservable(this)
+  }
   @observable external = true
   render() {
     return (

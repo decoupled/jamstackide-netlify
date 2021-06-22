@@ -1,7 +1,7 @@
 import React from "react"
 import vscode from "vscode"
 import * as api from "../../../api/netlify_api"
-import { Collapsed, icon, menu, None, observer, TreeItem } from "./deps"
+import { Collapsed, icon, None, observer, TreeItem } from "./deps"
 import { LinkUI } from "./LinkUI"
 import { menu_def_deploy, menu_def_deploy_published } from "./menus"
 
@@ -38,7 +38,7 @@ export class SiteDeploy extends React.Component<{
     )
   }
 
-  private menu = menu(menu_def_deploy, {
+  private menu = menu_def_deploy.create({
     preview: () => {
       const r = this.props.data.raw
       const url = r.deploy_ssl_url ?? r.deploy_url
@@ -52,7 +52,7 @@ export class SiteDeploy extends React.Component<{
     restore2: this.restore,
   })
 
-  private menu_published = menu(menu_def_deploy_published, {
+  private menu_published = menu_def_deploy_published.create({
     preview: () => {
       const url = this.props.data.ssl_url__or__url
       if (url)

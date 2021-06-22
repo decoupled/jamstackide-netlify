@@ -1,10 +1,10 @@
-import { TreeItem_Menu_def as menudef, TreeItem_Menu_to_json } from "lambdragon"
 import { netlify_ids } from "src/vscode_extension/util/netlify_ids"
 import merge from "webpack-merge"
+import { TreeItemMenu } from "./deps"
 
 const m = netlify_ids.netlify.menus
 
-export const menu_def_authenticating = menudef({
+export const menu_def_authenticating = new TreeItemMenu({
   id: m.authenticating.$id,
   commands: {
     retry: {
@@ -15,7 +15,7 @@ export const menu_def_authenticating = menudef({
   },
 })
 
-export const menu_def_logged_in = menudef({
+export const menu_def_logged_in = new TreeItemMenu({
   id: m.logged_in.$id,
   commands: {
     logout: {
@@ -30,7 +30,7 @@ export const menu_def_logged_in = menudef({
   },
 })
 
-export const menu_def_site2 = menudef({
+export const menu_def_site2 = new TreeItemMenu({
   id: m.site2.$id,
   commands: {
     unlink: {
@@ -63,7 +63,7 @@ export const menu_def_site2 = menudef({
   },
 })
 
-export const menu_def_add = menudef({
+export const menu_def_add = new TreeItemMenu({
   id: m.add.$id,
   commands: {
     add: {
@@ -74,7 +74,7 @@ export const menu_def_add = menudef({
   },
 })
 
-export const menu_def__add__docs = menudef({
+export const menu_def__add__docs = new TreeItemMenu({
   id: m.add__docs.$id,
   commands: {
     add: {
@@ -90,7 +90,7 @@ export const menu_def__add__docs = menudef({
   },
 })
 
-export const menu_def__docs = menudef({
+export const menu_def__docs = new TreeItemMenu({
   id: m.docs.$id,
   commands: {
     docs: {
@@ -101,7 +101,7 @@ export const menu_def__docs = menudef({
   },
 })
 
-export const menu_def_snippet = menudef({
+export const menu_def_snippet = new TreeItemMenu({
   id: m.snippet.$id,
   commands: {
     rename: {
@@ -115,7 +115,7 @@ export const menu_def_snippet = menudef({
   },
 })
 
-export const menu_def_edit = menudef({
+export const menu_def_edit = new TreeItemMenu({
   id: m.edit.$id,
   commands: {
     edit: {
@@ -126,7 +126,7 @@ export const menu_def_edit = menudef({
   },
 })
 
-export const menu_def__edit__docs = menudef({
+export const menu_def__edit__docs = new TreeItemMenu({
   id: m.edit__docs.$id,
   commands: {
     edit: {
@@ -142,7 +142,7 @@ export const menu_def__edit__docs = menudef({
   },
 })
 
-export const menu_def_sites = menudef({
+export const menu_def_sites = new TreeItemMenu({
   id: m.sites.$id,
   commands: {
     search: {
@@ -158,7 +158,7 @@ export const menu_def_sites = menudef({
   },
 })
 
-export const menu_def_site = menudef({
+export const menu_def_site = new TreeItemMenu({
   id: m.site.$id,
   commands: {
     delete: {
@@ -177,7 +177,7 @@ export const menu_def_site = menudef({
   },
 })
 
-export const menu_def_deploy_published = menudef({
+export const menu_def_deploy_published = new TreeItemMenu({
   id: m.deploy_published.$id,
   commands: {
     preview: {
@@ -188,7 +188,7 @@ export const menu_def_deploy_published = menudef({
   },
 })
 
-export const menu_def_deploy = menudef({
+export const menu_def_deploy = new TreeItemMenu({
   id: m.deploy.$id,
   commands: {
     preview: {
@@ -208,7 +208,7 @@ export const menu_def_deploy = menudef({
   },
 })
 
-export const menu_def_forms = menudef({
+export const menu_def_forms = new TreeItemMenu({
   id: m.forms.$id,
   commands: {
     doc: {
@@ -236,10 +236,9 @@ export function menus_contributes() {
     menu_def__docs,
     menu_def__edit__docs,
   ]
-  return merge({}, ...defs.map(TreeItem_Menu_to_json)).contributes
+  return merge({}, ...defs.map((x) => x.contributes()))
 }
 
 {
-  TreeItem_Menu_to_json(menu_def_forms)
   menus_contributes()
 }

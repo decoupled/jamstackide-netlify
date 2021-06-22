@@ -1,10 +1,11 @@
-import { computed, observable, reaction, when } from "mobx"
+import { computed, observable, reaction, when, makeObservable } from "mobx"
 import { URLWatcher } from "x/http/URLWatcher"
 import { ProjectModel } from "./ProjectModel"
 import opn from "open"
 import { browser_preview } from "../browser_preview"
 export class BrowserModel {
   constructor(private project: ProjectModel) {
+    makeObservable(this)
     reaction(
       () => this.urlToWatch,
       async (url) => {

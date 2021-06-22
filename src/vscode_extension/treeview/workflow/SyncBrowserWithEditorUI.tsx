@@ -1,9 +1,20 @@
 import React from "react"
-import { Expanded, None, observable, observer, TreeItem } from "../deps"
+import {
+  Expanded,
+  None,
+  observable,
+  observer,
+  TreeItem,
+  makeObservable,
+} from "../deps"
 import { checkboxIcon } from "./util/checkboxIcon"
 
 @observer
 export class SyncBrowserWithEditorUI extends React.Component {
+  constructor(props) {
+    super(props)
+    makeObservable(this)
+  }
   @observable checked = false
   @observable browser_to_editor = true
   @observable editor_to_browser = false

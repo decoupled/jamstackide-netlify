@@ -3,7 +3,7 @@ import React from "react"
 import { develop_locally } from "src/vscode_extension/dev/develop_locally"
 import vscode from "vscode"
 import * as api from "../../../api/netlify_api"
-import { icon, menu, None, observer, TreeItem } from "./deps"
+import { icon, None, observer, TreeItem } from "./deps"
 import { LinkUI } from "./LinkUI"
 import { menu_def_site } from "./menus"
 import { SiteDeploys } from "./SiteDeploys"
@@ -48,7 +48,7 @@ export class Site extends React.Component<{
     return <SiteSnippets site={this.props.site} />
   }
 
-  private menu = menu(menu_def_site, {
+  private menu = menu_def_site.create({
     preview: () => {
       const {
         site: { url },

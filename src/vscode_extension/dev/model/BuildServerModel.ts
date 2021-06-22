@@ -1,12 +1,18 @@
-import { vscode_window_createTerminal_andRun, wait, WrappedShellCommand } from "@decoupled/xlib"
-import { computed, observable } from "mobx"
+import {
+  vscode_window_createTerminal_andRun,
+  wait,
+  WrappedShellCommand,
+} from "@decoupled/xlib"
+import { computed, observable, makeObservable } from "mobx"
 import vscode from "vscode"
 import { ProjectModel } from "./ProjectModel"
 
 export type BuildServerStatus = "init" | "running" | "done" | "error"
 
 export class BuildServerModel {
-  constructor(private project: ProjectModel) {}
+  constructor(private project: ProjectModel) {
+    makeObservable(this)
+  }
 
   @observable status: BuildServerStatus = "init"
 

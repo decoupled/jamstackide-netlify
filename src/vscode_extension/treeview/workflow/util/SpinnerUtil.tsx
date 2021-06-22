@@ -1,8 +1,9 @@
 import { memoize, repeat } from "lodash"
-import { computed, observable } from "mobx"
+import { computed, observable, makeObservable } from "mobx"
 export class SpinnerUtil {
   @observable num = 0
   private constructor() {
+    makeObservable(this)
     setInterval(() => {
       this.num++
       //if (this.num > 3) this.num = 0

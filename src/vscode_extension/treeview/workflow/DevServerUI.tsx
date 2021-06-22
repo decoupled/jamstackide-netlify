@@ -1,16 +1,15 @@
-import React from "react"
 import { wait } from "@decoupled/xlib"
+import React from "react"
 import vscode from "vscode"
 import merge from "webpack-merge"
 import {
   icon,
-  menu,
-  menudef,
-  menudef_json,
+  makeObservable,
   None,
   observable,
   observer,
   TreeItem,
+  TreeItemMenu
 } from "../deps"
 import { buildLabelProps } from "./util/buildLabelProps"
 
@@ -38,17 +37,17 @@ export class DevServerUI extends React.Component<{
 
   private view_logs = () => this.props.model.view_logs?.()
 
-  private menu_stopped = menu(menu_def_stopped, {
+  private menu_stopped = menu_def_stopped.create({
     start: () => this.props.model.start(),
     view_logs: this.view_logs,
   })
 
-  private menu_starting = menu(menu_def_starting, {
+  private menu_starting = menu_def_starting.create({
     stop: () => this.props.model.stop(),
     view_logs: this.view_logs,
   })
 
-  private menu_running = menu(menu_def_running, {
+  private menu_running = menu_def_running.create({
     stop: () => this.props.model.stop(),
     restart: () => this.props.model.restart(),
     view_logs: this.view_logs,
@@ -112,7 +111,7 @@ const view_logs = {
   group: "inline",
 } as const
 
-const menu_def_stopped = menudef({
+const menu_def_stopped = new TreeItemMenu({
   id: base + ".item-stopped",
   commands: {
     start: {
@@ -124,7 +123,7 @@ const menu_def_stopped = menudef({
   },
 })
 
-const menu_def_starting = menudef({
+const menu_def_starting = new TreeItemMenu({
   id: base + ".item-starting",
   commands: {
     stop,
@@ -132,7 +131,7 @@ const menu_def_starting = menudef({
   },
 })
 
-const menu_def_running = menudef({
+const menu_def_running = new TreeItemMenu({
   id: base + ".item-running",
   commands: {
     stop,
@@ -147,13 +146,16 @@ const menu_def_running = menudef({
 
 export function DevServerUI_contributes() {
   return merge(
-    menudef_json(menu_def_stopped),
-    menudef_json(menu_def_starting),
-    menudef_json(menu_def_running)
-  ).contributes
+    menu_def_stopped.contributes(),
+    menu_def_starting.contributes(),
+    menu_def_running.contributes()
+  )
 }
 
 export class DevServerUIModel_mock implements DevServerUIModel {
+  constructor() {
+    makeObservable(this)
+  }
   @observable status: DevServerStatus = "stopped"
 
   description = "redwood.js + netlify dev"
@@ -184,7 +186,7 @@ export class DevServerUIModel_mock implements DevServerUIModel {
 }
 
 {
-  menudef({
+  new TreeItemMenu({
     id: base + ".item-running",
     commands: {
       stop,

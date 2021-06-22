@@ -1,5 +1,8 @@
-import { memo } from "@decoupled/xlib"
-import { Singleton, TreeItem_render } from "lambdragon"
+import {
+  memo,
+  vscode_react_TreeItem_render as TreeItem_render,
+} from "@decoupled/xlib"
+import { Singleton } from "lambdragon"
 import React from "react"
 import { netlify_ids } from "src/vscode_extension/util/netlify_ids"
 import vscode from "vscode"

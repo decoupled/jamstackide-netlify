@@ -1,5 +1,5 @@
 import { memoize } from "lodash"
-import { observable as o } from "mobx"
+import { makeObservable, observable } from "mobx"
 import * as vscode from "vscode"
 
 export const vscode_mobx = memoize(() => new VSCodeMobx())
@@ -24,20 +24,21 @@ class VSCodeMobx {
     vscode.workspace.onDidChangeWorkspaceFolders(
       () => (this._workspaceFolders = vscode.workspace.workspaceFolders || [])
     )
+    makeObservable(this)
   }
 
   get activeTextEditor$$(): vscode.TextEditor | undefined {
     return this._activeTextEditor
   }
-  @o private _activeTextEditor: vscode.TextEditor | undefined
+  @observable private _activeTextEditor: vscode.TextEditor | undefined
 
   get visibleTextEditors$$() {
     return this._visibleTextEditors
   }
-  @o private _visibleTextEditors: vscode.TextEditor[]
+  @observable private _visibleTextEditors: vscode.TextEditor[]
 
   get workspaceFolders$$() {
     return this._workspaceFolders
   }
-  @o private _workspaceFolders: readonly vscode.WorkspaceFolder[] = []
+  @observable private _workspaceFolders: readonly vscode.WorkspaceFolder[] = []
 }

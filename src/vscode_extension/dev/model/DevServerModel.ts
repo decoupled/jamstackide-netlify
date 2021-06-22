@@ -1,9 +1,9 @@
 import {
   vscode_window_createTerminal_andRun,
   wait,
-  WrappedShellCommand,
+  WrappedShellCommand
 } from "@decoupled/xlib"
-import { computed, observable } from "mobx"
+import { computed, makeObservable, observable } from "mobx"
 import { now } from "mobx-utils"
 import vscode from "vscode"
 import { URLWatcher } from "x/http/URLWatcher"
@@ -11,7 +11,9 @@ import { DevServerStatus, DevServerUIModel } from "../ui/DevServerUI"
 import { ProjectModel } from "./ProjectModel"
 
 export class DevServerModel implements DevServerUIModel {
-  constructor(private project: ProjectModel) {}
+  constructor(private project: ProjectModel) {
+    makeObservable(this)
+  }
   @computed get status(): DevServerStatus {
     now(300)
     if (this.project.browserReady) return "started"

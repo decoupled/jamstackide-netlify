@@ -3,7 +3,7 @@ export {
   vscode_TreeItemMenu as TreeItemMenu,
   vscode_react_TreeItem as TreeItem,
 } from "@decoupled/xlib"
-export { computed, observable } from "mobx"
+export { computed, observable, makeObservable } from "mobx"
 export { observer } from "mobx-react"
 
 import { ComponentPropsWithoutRef } from "react"

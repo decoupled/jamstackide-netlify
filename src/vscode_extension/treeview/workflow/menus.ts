@@ -1,9 +1,9 @@
 import merge from "webpack-merge"
-import { menudef, menudef_json } from "../deps"
+import { TreeItemMenu } from "../deps"
 
 const base = "netlify.treeview.workflow.menus"
 
-export const menu_def_workflow = menudef({
+export const menu_def_workflow = new TreeItemMenu({
   id: base + ".menu_def_workflow",
   commands: {
     open_diagram: {
@@ -19,5 +19,5 @@ export function menus_contributes() {
     //menu_def_logged_out,
     menu_def_workflow,
   ]
-  return merge(defs.map(menudef_json)).contributes
+  return merge(defs.map((x) => x.contributes()))
 }
