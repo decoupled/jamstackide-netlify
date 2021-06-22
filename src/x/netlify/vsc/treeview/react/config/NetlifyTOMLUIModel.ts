@@ -2,12 +2,13 @@ import { lazy, vscode_workspace_applyEdit2 } from "@decoupled/xlib"
 import * as fs from "fs-extra"
 import { reaction, transaction } from "mobx"
 import { now } from "mobx-utils"
+import { experimental_enabled } from "src/vscode_extension/util/experimental_enabled"
 import * as toml from "toml"
 import vscode from "vscode"
 import { netlify_toml_inserts_insertPath_vscode } from "x/toml/netlify_toml_inserts"
 import { toml_parse_find_node_2 } from "x/toml/toml_parse_nodes"
 import { vscode_mobx } from "x/vscode/vscode_mobx"
-import { computed, observable, makeObservable } from "./deps"
+import { computed, makeObservable, observable } from "./deps"
 
 export class NetlifyTOMLUIModel {
   constructor(private filePath: string) {
@@ -47,6 +48,11 @@ export class NetlifyTOMLUIModel {
 
   @computed get hasSyntaxErrors() {
     return this.parsedDoc && this.isStale
+  }
+
+  @computed get experimental_enabled() {
+    now(500)
+    return experimental_enabled()
   }
 
   @computed get isActive() {

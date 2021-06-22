@@ -1,10 +1,9 @@
-import { vscode_window_createTerminal_andRun } from "@decoupled/xlib"
+import { memo, vscode_window_createTerminal_andRun } from "@decoupled/xlib"
 import execa from "execa"
 import { pathExists } from "fs-extra"
 import { BaseError } from "make-error"
-import { computed } from "mobx"
+import { computed, makeObservable } from "mobx"
 import { now } from "mobx-utils"
-import { memo } from "@decoupled/xlib"
 import { netlify_cli_local_config_json_read_hash } from "x/netlify/cli/netlify_cli_local_config_json_path"
 import * as syncify from "x/syncify/syncify_mobx"
 import { NetlifyCLIPath, NetlifyCLIPath_createDevTime } from "./NetlifyCLIPath"
@@ -21,7 +20,9 @@ export class NetlifyCLINotAuthError extends BaseError {
 }
 
 export class NetlifyCLIWrapper {
-  constructor(private clipath: NetlifyCLIPath) {}
+  constructor(private clipath: NetlifyCLIPath) {
+    makeObservable(this)
+  }
   async functions_create_list_templates() {
     const res = await execa(await this.clipath.withIDESupport(), [
       "functions:create",
@@ -57,13 +58,13 @@ export class NetlifyCLIWrapper {
     | NetlifyCLINotAuthError
     | undefined
   > {
-    console.log("status_R", cwd)
+    // console.log("status_R", cwd)
     try {
       return await this.status(cwd)
     } catch (e) {
       return e
     } finally {
-      console.log("status_R done")
+      // console.log("status_R done")
     }
   }
   async login(cwd: string) {

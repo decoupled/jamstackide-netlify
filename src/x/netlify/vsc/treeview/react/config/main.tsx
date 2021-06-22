@@ -3,7 +3,7 @@ import { join } from "path"
 import React from "react"
 import { NetlifyCLIWrapper } from "src/vscode_extension/NetlifyCLIWrapper"
 import vscode from "vscode"
-import { computed, observer, TreeItem } from "./deps"
+import { computed, observer, TreeItem, makeObservable } from "./deps"
 import { NetlifyTOMLUI } from "./NetlifyTOMLUI"
 import { StatusUI } from "./StatusUI"
 
@@ -12,6 +12,10 @@ export class Main extends React.Component<{
   ctx: vscode.ExtensionContext
   cli: NetlifyCLIWrapper
 }> {
+  constructor(props) {
+    super(props)
+    makeObservable(this)
+  }
   @computed.struct get workspaceFolderURIs(): string[] {
     now(300)
     return vscode.workspace.workspaceFolders.map((x) => x.uri.toString())

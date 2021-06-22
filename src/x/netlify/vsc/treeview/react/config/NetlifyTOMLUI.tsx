@@ -1,13 +1,11 @@
 import { lazy } from "@decoupled/xlib"
-import { now } from "mobx-utils"
 import React from "react"
 import { NetlifyCLIWrapper } from "src/vscode_extension/NetlifyCLIWrapper"
 import { icon } from "src/vscode_extension/treeview/deps"
 import { CheckboxUI } from "src/vscode_extension/treeview/workflow/CheckboxUI"
-import { experimental_enabled } from "src/vscode_extension/util/experimental_enabled"
 import vscode from "vscode"
 import { icon_uri } from "../icon_uri"
-import { computed, Expanded, None, observer, TreeItem } from "./deps"
+import { Expanded, None, observer, TreeItem } from "./deps"
 import { menu_def2__docs } from "./menus"
 import { NetlifyTOMLUIModel } from "./NetlifyTOMLUIModel"
 import { SchemaNodeUI } from "./SchemaNodeUI"
@@ -19,6 +17,9 @@ export class NetlifyTOMLUI extends React.Component<{
   cli: NetlifyCLIWrapper
   filePath: string
 }> {
+  constructor(props) {
+    super(props)
+  }
   @lazy() get model() {
     return new NetlifyTOMLUIModel(this.props.filePath)
   }
@@ -31,10 +32,6 @@ export class NetlifyTOMLUI extends React.Component<{
         )
       },
     })
-  }
-  @computed get experimental_enabled() {
-    now(500)
-    return experimental_enabled()
   }
 
   render_content() {
@@ -60,7 +57,7 @@ export class NetlifyTOMLUI extends React.Component<{
           onSelect={this.model.__onSelect}
           onEdit={this.model.__onEdit}
         />
-        {this.experimental_enabled ? (
+        {this.model.experimental_enabled ? (
           <CheckboxUI label="show resolved values" />
         ) : null}
       </>
