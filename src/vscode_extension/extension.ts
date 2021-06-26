@@ -1,13 +1,9 @@
 import { VSCodeExtension } from "lambdragon"
+import { configure } from "mobx"
 import { join } from "path"
 import { language_server_build_target } from "src/language_server/language_server"
 import vscode from "vscode"
-import merge from "webpack-merge"
-import { commands_create_function_contributes } from "./commands/CreateFunctionCommand"
-import { right_click_commands_contributes } from "./commands/RightClickCommands"
-import { configuration_contributes } from "./configuration/contributes"
-import { debugging_contributes } from "./debugging/contributes"
-import { develop_locally_contributes } from "./dev/contributes"
+import { VSCodeMeta } from "x/vscode/vscode_elms"
 import { autowire } from "./di/autowire"
 import { VSCodeProjectW } from "./di/VSCodeProjectW"
 import {
@@ -15,9 +11,7 @@ import {
   NetlifyCLIPath_createForExtension,
 } from "./NetlifyCLIPath"
 import icon from "./static/netlify_vscode_logo.png"
-import { treeview_contributes } from "./treeview/contributes"
 import { VERSION } from "./VERSION"
-import { configure } from "mobx"
 
 /**
  * we'll publish under a codename for now
@@ -50,6 +44,7 @@ const USE_LOCAL_CLI = false
 
 // the entrypoint
 function main() {
+  languages_meta.keep()
   return {
     async activate(ctx: vscode.ExtensionContext) {
       configure({ enforceActions: "never" })
@@ -74,28 +69,23 @@ function main() {
 }
 
 function contributes() {
-  return merge([
-    treeview_contributes(),
-    commands_create_function_contributes(),
-    develop_locally_contributes(),
-    debugging_contributes(),
-    {
-      languages: [
-        {
-          id: "netlifyredirects",
-          aliases: ["Netlify Redirects File"],
-          filenames: ["_redirects"],
-          // "configuration": "./language-configuration.json"
-        },
-        {
-          id: "netlifyheaders",
-          aliases: ["Netlify Headers File"],
-          filenames: ["_headers"],
-          // "configuration": "./language-configuration.json"
-        },
-      ],
-    },
-    right_click_commands_contributes(),
-    configuration_contributes(),
-  ])
+  return {}
+  // return merge([develop_locally_contributes()])
 }
+
+const languages_meta = new VSCodeMeta({
+  languages: [
+    {
+      id: "netlifyredirects",
+      aliases: ["Netlify Redirects File"],
+      filenames: ["_redirects"],
+      // "configuration": "./language-configuration.json"
+    },
+    {
+      id: "netlifyheaders",
+      aliases: ["Netlify Headers File"],
+      filenames: ["_headers"],
+      // "configuration": "./language-configuration.json"
+    },
+  ],
+})

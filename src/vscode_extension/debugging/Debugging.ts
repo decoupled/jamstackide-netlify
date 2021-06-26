@@ -1,15 +1,16 @@
+import { Singleton } from "lambdragon"
 import * as vscode from "vscode"
+import { VSCodeCommand } from "x/vscode/vscode_elms"
 import { CWD } from "../di/CWD"
 import { NetlifyCLIPath } from "../NetlifyCLIPath"
-import { commands } from "./contributes"
-import { Singleton } from "lambdragon"
+import { netlify_ids } from "../util/netlify_ids"
 
 /**
  *
  */
 export class Debugging implements Singleton {
   constructor(private NetlifyCLIPath: NetlifyCLIPath, private cwd: CWD) {
-    vscode.commands.registerCommand(commands.debug.command, async () => {
+    debug_cmd.register(async () => {
       vscode.window.showInformationMessage("debugging!")
       await this.fromCommand()
     })
@@ -155,3 +156,9 @@ const example_config2 = {
     },
   ],
 }
+
+const debug_cmd = new VSCodeCommand({
+  command: netlify_ids.netlify.commands.debug.$id,
+  title: "Debug Functions",
+  category: "Netlify",
+})

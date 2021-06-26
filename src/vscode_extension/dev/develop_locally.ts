@@ -2,14 +2,15 @@ import { memo, wait } from "@decoupled/xlib"
 import { Singleton } from "lambdragon"
 import vscode, { Uri } from "vscode"
 import { Command } from "vscode-languageserver-types"
+import { VSCodeCommand } from "x/vscode/vscode_elms"
+import { netlify_ids } from "../util/netlify_ids"
 import {
   NewProjectSourceSpec,
   NewProjectSourceSpecString,
   NewProjectSourceSpec_autoPickDir,
-  NewProjectSourceSpec_parse,
+  NewProjectSourceSpec_parse
 } from "../util/NewProjectSourceSpec"
 import { NewProjectSourceSpec_prompt } from "../util/NewProjectSourceSpec_prompt"
-import { commands } from "./commands"
 import { init_hook_activate, init_hook_set_and_open } from "./init_hook"
 import { materialize_project } from "./materialize_project"
 import { netlify_projects_dir } from "./netlify_projects_dir"
@@ -18,7 +19,7 @@ import {
   DevelopLocallyOpts,
   ExtraOpts,
   FromCommandInvocation,
-  InitAfterReload,
+  InitAfterReload
 } from "./types"
 
 export class DevelopLocallyServiceW implements Singleton {
@@ -26,19 +27,16 @@ export class DevelopLocallyServiceW implements Singleton {
     this.setup()
   }
   private setup() {
-    vscode.commands.registerCommand(
-      commands.develop_locally.command,
-      (opts?: NewProjectSourceSpecString | DevelopLocallyOpts) => {
-        const opts2 =
-          typeof opts === "object"
-            ? opts
-            : ({
-                action: "FromCommandInvocation",
-                sourceStr: opts,
-              } as FromCommandInvocation)
-        this.start(opts2)
-      }
-    )
+    develop_locally_cmd.register((opts) => {
+      const opts2 =
+        typeof opts === "object"
+          ? opts
+          : ({
+              action: "FromCommandInvocation",
+              sourceStr: opts,
+            } as FromCommandInvocation)
+      this.start(opts2)
+    })
     init_hook_activate()
   }
   start(opts: DevelopLocallyOpts) {
@@ -156,7 +154,7 @@ async function reload_and_init({
   const dir2 =
     dir ?? NewProjectSourceSpec_autoPickDir(source, netlify_projects_dir())
   const cmd = {
-    command: commands.develop_locally.command,
+    command: develop_locally_cmd.command,
     arguments: [
       {
         action: "InitAfterReload",
@@ -188,3 +186,11 @@ export function hideAll() {
 { "key": "cmd+j",                 "command": "workbench.action.togglePanel" },
 { "key": "cmd+b",                 "command": "workbench.action.toggleSidebarVisibility" },
 */
+
+const develop_locally_cmd = new VSCodeCommand<
+  [opts?: NewProjectSourceSpecString | DevelopLocallyOpts]
+>({
+  command: netlify_ids.netlify.commands.develop_locally.$id,
+  title: "Fetch and Develop Locally",
+  category: "Netlify",
+})

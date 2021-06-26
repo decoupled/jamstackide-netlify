@@ -6,7 +6,9 @@ import { Singleton } from "lambdragon"
 import React from "react"
 import { netlify_ids } from "src/vscode_extension/util/netlify_ids"
 import vscode from "vscode"
+import { VSCodeView } from "x/vscode/vscode_elms"
 import { icon, None, TreeItem } from "../deps"
+import { netlify_viewContainer } from "../netlify_viewContainer"
 
 export class TreeviewShortcutsW implements Singleton {
   constructor() {
@@ -27,7 +29,7 @@ export class TreeviewShortcutsW implements Singleton {
         }}
       />
     ))
-    return TreeItem_render(netlify_ids.netlify.views.shortcuts.$id, <>{ll}</>)
+    return TreeItem_render(view_def.id, <>{ll}</>)
   }
 }
 
@@ -48,15 +50,8 @@ const links = [
   // ],
 ] as const
 
-export function treeview_docs_contributes() {
-  return {
-    views: {
-      netlify: [
-        {
-          id: netlify_ids.netlify.views.shortcuts.$id,
-          name: "Shortcuts",
-        },
-      ],
-    },
-  } as const
-}
+const view_def = new VSCodeView({
+  id: netlify_ids.netlify.views.shortcuts.$id,
+  name: "Shortcuts",
+  _container: netlify_viewContainer,
+})

@@ -4,15 +4,20 @@ import {
   vscode_window_createTerminal_andRun,
 } from "@decoupled/xlib"
 import { Singleton } from "lambdragon"
-import { values } from "lodash"
 import vscode from "vscode"
 import { netlify_events_meta } from "x/netlify/events/netlify_events_meta"
+import { VSCodeCommand } from "x/vscode/vscode_elms"
 import { CWD } from "../di/CWD"
 import { NetlifyCLIPath } from "../NetlifyCLIPath"
 import { NetlifyCLIRPCServer } from "../NetlifyCLIRPCServer"
 import { NetlifyCLIWrapper } from "../NetlifyCLIWrapper"
 import { netlify_ids } from "../util/netlify_ids"
 
+export const create_function_cmd = new VSCodeCommand({
+  command: netlify_ids.netlify.commands.create_function.$id,
+  title: "Create Function...",
+  category: "Netlify",
+})
 export class CreateFunctionCommand implements Singleton {
   constructor(
     private ctx: vscode.ExtensionContext,
@@ -21,21 +26,16 @@ export class CreateFunctionCommand implements Singleton {
     private cli: NetlifyCLIWrapper,
     private clipath: NetlifyCLIPath
   ) {
-    vscode.commands.registerCommand(
-      commands.create_function.command,
-      () => {
-        this.start()
-        // Trigger: Command : Netlify > Add a new function
-        // Pick a function directory, if not already configured
-        // Pick a language (JavaScript, TypeScript, Go)
-        // Pick a type (synchronous, background, event)
-        // If event, pick a type and configuration
-        // If sync or background, pick from a template
-        // Provide a name
-        // Auto-populate the directory with the template file
-      },
-      this.ctx.subscriptions
-    )
+    // Trigger: Command : Netlify > Add a new function
+    // Pick a function directory, if not already configured
+    // Pick a language (JavaScript, TypeScript, Go)
+    // Pick a type (synchronous, background, event)
+    // If event, pick a type and configuration
+    // If sync or background, pick from a template
+    // Provide a name
+    // Auto-populate the directory with the template file
+    const d = create_function_cmd.register(() => this.start())
+    this.ctx.subscriptions.push(d)
   }
   private async start() {
     try {
@@ -231,20 +231,6 @@ type FunctionType = "sync" | "background" | "event" | "template"
 // https://docs.netlify.com/functions/logs/
 
 // https://docs.netlify.com/functions/overview/
-
-export const commands = {
-  create_function: {
-    command: netlify_ids.netlify.commands.create_function.$id,
-    title: "Create Function...",
-    category: "Netlify",
-  },
-}
-
-export function commands_create_function_contributes() {
-  return {
-    commands: [...values(commands)],
-  } as const
-}
 
 /*
 Add a new function

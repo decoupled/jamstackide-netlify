@@ -1,5 +1,5 @@
-import { netlify_ids } from "src/vscode_extension/util/netlify_ids"
-import vscode from "vscode"
+import { create_function_cmd } from "src/vscode_extension/commands/CreateFunctionCommand"
+import * as jst from "x/json_schema/json_schema_typings"
 import {
   menu_def2__add,
   menu_def2__add__docs,
@@ -10,7 +10,6 @@ import {
 } from "./menus"
 import { TOMLPath } from "./types"
 import { openDocs } from "./util"
-import * as jst from "x/json_schema/json_schema_typings"
 
 export class SchemaNodeUI_MenuHelper {
   constructor(
@@ -31,9 +30,7 @@ export class SchemaNodeUI_MenuHelper {
       add: () => {},
       add2: () => {},
       create_new_function: () => {
-        vscode.commands.executeCommand(
-          netlify_ids.netlify.commands.create_function.$id
-        )
+        create_function_cmd.execute()
       },
     })
   }

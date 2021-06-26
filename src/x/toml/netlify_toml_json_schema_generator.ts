@@ -4,7 +4,11 @@ import { outputFileSync, readJSONSync } from "fs-extra"
 import hsc from "http-status-codes"
 import _ from "lodash"
 import { join } from "path"
-import { netlify_ids } from "src/vscode_extension/util/netlify_ids"
+import { create_function_cmd } from "src/vscode_extension/commands/CreateFunctionCommand"
+import {
+  add_custom_header_cmd,
+  add_redirect_cmd,
+} from "src/vscode_extension/commands/RightClickCommands"
 import { iso3166_countries_jsonSchema } from "x/iso3166/iso3166"
 import * as jst from "x/json_schema/json_schema_typings"
 import * as menus from "x/netlify/vsc/treeview/react/config/menus"
@@ -54,10 +58,7 @@ export function netlify_toml_json_schema_generate() {
         "x-menu": ({ filePath, path, value }) => {
           return menus.menu_def2__add__docs.create({
             add: () => {
-              executeCommand(
-                netlify_ids.netlify.commands.add_redirect.$id,
-                filePath
-              )
+              add_redirect_cmd.execute(filePath)
             },
             docs: () => {
               xlib
@@ -86,10 +87,7 @@ export function netlify_toml_json_schema_generate() {
         "x-menu": ({ filePath, path, value }) => {
           return menus.menu_def2__add__docs.create({
             add: () => {
-              executeCommand(
-                netlify_ids.netlify.commands.add_custom_header.$id,
-                filePath
-              )
+              add_custom_header_cmd.execute(filePath)
             },
             docs: () => {
               xlib
@@ -122,23 +120,24 @@ export function netlify_toml_json_schema_generate() {
         "x-menu": ({ filePath, path, value }) => {
           return menus.menu_def2__functions.create({
             add: () => {
-              executeCommand(
-                netlify_ids.netlify.commands.create_function_config.$id
-              )
+              // executeCommand(
+              //   netlify_ids.netlify.commands.create_function_config.$id
+              // )
             },
             add2: () => {
-              executeCommand(
-                netlify_ids.netlify.commands.create_function_config.$id
-              )
+              // executeCommand(
+              //   netlify_ids.netlify.commands.create_function_config.$id
+              // )
             },
             create_new_function: () => {
-              executeCommand(netlify_ids.netlify.commands.create_function.$id)
+              create_function_cmd.execute()
+              // executeCommand(netlify_ids.netlify.commands.create_function.$id)
             },
             debug: () => {
-              executeCommand(netlify_ids.netlify.commands.debug.$id)
+              // executeCommand(netlify_ids.netlify.commands.debug.$id)
             },
             debug2: () => {
-              executeCommand(netlify_ids.netlify.commands.debug.$id)
+              // executeCommand(netlify_ids.netlify.commands.debug.$id)
             },
             docs: () => {
               xlib
@@ -574,6 +573,6 @@ function node_bundler(): jst.T_string {
   }
 }
 
-function executeCommand(id: string, ...args: any[]) {
-  xlib.vscode_().commands.executeCommand(id, ...args)
-}
+// function executeCommand(id: string, ...args: any[]) {
+//   xlib.vscode_().commands.executeCommand(id, ...args)
+// }

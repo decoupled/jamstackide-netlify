@@ -1,27 +1,24 @@
 import { vscode_Uri_smartParse } from "@decoupled/xlib"
-import { values } from "lodash"
 import vscode from "vscode"
+import { VSCodeCommand, VSCodeMeta } from "x/vscode/vscode_elms"
 import { netlify_ids } from "../util/netlify_ids"
 import { when_clauses } from "../util/when_clauses"
 
 export class RightClickCommands {
   constructor(private wf: vscode.WorkspaceFolder) {
-    vscode.SnippetString
-    vscode.commands.registerCommand(
-      command_ids.add_redirect.command,
-      async (maybeUri?: any) => {
-        if (maybeUri) {
-          const uri = vscode_Uri_smartParse(maybeUri)
-          if (uri.fsPath.endsWith("netlify.toml")) {
-            const editor = await vscode.window.showTextDocument(uri)
-            const snip = new vscode.SnippetString(redirect_snippet)
-            const line = lineForInsert(editor.document.getText()) + 1
-            const pos = line ? new vscode.Position(line, 0) : undefined
-            editor.insertSnippet(snip, pos)
-          }
+    menusMeta.keep()
+    add_redirect_cmd.register(async (maybeUri) => {
+      if (maybeUri) {
+        const uri = vscode_Uri_smartParse(maybeUri)
+        if (uri.fsPath.endsWith("netlify.toml")) {
+          const editor = await vscode.window.showTextDocument(uri)
+          const snip = new vscode.SnippetString(redirect_snippet)
+          const line = lineForInsert(editor.document.getText()) + 1
+          const pos = line ? new vscode.Position(line, 0) : undefined
+          editor.insertSnippet(snip, pos)
         }
       }
-    )
+    })
   }
 }
 
@@ -58,8 +55,7 @@ status = \${3:301}
 `.trim() +
   "\n"
 
-// https://code.visualstudio.com/api/references/contribution-points#Sorting-of-groups
-export function right_click_commands_contributes() {
+const menusMeta = new VSCodeMeta(() => {
   function cc(group: string) {
     return [
       ...netlify_toml_commands().map((cmd) => {
@@ -90,45 +86,56 @@ export function right_click_commands_contributes() {
       "explorer/context": [...cc("2_netlify")],
       "editor/context": [...cc("2_netlify")],
     },
-    commands: values(command_ids),
   }
-}
+})
+
+// https://code.visualstudio.com/api/references/contribution-points#Sorting-of-groups
 
 function netlify_toml_commands() {
   // all commands apply to netlify.toml
-  return values(command_ids)
+  return [
+    add_redirect_cmd,
+    add_context_cmd,
+    add_custom_header_cmd,
+    add_edge_handler_cmd,
+  ]
 }
 
 function headers_commands() {
-  return [command_ids.add_custom_header]
+  return [add_custom_header_cmd]
 }
 
 function redirects_commands() {
-  return [command_ids.add_redirect]
+  return [add_redirect_cmd]
 }
 
-const command_ids = {
-  add_redirect: {
-    command: netlify_ids.netlify.commands.add_redirect.$id,
-    title: "Add Redirect",
-    category: "Netlify",
-  },
-  add_context: {
-    command: netlify_ids.netlify.commands.add_context.$id,
-    title: "Add Context",
-    category: "Netlify",
-  },
-  add_custom_header: {
-    command: netlify_ids.netlify.commands.add_custom_header.$id,
-    title: "Add Custom Header",
-    category: "Netlify",
-  },
-  add_edge_handler: {
-    command: netlify_ids.netlify.commands.add_edge_handler.$id,
-    title: "Add Edge Handler",
-    category: "Netlify",
-  },
-}
+export const add_redirect_cmd = new VSCodeCommand<[uri?: string | vscode.Uri]>({
+  command: netlify_ids.netlify.commands.add_redirect.$id,
+  title: "Add Redirect",
+  category: "Netlify",
+})
+
+export const add_context_cmd = new VSCodeCommand<[uri?: string | vscode.Uri]>({
+  command: netlify_ids.netlify.commands.add_context.$id,
+  title: "Add Context",
+  category: "Netlify",
+})
+
+export const add_custom_header_cmd = new VSCodeCommand<
+  [uri?: string | vscode.Uri]
+>({
+  command: netlify_ids.netlify.commands.add_custom_header.$id,
+  title: "Add Custom Header",
+  category: "Netlify",
+})
+
+export const add_edge_handler_cmd = new VSCodeCommand<
+  [uri?: string | vscode.Uri]
+>({
+  command: netlify_ids.netlify.commands.add_edge_handler.$id,
+  title: "Add Edge Handler",
+  category: "Netlify",
+})
 
 function isNetlifyTOML(maybeUri?: string | vscode.Uri): boolean {
   try {
