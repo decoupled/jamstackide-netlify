@@ -1,5 +1,6 @@
 import React from "react"
 import vscode from "vscode"
+import { Array_unique_keep_first } from "../../../../../Array/Array_unique_keep_first"
 import { None, TreeItem, TreeItemProps } from "./deps"
 import { SchemaNodeUI_MenuHelper } from "./SchemaNodeUI_MenuHelper"
 import { TOMLPath } from "./types"
@@ -56,7 +57,15 @@ export class SchemaNodeUI extends React.Component<
     const value = value_original ?? {}
     const schema_prop_keys = Object.keys(schema.properties ?? {})
     const value_prop_keys = Object.keys(value ?? {})
-    const all_keys = new Set([...schema_prop_keys, ...value_prop_keys])
+    let all_keys = Array.from(
+      new Set([...schema_prop_keys, ...value_prop_keys])
+    )
+    if (schema["x-sort-keys-with-values-first"]) {
+      all_keys = Array_unique_keep_first([
+        ...value_prop_keys, // value keys first
+        ...schema_prop_keys,
+      ])
+    }
     const elms: any[] = []
 
     for (const k of all_keys) {

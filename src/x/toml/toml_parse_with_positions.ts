@@ -1,14 +1,80 @@
 import * as toml from "./toml_parse"
 
 const x = `
-[a.b]
-c="c"
+#[a.b]
+#c="c"
+[[arr1]]
+a="m"
 `
 
 {
   const nodes = toml.toml_parse(x)
   const data = buildData(nodes)
   console.log(data)
+}
+
+const mmm = {
+  type: "Obj",
+  entries: [
+    {
+      type: "ObjEntry",
+      key: "arr1",
+      value: {
+        type: "Obj",
+        entries: [
+          {
+            type: "ObjEntry",
+            createdBy: [
+              {
+                type: "Assign",
+                value: {
+                  type: "String",
+                  value: "m",
+                  line: 5,
+                  column: 3,
+                },
+                line: 5,
+                column: 1,
+                key: "a",
+              },
+            ],
+            key: "a",
+            value: {
+              type: "String",
+              value: "m",
+              line: 5,
+              column: 3,
+            },
+          },
+        ],
+        createdBy: [
+          {
+            type: "PathStep",
+            path: {
+              type: "ArrayPath",
+              value: ["arr1"],
+              line: 4,
+              column: 1,
+            },
+            index: 0,
+          },
+        ],
+      },
+      createdBy: [
+        {
+          type: "PathStep",
+          path: {
+            type: "ArrayPath",
+            value: ["arr1"],
+            line: 4,
+            column: 1,
+          },
+          index: 0,
+        },
+      ],
+    },
+  ],
+  createdBy: [],
 }
 
 function buildData(nodes: toml.TopLevelNode[]): Obj {
@@ -38,9 +104,48 @@ function buildData(nodes: toml.TopLevelNode[]): Obj {
   // }
 
   function applyPath(node: toml.ArrayPath | toml.ObjectPath) {
+    // all paths start at the root
     let currObj: Obj = root
+
     for (const [i, key] of node.value.entries()) {
       const isLastStep = i === node.value.length - 1
+      // find entry for this step
+      let entry = currObj.entries.find((x) => x.key === key)
+      if (!entry) {
+        // if there is no entry, create one
+        const createdBy: CreationReason[] = [
+          { type: "PathStep", path: node, index: i },
+        ]
+        const objToReturn: Obj = {
+          type: "Obj",
+          entries: [],
+          createdBy,
+        }
+        let objToAddToEntry: Obj | Arr = objToReturn
+        if (isLastStep && node.type === "ArrayPath") {
+          objToAddToEntry = {
+            type: "Arr",
+            entries: [{ type: "ArrEntry", value: objToReturn }],
+            createdBy,
+          } as Arr
+        }
+
+        entry = {
+          type: "ObjEntry",
+          key,
+          value: objToAddToEntry,
+          createdBy: [{ type: "PathStep", path: node, index: i }],
+        }
+        // add it to the object
+        currObj.entries.push(entry)
+      }
+      let v = entry.value
+      if (v.type === "Arr") {
+        // access last element of the array
+        v = v.entries[v.entries.length - 1]!.value
+      }
+      if (v.type !== "Obj") throw new Error("should not happen")
+      currObj = v
       function create(): Obj {
         const createdBy: CreationReason[] = [
           { type: "PathStep", path: node, index: i },
@@ -60,23 +165,6 @@ function buildData(nodes: toml.TopLevelNode[]): Obj {
         }
         return objToReturn
       }
-      let entry = currObj.entries.find((x) => x.key === key)
-      if (!entry) {
-        entry = {
-          type: "ObjEntry",
-          key,
-          value: create(),
-          createdBy: [{ type: "PathStep", path: node, index: i }],
-        }
-        currObj.entries.push(entry)
-      }
-      let v = entry.value
-      if (v.type === "Arr") {
-        // access last element of the array
-        v = v.entries[v.entries.length - 1]!.value
-      }
-      if (v.type !== "Obj") throw new Error("should not happen")
-      currObj = v
     }
     focused = currObj
   }

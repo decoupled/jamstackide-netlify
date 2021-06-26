@@ -5,6 +5,7 @@ import {
   NetlifyCLIStatusResult,
   NetlifyCLIWrapper,
 } from "src/vscode_extension/NetlifyCLIWrapper"
+import { SpinnerUtil } from "src/vscode_extension/treeview/workflow/util/SpinnerUtil"
 import vscode from "vscode"
 import { icon, None, observer, TreeItem } from "./deps"
 import { menu_def2__logged_in, menu_def2__site2 } from "./menus"
@@ -63,6 +64,7 @@ export class StatusUI extends React.Component<{
   }
 
   render() {
+    SpinnerUtil.dots()
     // const s = this.status
     const s = this.status2
     // console.log("this.status2 ", this.status2)
@@ -98,12 +100,17 @@ export class StatusUI extends React.Component<{
       return (
         <>
           <TreeItem
-            label=""
-            description={""}
-            iconPath={undefined}
+            iconPath={icon("account")}
+            label="account"
             collapsibleState={None}
+            description={`resolving ${SpinnerUtil.dots()}`}
           />
-          {this.empty()}
+          <TreeItem
+            iconPath={icon("globe")}
+            label="site"
+            collapsibleState={None}
+            description={`resolving ${SpinnerUtil.dots()}`}
+          />
         </>
       )
     }

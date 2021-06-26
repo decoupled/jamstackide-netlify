@@ -1,10 +1,8 @@
 import { when_clauses } from "src/vscode_extension/util/when_clauses"
-import merge from "webpack-merge"
-import { menus_contributes } from "./menus"
 import { netlify_vsc_treeview_react_id } from "./treeview_id"
 
 export function netlify_vsc_treeview_react_contributes() {
-  const cc = {
+  return {
     views: {
       netlify: [
         {
@@ -15,5 +13,4 @@ export function netlify_vsc_treeview_react_contributes() {
       ],
     },
   }
-  return merge(cc, menus_contributes())
 }

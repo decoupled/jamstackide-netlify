@@ -6,6 +6,7 @@ export const netlify_ids = vscode_ids({
       enabled: {},
     },
     commands: {
+      create_function_config: {},
       create_function: {},
       add_redirect: {},
       add_context: {},

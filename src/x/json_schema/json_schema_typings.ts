@@ -44,7 +44,6 @@ interface T_base<ValueType = any> {
     path: SimpleJSONPath
     value?: ValueType
   }) => MenuInstance
-
   enum?: any
 }
 
@@ -53,6 +52,8 @@ export interface T_object extends T_base<Record<string, any>> {
   properties?: Record<string, TypeExpr>
   additionalProperties?: any
   required?: any
+  "x-sort-keys-with-values-first"?: boolean
+  "x-add-button"?: { label: string; handler: () => void }
 }
 
 export interface T_array extends T_base<Array<any>> {

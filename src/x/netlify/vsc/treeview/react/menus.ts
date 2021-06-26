@@ -1,5 +1,4 @@
 import { netlify_ids } from "src/vscode_extension/util/netlify_ids"
-import merge from "webpack-merge"
 import { TreeItemMenu } from "./deps"
 
 const m = netlify_ids.netlify.menus
@@ -218,27 +217,3 @@ export const menu_def_forms = new TreeItemMenu({
     },
   },
 })
-
-export function menus_contributes() {
-  const defs = [
-    //menu_def_logged_out,
-    menu_def_authenticating,
-    menu_def_logged_in,
-    menu_def_edit,
-    menu_def_add,
-    menu_def_sites,
-    menu_def_site,
-    menu_def_deploy_published,
-    menu_def_deploy,
-    menu_def_forms,
-    menu_def_snippet,
-    menu_def__add__docs,
-    menu_def__docs,
-    menu_def__edit__docs,
-  ]
-  return merge({}, ...defs.map((x) => x.contributes()))
-}
-
-{
-  menus_contributes()
-}

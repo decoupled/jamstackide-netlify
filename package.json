@@ -7,7 +7,7 @@
     "format": "prettier --write \"./src/**/*.{js,json,md,ts,tsx}\""
   },
   "dependencies": {
-    "@decoupled/xlib": "^0.0.13",
+    "@decoupled/xlib": "^0.0.17",
     "@netlify/config": "^6.7.1",
     "@taplo/lib": "^0.2.2",
     "@taplo/lsp": "^0.1.7",

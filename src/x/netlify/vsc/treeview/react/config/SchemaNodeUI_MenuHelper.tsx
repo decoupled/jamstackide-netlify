@@ -25,6 +25,9 @@ export class SchemaNodeUI_MenuHelper {
 
   get __menu_def2__functions() {
     return menu_def2__functions.create({
+      docs: () => {},
+      debug: () => {},
+      debug2: () => {},
       add: () => {},
       add2: () => {},
       create_new_function: () => {

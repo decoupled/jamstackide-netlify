@@ -1,7 +1,6 @@
 import { wait } from "@decoupled/xlib"
 import React from "react"
 import vscode from "vscode"
-import merge from "webpack-merge"
 import {
   icon,
   makeObservable,
@@ -9,7 +8,7 @@ import {
   observable,
   observer,
   TreeItem,
-  TreeItemMenu
+  TreeItemMenu,
 } from "../deps"
 import { buildLabelProps } from "./util/buildLabelProps"
 
@@ -143,14 +142,6 @@ const menu_def_running = new TreeItemMenu({
     view_logs,
   },
 })
-
-export function DevServerUI_contributes() {
-  return merge(
-    menu_def_stopped.contributes(),
-    menu_def_starting.contributes(),
-    menu_def_running.contributes()
-  )
-}
 
 export class DevServerUIModel_mock implements DevServerUIModel {
   constructor() {

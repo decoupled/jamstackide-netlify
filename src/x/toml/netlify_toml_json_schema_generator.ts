@@ -9,6 +9,7 @@ import { iso3166_countries_jsonSchema } from "x/iso3166/iso3166"
 import * as jst from "x/json_schema/json_schema_typings"
 import * as menus from "x/netlify/vsc/treeview/react/config/menus"
 import * as docs from "./netlify_toml_docs"
+
 {
   // run this playground to generate the JSON schema, load it into AJV, and then validate an example netlify.toml
   const ajv = new Ajv()
@@ -53,12 +54,10 @@ export function netlify_toml_json_schema_generate() {
         "x-menu": ({ filePath, path, value }) => {
           return menus.menu_def2__add__docs.create({
             add: () => {
-              xlib
-                .vscode_()
-                .commands.executeCommand(
-                  netlify_ids.netlify.commands.add_redirect.$id,
-                  [filePath]
-                )
+              executeCommand(
+                netlify_ids.netlify.commands.add_redirect.$id,
+                filePath
+              )
             },
             docs: () => {
               xlib
@@ -87,12 +86,10 @@ export function netlify_toml_json_schema_generate() {
         "x-menu": ({ filePath, path, value }) => {
           return menus.menu_def2__add__docs.create({
             add: () => {
-              xlib
-                .vscode_()
-                .commands.executeCommand(
-                  netlify_ids.netlify.commands.add_custom_header.$id,
-                  [filePath]
-                )
+              executeCommand(
+                netlify_ids.netlify.commands.add_custom_header.$id,
+                filePath
+              )
             },
             docs: () => {
               xlib
@@ -122,6 +119,34 @@ export function netlify_toml_json_schema_generate() {
           included_files: $ref("Functions__included_files"),
         },
         additionalProperties: $ref("FunctionOverrides"),
+        "x-menu": ({ filePath, path, value }) => {
+          return menus.menu_def2__functions.create({
+            add: () => {
+              executeCommand(
+                netlify_ids.netlify.commands.create_function_config.$id
+              )
+            },
+            add2: () => {
+              executeCommand(
+                netlify_ids.netlify.commands.create_function_config.$id
+              )
+            },
+            create_new_function: () => {
+              executeCommand(netlify_ids.netlify.commands.create_function.$id)
+            },
+            debug: () => {
+              executeCommand(netlify_ids.netlify.commands.debug.$id)
+            },
+            debug2: () => {
+              executeCommand(netlify_ids.netlify.commands.debug.$id)
+            },
+            docs: () => {
+              xlib
+                .vscode_()
+                .env.openExternal(xlib.vscode_Uri_smartParse(docs.urls.headers))
+            },
+          })
+        },
       },
       FunctionOverrides: {
         type: "object",
@@ -168,6 +193,8 @@ export function netlify_toml_json_schema_generate() {
           "X-Api-Key": { type: "string" },
         },
         additionalProperties: { type: "string" },
+        "x-sort-keys-with-values-first": true,
+        "x-add-button": { label: "add custom header...", handler: () => {} },
       },
       ContextMap: {
         type: "object",
@@ -545,4 +572,8 @@ function node_bundler(): jst.T_string {
       },
     },
   }
+}
+
+function executeCommand(id: string, ...args: any[]) {
+  xlib.vscode_().commands.executeCommand(id, ...args)
 }

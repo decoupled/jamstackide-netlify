@@ -13,13 +13,9 @@ export class RightClickCommands {
         if (maybeUri) {
           const uri = vscode_Uri_smartParse(maybeUri)
           if (uri.fsPath.endsWith("netlify.toml")) {
-            // three options here:
-            // 1. wizard
-            // 2. snippet
-            // const doc = await vscode.workspace.openTextDocument(maybeUri)
-            const editor = await vscode.window.showTextDocument(maybeUri)
+            const editor = await vscode.window.showTextDocument(uri)
             const snip = new vscode.SnippetString(redirect_snippet)
-            const line = lineForInsert(editor.document.getText())
+            const line = lineForInsert(editor.document.getText()) + 1
             const pos = line ? new vscode.Position(line, 0) : undefined
             editor.insertSnippet(snip, pos)
           }
@@ -29,7 +25,7 @@ export class RightClickCommands {
   }
 }
 
-function lineForInsert(str: string) {
+function lineForInsert(str: string): number | undefined {
   const lines = str.split("\n")
   let state_saw_redirects = false
   let state_last_line_with_content = 0
@@ -41,6 +37,10 @@ function lineForInsert(str: string) {
     } else if (line.trim().length > 0) {
       state_last_line_with_content = i
     }
+  }
+  // we reached the end
+  if (state_saw_redirects) {
+    return lines.length
   }
   return undefined
 }
@@ -55,7 +55,8 @@ status = \${3:301}
 # force = false
 # query = {path = ":path"}
 # conditions = {Language = ["en"], Country = ["US"], Role = ["admin"]}
-`.trim()
+`.trim() +
+  "\n"
 
 // https://code.visualstudio.com/api/references/contribution-points#Sorting-of-groups
 export function right_click_commands_contributes() {

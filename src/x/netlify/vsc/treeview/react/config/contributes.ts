@@ -1,9 +1,7 @@
-import merge from "webpack-merge"
-import { menus_contributes } from "./menus"
 import { netlify_vsc_treeview_config_id } from "./treeview_id"
 
 export function netlify_vsc_treeview_config_contributes() {
-  const vv = {
+  return {
     views: {
       explorer: [
         {
@@ -14,5 +12,4 @@ export function netlify_vsc_treeview_config_contributes() {
       ],
     },
   } as const
-  return merge(vv, menus_contributes())
 }
