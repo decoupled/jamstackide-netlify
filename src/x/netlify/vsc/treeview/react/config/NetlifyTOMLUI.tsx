@@ -54,6 +54,7 @@ export class NetlifyTOMLUI extends React.Component<{
           value={d}
           schema={netlifyTOMLJSONSchema}
           path={[]}
+          pathString={JSON.stringify([])}
           onSelect={this.model.__onSelect}
           onEdit={this.model.__onEdit}
         />

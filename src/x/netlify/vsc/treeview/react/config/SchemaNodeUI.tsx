@@ -15,6 +15,7 @@ export class SchemaNodeUI extends React.Component<
     label?: string
     description?: string
     path: TOMLPath
+    pathString: string
     onSelect?: (path: TOMLPath) => void
     onEdit?: (path: TOMLPath) => void
     filePath: string
@@ -26,8 +27,13 @@ export class SchemaNodeUI extends React.Component<
   get menuHelper() {
     return new SchemaNodeUI_MenuHelper(this.props)
   }
-  private __onSelect = () => {
-    this.props.onSelect?.(this.props.path)
+
+  private createOnSelect() {
+    const onSelect = this.props.onSelect
+    const pathString = this.props.pathString
+    return () => {
+      onSelect?.(JSON.parse(pathString))
+    }
   }
   get isUndefined(): boolean {
     const { value } = this.props
@@ -80,6 +86,7 @@ export class SchemaNodeUI extends React.Component<
           value={value2}
           label={k}
           path={[...path, k]}
+          pathString={JSON.stringify([...path, k])}
           onSelect={onSelect}
           onEdit={onEdit}
           tooltip={
@@ -99,7 +106,7 @@ export class SchemaNodeUI extends React.Component<
         {...label_description(this.isUndefined, label, description2)}
         tooltip={tooltip}
         menu={this.menu}
-        select={this.__onSelect}
+        select={this.createOnSelect()}
       >
         {elms}
       </TreeItem>
@@ -119,15 +126,18 @@ export class SchemaNodeUI extends React.Component<
     const value: any[] = Array.isArray(value_original) ? value_original : []
     const schema2 = schema.items
     const elms = value.map((value2, i) => {
+      const label = i + ""
+      const newPath = path.concat(i)
       return (
         <SchemaNodeUI
           filePath={this.props.filePath}
           onSelect={onSelect}
-          key={i}
+          key={"key:" + i}
           schema={schema2}
           value={value2}
-          label={"" + i}
-          path={[...path, i]}
+          label={label}
+          path={newPath}
+          pathString={JSON.stringify([...path, i])}
           onEdit={onEdit}
         />
       )
@@ -137,7 +147,7 @@ export class SchemaNodeUI extends React.Component<
         {...label_description(this.isUndefined, label, description)}
         tooltip={tooltip}
         menu={this.menu}
-        select={this.__onSelect}
+        select={this.createOnSelect()}
       >
         {elms}
       </TreeItem>
@@ -159,7 +169,7 @@ export class SchemaNodeUI extends React.Component<
           collapsibleState={None}
           tooltip={tooltip}
           menu={this.menu}
-          select={this.__onSelect}
+          select={this.createOnSelect()}
         />
       )
     } else {
@@ -170,7 +180,7 @@ export class SchemaNodeUI extends React.Component<
           collapsibleState={None}
           tooltip={tooltip}
           menu={this.menu}
-          select={this.__onSelect}
+          select={this.createOnSelect()}
         />
       )
     }

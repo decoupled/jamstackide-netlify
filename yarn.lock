@@ -26,10 +26,10 @@
     redis "^2.7.1"
     uuid "^3.3.2"
 
-"@decoupled/xlib@^0.0.17":
-  version "0.0.17"
-  resolved "https://registry.yarnpkg.com/@decoupled/xlib/-/xlib-0.0.17.tgz#a53b4e8cf499c9be73b8fbd25e4ffd5267fd7ff3"
-  integrity sha512-e+kEIJFAjr0Jckl7H08hznHxdukYZPxOH10Rf1BT6YaCx45n79ANuKn6sUdIXz/Nzv9NDZGgkbddQsC/24u2tQ==
+"@decoupled/xlib@^0.0.18":
+  version "0.0.18"
+  resolved "https://registry.yarnpkg.com/@decoupled/xlib/-/xlib-0.0.18.tgz#74a230b76caad30003ea7a7c520476e838b53063"
+  integrity sha512-cvI6rmvcZEU1/NgCrH0AS/h5/613Ayomn4PcQKy0EFhpD+ueFQej1i0RO1vtVdd+b3H1TQ7B+HWp5AwTAYQYnA==
   dependencies:
     fkill "^7.0.1"
     fs-extra "^7.0.1"
@@ -42,6 +42,7 @@
     promise-queue "^2.2.5"
     react-reconciler "0.26.2"
     tmp "^0.2.1"
+    toml "^3.0.0"
     vscode-languageserver-types "^3.16.0"
     webpack-merge "^4.2.2"
 

@@ -1,4 +1,5 @@
-import { lazy, vscode_workspace_applyEdit2 } from "@decoupled/xlib"
+import * as xlib from "@decoupled/xlib"
+import { vscode_workspace_applyEdit2 } from "@decoupled/xlib"
 import * as fs from "fs-extra"
 import { reaction, transaction } from "mobx"
 import { now } from "mobx-utils"
@@ -6,10 +7,8 @@ import { experimental_enabled } from "src/vscode_extension/util/experimental_ena
 import * as toml from "toml"
 import vscode from "vscode"
 import { netlify_toml_inserts_insertPath_vscode } from "x/toml/netlify_toml_inserts"
-import { toml_parse_find_node_2 } from "x/toml/toml_parse_nodes"
 import { vscode_mobx } from "x/vscode/vscode_mobx"
 import { computed, makeObservable, observable } from "./deps"
-
 export class NetlifyTOMLUIModel {
   constructor(private filePath: string) {
     reaction(
@@ -105,7 +104,7 @@ export class NetlifyTOMLUIModel {
     // )
   }
 
-  @lazy() get uri() {
+  get uri() {
     return vscode.Uri.file(this.filePath)
   }
   focus = (preserveFocus = true) => {
@@ -114,9 +113,11 @@ export class NetlifyTOMLUIModel {
   __onSelect = (path: (string | number)[]) => {
     this.focus()
     try {
-      const nn = toml_parse_find_node_2(path, this.text)
+      // vscode.window.showInformationMessage(path.join(" . "))
+      const nn = xlib.toml_path_to_position(this.text, path.concat())
       if (nn) {
-        const pos = new vscode.Position(nn.line - 1, nn.column)
+        const pos = xlib.Position_iso.reverseGet(nn)
+        // const pos = new vscode.Position(nn.line - 1, nn.column)
         this.openNode(pos)
         // vscode.window.showInformationMessage(JSON.stringify(nn))
       } else {
