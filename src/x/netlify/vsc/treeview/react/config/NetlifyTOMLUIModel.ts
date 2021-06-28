@@ -95,15 +95,6 @@ export class NetlifyTOMLUIModel {
     )
   }
 
-  openNode(pos: vscode.Position) {
-    const selection = new vscode.Selection(pos, pos)
-    vscode.window.showTextDocument(this.uri, { selection, preserveFocus: true })
-    // editor.revealRange(
-    //   new vscode.Range(pos, pos),
-    //   vscode.TextEditorRevealType.InCenter
-    // )
-  }
-
   get uri() {
     return vscode.Uri.file(this.filePath)
   }
@@ -112,20 +103,11 @@ export class NetlifyTOMLUIModel {
   }
   __onSelect = (path: (string | number)[]) => {
     this.focus()
-    try {
-      // vscode.window.showInformationMessage(path.join(" . "))
-      const nn = xlib.toml_path_to_position(this.text, path.concat())
-      if (nn) {
-        const pos = xlib.Position_iso.reverseGet(nn)
-        // const pos = new vscode.Position(nn.line - 1, nn.column)
-        this.openNode(pos)
-        // vscode.window.showInformationMessage(JSON.stringify(nn))
-      } else {
-        // vscode.window.showInformationMessage("not found")
-      }
-    } catch (e) {
-      // console.log(e)
-    }
+    const nn = xlib.toml_path_to_range(this.text, path.concat())
+    if (!nn) return
+    const range = xlib.Range_iso.reverseGet(nn)
+    const selection = new vscode.Selection(range.start, range.end)
+    vscode.window.showTextDocument(this.uri, { selection, preserveFocus: true })
   }
   __onEdit = (path: (string | number)[]) => {
     if (path.some((x) => typeof x !== "string")) {
