@@ -1,6 +1,7 @@
 // import { HeadersFileW } from "x/netlify/headers_file/headers_file_vsc"
 import { RedirectsFileW } from "x/netlify/redirects_file/RedirectsFileW"
 import { TaploUpdateW } from "x/taplo/TaploUpdateW"
+import { NetlifyTOMLValidatorW } from "x/toml/netlify_toml_validator_vsc"
 import { CreateFunctionCommand } from "../commands/CreateFunctionCommand"
 import { RightClickCommands } from "../commands/RightClickCommands"
 import { Debugging } from "../debugging/Debugging"
@@ -22,6 +23,7 @@ export class VSCodeProjectW {
     _treeviews: TreeviewModules,
     _debugging: Debugging,
     _taplo: TaploUpdateW,
-    _rightClick: RightClickCommands
+    _rightClick: RightClickCommands,
+    _netlify_toml: NetlifyTOMLValidatorW
   ) {}
 }

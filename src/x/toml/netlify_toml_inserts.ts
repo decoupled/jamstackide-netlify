@@ -66,7 +66,14 @@ export function netlify_toml_inserts_insertPath(
     if (schema?.type === "object") {
       value = "{ }"
     }
+    if (schema?.type === "integer") {
+      value = "0"
+    }
   }
+  if (schema?.["x-insert-placeholder"]) {
+    value = schema?.["x-insert-placeholder"]
+  }
+
   if (typeof value === "undefined") value = ""
   const toInsert = insertInfo.before + value + insertInfo.after
   const src2 = xlib.Position_insert(

@@ -69,7 +69,7 @@
             "docs": {
               "enumValues": [
                 "[ESBuild](https://esbuild.github.io/) - an extremely fast bundler",
-                "\n[Zip it and Ship It](https://github.com/netlify/zip-it-and-ship-it)\n\nCreates Zip archives from Node.js, Go, and Rust programs. Those archives are ready to be uploaded to AWS Lambda.\nThis library is used under the hood by several Netlify features,\nincluding production CI builds, Netlify CLI and the JavaScript client.\n                  "
+                "\n[Zip it and Ship It](https://github.com/netlify/zip-it-and-ship-it)\n\nCreates Zip archives from Node.js, Go, and Rust programs. Those archives are ready to be uploaded to AWS Lambda.\nThis library is used under the hood by several Netlify features,\nincluding production CI builds, Netlify CLI and the JavaScript client."
               ]
             }
           }
@@ -720,14 +720,23 @@
       },
       "additionalProperties": {
         "type": "string"
+      },
+      "x-sort-keys-with-values-first": true,
+      "x-add-button": {
+        "label": "add custom header..."
       }
     },
     "ContextMap": {
       "type": "object",
+      "x-sort-keys-with-values-first": true,
+      "x-add-button": {
+        "label": "add custom context..."
+      },
       "properties": {
         "production": {
           "type": "object",
           "description": "This context corresponds to the main site’s deployment, attached to the Git branch you set when the site is created",
+          "x-no-edit-when-empty": true,
           "properties": {
             "base": {
               "type": "string",
@@ -755,6 +764,7 @@
         "deploy-preview": {
           "type": "object",
           "description": "This context corresponds to the previews we build for pull/merge requests.",
+          "x-no-edit-when-empty": true,
           "properties": {
             "base": {
               "type": "string",
@@ -782,6 +792,7 @@
         "branch-deploy": {
           "type": "object",
           "description": "This context corresponds to deploys from branches that are not the site’s main production branch.",
+          "x-no-edit-when-empty": true,
           "properties": {
             "base": {
               "type": "string",
@@ -812,6 +823,7 @@
       }
     },
     "Context": {
+      "x-no-edit-when-empty": true,
       "type": "object",
       "properties": {
         "base": {
@@ -838,6 +850,7 @@
       }
     },
     "Build": {
+      "x-no-edit-when-empty": true,
       "type": "object",
       "description": "Settings in the [build] context are global and are applied to all contexts\nunless otherwise overridden by more specific contexts.",
       "x-docs": "https://docs.netlify.com/configure-builds/file-based-configuration/#build-settings",
@@ -972,10 +985,12 @@
             ]
           }
         }
-      }
+      },
+      "x-no-edit-when-empty": true
     },
     "Dev": {
       "type": "object",
+      "x-no-edit-when-empty": true,
       "description": "Configuration for Netlify Dev",
       "x-docs": "https://docs.netlify.com/configure-builds/file-based-configuration/#netlify-dev",
       "properties": {

@@ -45,6 +45,8 @@ interface T_base<ValueType = any> {
     value?: ValueType
   }) => MenuInstance
   enum?: any
+  "x-no-edit-when-empty"?: boolean
+  "x-insert-placeholder"?: string
 }
 
 export interface T_object extends T_base<Record<string, any>> {

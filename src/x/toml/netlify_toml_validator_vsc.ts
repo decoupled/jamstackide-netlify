@@ -4,6 +4,14 @@ import { basename } from "path"
 import * as vscode from "vscode"
 import { netlify_toml_validator_get_diagnostics } from "./netlify_toml_validator"
 
+export class NetlifyTOMLValidatorW {
+  constructor(ctx: vscode.ExtensionContext) {
+    // there is an issue with these validations
+    // functions.directory must be an object <-- this is not correct
+    //  netlify_toml_validator_vsc(ctx)
+  }
+}
+
 export async function netlify_toml_validator_vsc(ctx: vscode.ExtensionContext) {
   const w = vscode.workspace.createFileSystemWatcher("**/netlify.toml")
   vscode.workspace

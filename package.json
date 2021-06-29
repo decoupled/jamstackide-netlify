@@ -7,7 +7,7 @@
     "format": "prettier --write \"./src/**/*.{js,json,md,ts,tsx}\""
   },
   "dependencies": {
-    "@decoupled/xlib": "^0.0.22",
+    "@decoupled/xlib": "^0.0.23",
     "@netlify/config": "^6.7.1",
     "@taplo/lib": "^0.2.2",
     "@taplo/lsp": "^0.1.7",
@@ -43,10 +43,12 @@
     "mobx-utils": "^6.0.4",
     "moment": "^2.29.1",
     "monocle-ts": "^2.3.10",
+    "nanoid": "^3.1.23",
     "netlify": "^6.1.26",
     "netlify-redirect-parser": "^3.0.29",
     "object-hash": "^2.1.1",
     "open": "^8.0.7",
+    "peggy": "^1.2.0",
     "prettier": "^2.2.1",
     "process-exists": "^4.0.0",
     "react": "^17.0.2",

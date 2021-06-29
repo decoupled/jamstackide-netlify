@@ -576,6 +576,7 @@ function port(description?: string): jst.T_integer {
     description,
     minimum: 1,
     maximum: 65535,
+    "x-insert-placeholder": "8000",
   }
 }
 

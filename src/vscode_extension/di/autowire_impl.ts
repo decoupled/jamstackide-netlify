@@ -24,6 +24,7 @@ import { TreeviewWorkflowW } from "../treeview/workflow/TreeviewWorkflowW"
 import { Debugging } from "../debugging/Debugging"
 import { TaploUpdateW } from "../../x/taplo/TaploUpdateW"
 import { RightClickCommands } from "../commands/RightClickCommands"
+import { NetlifyTOMLValidatorW } from "../../x/toml/netlify_toml_validator_vsc"
 
 export const autowire__impl = ___autowire__(
   "VSCodeProjectW",
@@ -43,6 +44,7 @@ export const autowire__impl = ___autowire__(
         "Debugging",
         "TaploUpdateW",
         "RightClickCommands",
+        "NetlifyTOMLValidatorW",
       ],
       impl: VSCodeProjectW,
     },
@@ -234,8 +236,15 @@ export const autowire__impl = ___autowire__(
       out: "RightClickCommands",
       isConstructor: true,
       isSingleton: false,
-      args: [],
+      args: ["WorkspaceFolder"],
       impl: RightClickCommands,
+    },
+    {
+      out: "NetlifyTOMLValidatorW",
+      isConstructor: true,
+      isSingleton: false,
+      args: ["ExtensionContext"],
+      impl: NetlifyTOMLValidatorW,
     },
   ]
 )

@@ -1,30 +1,62 @@
+import * as xlib from "@decoupled/xlib"
 import * as validations from "@netlify/config/src/validate/validations"
 import { parse as toml_parse } from "toml"
-import { parse as parsenodes } from "toml/lib/parser"
 import * as lsp from "vscode-languageserver-types"
 import { netlify_toml_example } from "./netlify_toml_example"
-import { getRange } from "./toml-utils"
+import { prop_path_parser } from "./prop_path_parser"
+
+const topOfFileRange: lsp.Range = {
+  start: { line: 0, character: 0 },
+  end: { line: 0, character: 0 },
+}
 
 export function netlify_toml_validator_get_diagnostics(
   netlify_toml_string: string
 ): lsp.Diagnostic[] {
   const config = toml_parse(netlify_toml_string)
-  const errors = validateConfig(config)
-  if (!errors) return []
-  const nodes = parsenodes(netlify_toml_string)
-  const topOfFileRange: lsp.Range = {
-    start: { line: 0, character: 0 },
-    end: { line: 0, character: 0 },
-  }
+  const errors = validateConfig(config) ?? []
   return errors.map((err) => {
-    const range = getRange(nodes, err)
+    let range = topOfFileRange
+    const path = prop_path_parser(err.propPath)
+    if (path) {
+      const r2 = xlib.toml_path_to_range(netlify_toml_string, path)
+      if (r2) range = r2
+    }
     return {
-      range: range ?? topOfFileRange,
+      range: range,
       message: err.message,
       severity: lsp.DiagnosticSeverity.Error,
+      source: '@netlify/config validation'
     } as lsp.Diagnostic
   })
 }
+
+{
+  netlify_toml_validator_get_diagnostics(netlify_toml_example)
+}
+
+interface ValidationError {
+  message: string
+  propPath: string
+}
+const validateConfig_output_example = [
+  {
+    kind: "ValueError",
+    message: "'plugins[0]' \"package\" property is required.",
+    propPath: "plugins[0]",
+    value: {
+      inputs: {
+        path: "api/prisma/schema.prisma",
+      },
+    },
+  },
+  {
+    kind: "ValueError",
+    message: "'functions' must be a string.",
+    propPath: "build.functions",
+    value: 123,
+  },
+]
 
 {
   netlify_toml_validator_get_diagnostics(netlify_toml_example)
@@ -46,7 +78,7 @@ function filter_empty_and_flatten(array: any[]) {
 }
 
 // wrappers on netlify internal functions
-function validateConfig(config: any) {
+function validateConfig(config: any): ValidationError[] {
   return filter_empty_and_flatten(
     getValidations().map(({ property, ...validation }) =>
       validateProperty(config, { ...validation, nextPath: property.split(".") })
