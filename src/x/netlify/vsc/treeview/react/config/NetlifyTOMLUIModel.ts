@@ -109,14 +109,11 @@ export class NetlifyTOMLUIModel {
     const selection = new vscode.Selection(range.start, range.end)
     vscode.window.showTextDocument(this.uri, { selection, preserveFocus: true })
   }
-  __onEdit = (path: (string | number)[]) => {
-    if (path.some((x) => typeof x !== "string")) {
-      vscode.window.showWarningMessage("Editing TOML arrays not supported yet")
-    }
+  __onEdit = (path: (string | number)[], schema?: any) => {
     this.focus(false)
     const editor = this.editor
     if (!editor) return
-    netlify_toml_inserts_insertPath_vscode(editor, path as any)
+    netlify_toml_inserts_insertPath_vscode(editor, path as any, schema)
   }
 
   createNewNetlifyTOML = () => {

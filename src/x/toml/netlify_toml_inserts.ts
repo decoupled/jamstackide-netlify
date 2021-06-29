@@ -1,9 +1,8 @@
+import * as xlib from "@decoupled/xlib"
 import { vscode_workspace_applyEdit2 } from "@decoupled/xlib"
-import { TOMLHelper } from "./toml_parse_nodes"
-import * as lsp from "vscode-languageserver-types"
 import vscode from "vscode"
-import { lsp_Range__vscode_Range } from "x/lsp__vscode/lsp_Range__vscode_Range"
-
+import * as lsp from "vscode-languageserver-types"
+import { TOMLHelper } from "./toml_parse_nodes"
 {
   const src = `
 [context.production]
@@ -17,6 +16,7 @@ foo="bar"
     "css",
     "bundle",
   ])
+  console.log(r)
   console.log(r.src.split("\n"))
 }
 
@@ -46,52 +46,63 @@ interface Result {
 
 export function netlify_toml_inserts_insertPath(
   src: string,
-  path: string[]
+  path: string[],
+  schema?: any,
+  value?: string
 ): Result | undefined {
-  const h = new TOMLHelper(src)
-  const ancestor = h.findClosestAncestorByPath(path)
-  const last = path[path.length - 1]
-  if (last === "bundle" || last === "minify") {
-    if (!ancestor) {
-    } else {
-      const xxx = [...path]
-      xxx.pop()
-      const key = xxx.join(".")
-      const newLines = ["", `[${key}]`, `${last} = false`, ""]
-      const srcLines = src.split("\n")
-      if (ancestor.ancestor.type !== "ObjectPath") return // not supported yet
-      const lineN = h.getLastNodeInSection(ancestor.ancestor).line
-      srcLines.splice(lineN, 0, ...newLines)
-      return {
-        src: srcLines.join("\n"),
-        select: {
-          start: { line: lineN, character: 0 },
-          end: { line: lineN, character: 0 },
-        } as lsp.Range,
-      }
+  let hint: "arr-push" | undefined = undefined
+  if (schema?.type === "array") {
+    hint = "arr-push"
+  }
+  const insertInfo = xlib.toml_path_to_insert_info(src, { path, hint })
+  if (!insertInfo) return
+  if (typeof value === "undefined") {
+    if (schema?.type === "string") {
+      value = '""'
+    }
+    if (schema?.type === "boolean") {
+      value = "true"
+    }
+    if (schema?.type === "object") {
+      value = "{ }"
     }
   }
+  if (typeof value === "undefined") value = ""
+  const toInsert = insertInfo.before + value + insertInfo.after
+  const src2 = xlib.Position_insert(
+    src,
+    toInsert,
+    insertInfo.position,
+    "yes-add-new-line"
+  )
+  // TODO: focus only on the "value" part
+  // or use "snippets"
+  const start = insertInfo.position
+  const end: lsp.Position = { line: start.line, character: start.character + 1 }
+  const select: lsp.Range = { start, end }
+  return { src: src2, select }
 }
 
 export async function netlify_toml_inserts_insertPath_vscode(
   editor: vscode.TextEditor,
-  path: string[]
+  path: string[],
+  schema?: any
 ) {
   try {
-    const rr = netlify_toml_inserts_insertPath(editor.document.getText(), path)
+    const rr = netlify_toml_inserts_insertPath(
+      editor.document.getText(),
+      path,
+      schema
+    )
     if (!rr) return
     await vscode_workspace_applyEdit2({
       files: new Map([[editor.document.fileName, rr.src]]),
     })
-    editor.revealRange(
-      lsp_Range__vscode_Range(rr.select),
-      vscode.TextEditorRevealType.InCenter
-    )
+
+    const range = xlib.Range_iso.reverseGet(rr.select)
+    editor.selection = new vscode.Selection(range.start, range.end)
+    editor.revealRange(range, vscode.TextEditorRevealType.InCenter)
   } catch (e) {
     console.log(e)
   }
-}
-
-class NetlifyTOMLInserts {
-  constructor() {}
 }

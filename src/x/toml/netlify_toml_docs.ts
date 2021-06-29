@@ -67,4 +67,5 @@ export const urls = {
     "https://docs.netlify.com/configure-builds/file-based-configuration/#redirects",
   headers:
     "https://docs.netlify.com/configure-builds/file-based-configuration/#headers",
+  context: "https://docs.netlify.com/site-deploys/overview/#deploy-contexts",
 }

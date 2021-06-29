@@ -1,1 +1,1 @@
-export type TOMLPath = (string | number)[]
+export type TOMLPath = readonly (string | number)[]

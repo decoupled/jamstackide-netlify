@@ -17,7 +17,7 @@ export class SchemaNodeUI extends React.Component<
     path: TOMLPath
     pathString: string
     onSelect?: (path: TOMLPath) => void
-    onEdit?: (path: TOMLPath) => void
+    onEdit?: (path: TOMLPath, schema: any) => void
     filePath: string
   } & OverridesFromParent
 > {

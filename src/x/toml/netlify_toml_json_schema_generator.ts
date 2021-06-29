@@ -197,6 +197,20 @@ export function netlify_toml_json_schema_generate() {
       },
       ContextMap: {
         type: "object",
+        "x-sort-keys-with-values-first": true,
+        "x-add-button": { label: "add custom context...", handler: () => {} },
+        "x-menu": ({ filePath, path, value }) => {
+          return menus.menu_def2__add__docs.create({
+            add: () => {
+              // add_custom_header_cmd.execute(filePath)
+            },
+            docs: () => {
+              xlib
+                .vscode_()
+                .env.openExternal(xlib.vscode_Uri_smartParse(docs.urls.context))
+            },
+          })
+        },
         properties: {
           // production: $ref("Context"),
           // "deploy-preview": $ref("Context"),
@@ -215,6 +229,7 @@ export function netlify_toml_json_schema_generate() {
         additionalProperties: $ref("Context"),
       },
       Context: {
+        "x-no-edit-when-empty": true,
         type: "object",
         properties: {
           base: {
@@ -235,6 +250,7 @@ export function netlify_toml_json_schema_generate() {
         },
       },
       Build: {
+        "x-no-edit-when-empty": true,
         type: "object",
         description: docs.build_description,
         "x-docs":
@@ -335,9 +351,11 @@ export function netlify_toml_json_schema_generate() {
             "x-taplo": { initKeys: ["compress"] },
           },
         },
+        "x-no-edit-when-empty": true,
       },
       Dev: {
         type: "object",
+        "x-no-edit-when-empty": true,
         description: "Configuration for Netlify Dev",
         "x-docs":
           "https://docs.netlify.com/configure-builds/file-based-configuration/#netlify-dev",
@@ -405,6 +423,7 @@ export function netlify_toml_json_schema_generate() {
     return {
       type: "object",
       description,
+      "x-no-edit-when-empty": true,
       properties: {
         base: {
           type: "string",

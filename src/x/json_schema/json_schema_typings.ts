@@ -1,6 +1,6 @@
 import * as xlib from "@decoupled/xlib"
 
-export type SimpleJSONPath = (string | number)[]
+export type SimpleJSONPath = readonly (string | number)[]
 
 type MenuInstance = ReturnType<
   InstanceType<typeof xlib.vscode_TreeItemMenu>["create"]
