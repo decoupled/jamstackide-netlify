@@ -1,6 +1,6 @@
 import vscode from "vscode"
 import { json_schema_resolve_refs_in_place } from "x/json_schema/json_schema_resolve_refs"
-import { netlify_toml_json_schema_generate } from "x/toml/netlify_toml_json_schema_generator"
+import { netlify_toml_json_schema_generate } from "x/toml/netlify_toml_schema/netlify_toml_json_schema_generator"
 
 export function label_description(
   isUndefined: boolean,

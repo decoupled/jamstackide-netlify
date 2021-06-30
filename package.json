@@ -9,6 +9,7 @@
   "dependencies": {
     "@decoupled/xlib": "^0.0.23",
     "@netlify/config": "^6.7.1",
+    "@netlify/framework-info": "^5.4.0",
     "@taplo/lib": "^0.2.2",
     "@taplo/lsp": "^0.1.7",
     "@types/command-exists": "^1.2.0",

@@ -1,6 +1,6 @@
 import { fs_patchJSON, fs_updateJSON } from "@decoupled/xlib"
 import { join } from "path"
-import { netlify_toml_json_schema_generate } from "x/toml/netlify_toml_json_schema_generator"
+import { netlify_toml_json_schema_generate } from "x/toml/netlify_toml_schema/netlify_toml_json_schema_generator"
 
 {
   const dir = "/Users/aldo/com.github/decoupled/netlify-vscode-extension"
