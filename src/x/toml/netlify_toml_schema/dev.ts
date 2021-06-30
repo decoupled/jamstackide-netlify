@@ -1,10 +1,18 @@
 import * as jst from "x/json_schema/json_schema_typings"
 import * as docs from "../netlify_toml_docs"
 import { file_regex } from "./util"
+import * as menus from "x/netlify/vsc/treeview/react/config/menus"
+import * as xlib from "@decoupled/xlib"
+import { icon_uri } from "x/netlify/vsc/treeview/react/icon_uri"
 
 export const dev = new jst.TypeW(() => ({
   type: "object",
   "x-no-edit-when-empty": true,
+  "x-icon": ({ value, ctx }) => {
+    const icon = dev_framework_icon[value?.framework ?? "____"]
+    if (typeof icon !== "string") return undefined
+    return icon_uri(icon, ctx)
+  },
   description: "Configuration for Netlify Dev",
   "x-docs":
     "https://docs.netlify.com/configure-builds/file-based-configuration/#netlify-dev",
@@ -54,6 +62,17 @@ export const dev = new jst.TypeW(() => ({
   },
   "x-taplo": {
     initKeys: ["command"],
+  },
+  "x-menu": ({ filePath, path, value }) => {
+    return menus.menu_def2__dev.create({
+      debug: () => {},
+      docs: () => {
+        xlib
+          .vscode_()
+          .env.openExternal(xlib.vscode_Uri_smartParse(docs.urls.headers))
+      },
+      play: () => {},
+    })
   },
 }))
 
@@ -128,4 +147,14 @@ const frameworks = x9.preval(() => getFrameworks())
 function getFrameworks(): FrameworkInfo[] {
   const xx = require("@netlify/framework-info/src/frameworks/main")
   return xx.FRAMEWORKS
+}
+
+/**
+ * maps the framework id (from netlify/framework-info)
+ * to icons in the icons2/* folder
+ */
+export const dev_framework_icon = {
+  next: "nextjs",
+  gatsby: "gatsby",
+  redwood: "redwood",
 }

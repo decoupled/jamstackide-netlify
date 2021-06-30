@@ -5,12 +5,15 @@ import { netlify_toml_json_schema_generate } from "x/toml/netlify_toml_schema/ne
 export function label_description(
   isUndefined: boolean,
   label: string,
-  description?: string
+  description?: string,
+  iconPath?: vscode.Uri | vscode.ThemeIcon
 ) {
+  // it there is an icon present, we don't need the gap anyway
+  const extraGap = iconPath ? "" : "  "
   if (!isUndefined) {
-    return { label: "  " + label, description }
+    return { label: extraGap + label, description, iconPath }
   } else {
-    return { label: "", description: label }
+    return { label: "", description: label, iconPath }
   }
 }
 

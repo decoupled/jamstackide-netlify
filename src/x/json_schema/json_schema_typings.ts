@@ -32,13 +32,16 @@ interface OneOf {
   oneOf: TypeExpr[]
 }
 
+import type vscode from "vscode"
+
 interface T_base<ValueType = any> {
   title?: string
   description?: string
-  /**
-   * xlabel!
-   */
-  "x-label"?: (v: ValueType) => string | undefined
+  "x-label"?: (v: ValueType) => string | undefined | void
+  "x-icon"?: (opts: {
+    value?: ValueType
+    ctx: vscode.ExtensionContext
+  }) => vscode.TreeItem["iconPath"] | undefined | void
   "x-taplo"?: any
   "x-docs"?: URLString
   "x-validate"?: (v: ValueType) => Promise<any>

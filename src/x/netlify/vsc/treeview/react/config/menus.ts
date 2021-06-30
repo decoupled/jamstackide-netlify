@@ -132,3 +132,16 @@ export const menu_def2__functions = new TreeItemMenu({
     docs,
   },
 })
+
+export const menu_def2__dev = new TreeItemMenu({
+  id: m2.dev.$id,
+  commands: {
+    debug,
+    docs,
+    play: {
+      title: "Play",
+      icon: "$(play)",
+      group: "inline",
+    },
+  },
+})

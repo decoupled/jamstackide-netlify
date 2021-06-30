@@ -44,6 +44,7 @@ export const netlify_ids = vscode_ids({
       logged_in: {},
       site2: {},
       functions: {},
+      dev: {},
     },
   },
 } as const)

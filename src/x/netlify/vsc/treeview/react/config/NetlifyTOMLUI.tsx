@@ -50,6 +50,7 @@ export class NetlifyTOMLUI extends React.Component<{
     return (
       <>
         <SchemaNodeUI
+          ctx={this.props.ctx}
           filePath={this.props.filePath}
           value={d}
           schema={netlifyTOMLJSONSchema}

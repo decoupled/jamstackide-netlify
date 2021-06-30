@@ -10,6 +10,7 @@ type OverridesFromParent = Partial<Pick<TreeItemProps, "tooltip">>
 
 export class SchemaNodeUI extends React.Component<
   {
+    ctx: vscode.ExtensionContext
     schema: any
     value: any
     label?: string
@@ -44,6 +45,10 @@ export class SchemaNodeUI extends React.Component<
     const { schema, value } = this.props
     const f = schema?.["x-label"]
     if (typeof f === "function") return f(value)
+  }
+  get x_icon(): vscode.Uri | vscode.ThemeIcon | undefined {
+    const { schema, value, ctx } = this.props
+    return schema?.["x-icon"]?.({ value, ctx })
   }
   get isRoot(): boolean {
     return this.props.path.length === 0
@@ -80,6 +85,7 @@ export class SchemaNodeUI extends React.Component<
       if (!schema2) continue
       const elm = (
         <SchemaNodeUI
+          ctx={this.props.ctx}
           filePath={this.props.filePath}
           key={"key:" + k}
           schema={schema2}
@@ -103,7 +109,12 @@ export class SchemaNodeUI extends React.Component<
     const description2 = this.x_label ?? description
     return (
       <TreeItem
-        {...label_description(this.isUndefined, label, description2)}
+        {...label_description(
+          this.isUndefined,
+          label,
+          description2,
+          this.x_icon
+        )}
         tooltip={tooltip}
         menu={this.menu}
         select={this.createOnSelect()}
@@ -130,6 +141,7 @@ export class SchemaNodeUI extends React.Component<
       const newPath = path.concat(i)
       return (
         <SchemaNodeUI
+          ctx={this.props.ctx}
           filePath={this.props.filePath}
           onSelect={onSelect}
           key={"key:" + i}
@@ -144,7 +156,12 @@ export class SchemaNodeUI extends React.Component<
     })
     return (
       <TreeItem
-        {...label_description(this.isUndefined, label, description)}
+        {...label_description(
+          this.isUndefined,
+          label,
+          description,
+          this.x_icon
+        )}
         tooltip={tooltip}
         menu={this.menu}
         select={this.createOnSelect()}
@@ -164,6 +181,7 @@ export class SchemaNodeUI extends React.Component<
     if (typeof value === "undefined") {
       return (
         <TreeItem
+          iconPath={this.x_icon}
           label={""}
           description={label}
           collapsibleState={None}
@@ -175,6 +193,7 @@ export class SchemaNodeUI extends React.Component<
     } else {
       return (
         <TreeItem
+          iconPath={this.x_icon}
           label={"  " + label}
           description={"= " + (value + "").trim()}
           collapsibleState={None}
