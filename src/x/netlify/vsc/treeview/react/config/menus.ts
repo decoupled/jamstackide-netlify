@@ -136,12 +136,16 @@ export const menu_def2__functions = new TreeItemMenu({
 export const menu_def2__dev = new TreeItemMenu({
   id: m2.dev.$id,
   commands: {
-    debug,
-    docs,
-    play: {
-      title: "Play",
+    start: {
+      title: "Start Netlify Dev",
       icon: "$(play)",
       group: "inline",
     },
+    debug: {
+      title: "Start Netlify Dev in Debug Mode",
+      icon: "$(debug)",
+      group: "inline",
+    },
+    docs,
   },
 })

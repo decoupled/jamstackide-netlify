@@ -6,7 +6,7 @@ import { Singleton } from "lambdragon"
 import React from "react"
 import { netlify_ids } from "src/vscode_extension/util/netlify_ids"
 import vscode from "vscode"
-import { VSCodeView } from "x/vscode/vscode_elms"
+import { VSCodeView } from "lambdragon"
 import { icon, None, TreeItem } from "../deps"
 import { netlify_viewContainer } from "../netlify_viewContainer"
 

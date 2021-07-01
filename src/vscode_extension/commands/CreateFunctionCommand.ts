@@ -3,10 +3,9 @@ import {
   vscode_QuickPick_await,
   vscode_window_createTerminal_andRun,
 } from "@decoupled/xlib"
-import { Singleton } from "lambdragon"
+import { Singleton, VSCodeCommand } from "lambdragon"
 import vscode from "vscode"
 import { netlify_events_meta } from "x/netlify/events/netlify_events_meta"
-import { VSCodeCommand } from "x/vscode/vscode_elms"
 import { CWD } from "../di/CWD"
 import { NetlifyCLIPath } from "../NetlifyCLIPath"
 import { NetlifyCLIRPCServer } from "../NetlifyCLIRPCServer"

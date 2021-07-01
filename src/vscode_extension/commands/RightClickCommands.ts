@@ -1,6 +1,6 @@
 import { vscode_Uri_smartParse } from "@decoupled/xlib"
 import vscode from "vscode"
-import { VSCodeCommand, VSCodeMeta } from "x/vscode/vscode_elms"
+import { VSCodeCommand, VSCodeMeta } from "lambdragon"
 import { netlify_ids } from "../util/netlify_ids"
 import { when_clauses } from "../util/when_clauses"
 

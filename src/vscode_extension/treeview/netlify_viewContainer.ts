@@ -1,4 +1,4 @@
-import { VSCodeViewContainer } from "x/vscode/vscode_elms"
+import { VSCodeViewContainer } from "lambdragon"
 
 export const netlify_viewContainer = new VSCodeViewContainer({
   _parent: "activitybar",

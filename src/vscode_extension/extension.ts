@@ -3,7 +3,7 @@ import { configure } from "mobx"
 import { join } from "path"
 import { language_server_build_target } from "src/language_server/language_server"
 import vscode from "vscode"
-import { VSCodeMeta } from "x/vscode/vscode_elms"
+import { VSCodeMeta } from "lambdragon"
 import { autowire } from "./di/autowire"
 import { VSCodeProjectW } from "./di/VSCodeProjectW"
 import {

@@ -2,13 +2,13 @@ import { memo, wait } from "@decoupled/xlib"
 import { Singleton } from "lambdragon"
 import vscode, { Uri } from "vscode"
 import { Command } from "vscode-languageserver-types"
-import { VSCodeCommand } from "x/vscode/vscode_elms"
+import { VSCodeCommand } from "lambdragon"
 import { netlify_ids } from "../util/netlify_ids"
 import {
   NewProjectSourceSpec,
   NewProjectSourceSpecString,
   NewProjectSourceSpec_autoPickDir,
-  NewProjectSourceSpec_parse
+  NewProjectSourceSpec_parse,
 } from "../util/NewProjectSourceSpec"
 import { NewProjectSourceSpec_prompt } from "../util/NewProjectSourceSpec_prompt"
 import { init_hook_activate, init_hook_set_and_open } from "./init_hook"
@@ -19,7 +19,7 @@ import {
   DevelopLocallyOpts,
   ExtraOpts,
   FromCommandInvocation,
-  InitAfterReload
+  InitAfterReload,
 } from "./types"
 
 export class DevelopLocallyServiceW implements Singleton {

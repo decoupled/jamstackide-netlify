@@ -1,5 +1,5 @@
 import vscode from "vscode"
-import { VSCodeMeta } from "x/vscode/vscode_elms"
+import { VSCodeMeta } from "lambdragon"
 import { netlify_ids } from "../util/netlify_ids"
 
 export function experimental_enabled(): boolean {

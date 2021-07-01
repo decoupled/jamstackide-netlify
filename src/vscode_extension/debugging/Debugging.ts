@@ -1,6 +1,6 @@
 import { Singleton } from "lambdragon"
 import * as vscode from "vscode"
-import { VSCodeCommand } from "x/vscode/vscode_elms"
+import { VSCodeCommand } from "lambdragon"
 import { CWD } from "../di/CWD"
 import { NetlifyCLIPath } from "../NetlifyCLIPath"
 import { netlify_ids } from "../util/netlify_ids"

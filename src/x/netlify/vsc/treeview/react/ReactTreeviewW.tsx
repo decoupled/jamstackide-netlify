@@ -4,7 +4,7 @@ import { experimental_enabled } from "src/vscode_extension/util/experimental_ena
 import { when_clauses } from "src/vscode_extension/util/when_clauses"
 import vscode from "vscode"
 import { NetlifyAPIWrapper } from "x/netlify/api/netlify_api"
-import { VSCodeView } from "x/vscode/vscode_elms"
+import { VSCodeView } from "lambdragon"
 import { NetlifyOAuthManager } from "../../NetlifyOAuthManager"
 import { TreeItem_render } from "./deps"
 import { icon_uri } from "./icon_uri"
