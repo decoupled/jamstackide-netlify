@@ -65,22 +65,16 @@ export const dev = new jst.TypeW(() => ({
   },
   "x-menu": ({ filePath, path, value }) => {
     return menus.menu_def2__dev.create({
+      start: () => {},
       debug: () => {},
       docs: () => {
         xlib
           .vscode_()
           .env.openExternal(xlib.vscode_Uri_smartParse(docs.urls.headers))
       },
-      play: () => {},
     })
   },
 }))
-
-/*
-#auto: the default, tests all available detectors.
-#static: specifies a static file server.
-#custom: uses the command value to run an app server and the targetPort value to connect to it. Required if command and targetPort are both set.
-*/
 
 const port = new jst.TypeW(() => ({
   type: "integer",
@@ -156,5 +150,5 @@ function getFrameworks(): FrameworkInfo[] {
 export const dev_framework_icon = {
   next: "nextjs",
   gatsby: "gatsby",
-  redwood: "redwood",
+  redwoodjs: "redwood",
 }
