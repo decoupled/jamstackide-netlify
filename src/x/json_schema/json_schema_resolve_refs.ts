@@ -1,5 +1,10 @@
 import traverse from "traverse"
 
+/**
+ * @param schemaObj a valid JSON schema object
+ * @returns a *copy* of the JSON schema object with all $refs
+ *          having been replaced by the definition they refer to
+ */
 export function json_schema_resolve_refs(schemaObj: any) {
   const o = clone(schemaObj)
   while (tick()) {}
@@ -16,6 +21,11 @@ export function json_schema_resolve_refs(schemaObj: any) {
   return o
 }
 
+/**
+ * @param schemaObj a valid JSON schema object
+ * @returns the *same* JSON schema object with all $refs
+ *          having been replaced by the definition they refer to
+ */
 export function json_schema_resolve_refs_in_place(o: any) {
   while (tick()) {}
   function tick() {

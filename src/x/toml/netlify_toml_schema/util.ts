@@ -18,7 +18,13 @@ export function removeUndefinedProps(x: any) {
   return x2
 }
 
-export function file_regex() {
+/**
+ * JSON schema compatible regular expression
+ * that matches valid file paths
+ *
+ * @returns
+ */
+export function file_regex(): string {
   return `
 ^
   (

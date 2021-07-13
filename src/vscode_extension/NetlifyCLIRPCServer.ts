@@ -73,6 +73,10 @@ export class NetlifyCLIRPCServer implements Singleton {
   @lazy() get port(): number {
     return AddressInfo_cast_getPort_orThrow(this.server().address())
   }
+
+  /**
+   * Pass these env vars to child processes so they can "talk back" to the server
+   */
   @lazy() get envForChildProcesses(): Record<string, any> {
     return {
       [NETLIFY_VSCODE_RPC]: this.port,
