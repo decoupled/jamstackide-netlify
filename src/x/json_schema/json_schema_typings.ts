@@ -1,5 +1,6 @@
 import * as xlib from "@decoupled/xlib"
 import _ from "lodash"
+import type vscode from "vscode"
 import { Object_iterateAllReachableObjectsAndArrays } from "x/Object/Object_iterateAllReachableObjectsAndArrays"
 import { removeUndefinedProps } from "x/toml/netlify_toml_schema/util"
 
@@ -32,8 +33,6 @@ interface OneOf {
   oneOf: TypeExpr[]
 }
 
-import type vscode from "vscode"
-
 interface T_base<ValueType = any> {
   title?: string
   description?: string
@@ -53,6 +52,17 @@ interface T_base<ValueType = any> {
   enum?: any
   "x-no-edit-when-empty"?: boolean
   "x-insert-placeholder"?: string
+  /**
+   * @see https://www.npmjs.com/package/@netlify/config
+   */
+  "x-resolved-value-from-config"?: (opts: {
+    filePath: string
+    path: SimpleJSONPath
+    /**
+     * the result of calling require('@netlify/config')(cwd)
+     */
+    config: { config: any }
+  }) => { value: string; origin: string } | undefined
 }
 
 export interface T_object extends T_base<Record<string, any>> {
@@ -87,7 +97,7 @@ export interface T_boolean extends T_base<boolean> {
 }
 
 export interface Ref {
-  $ref: string //`#/definitions/${DefIDs}`
+  $ref: string
 }
 
 /*

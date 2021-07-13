@@ -5,11 +5,12 @@ import * as lsp from "vscode-languageserver-types"
 import { netlify_toml_example } from "./netlify_toml_example"
 import { prop_path_parser } from "./prop_path_parser"
 
-const topOfFileRange: lsp.Range = {
-  start: { line: 0, character: 0 },
-  end: { line: 0, character: 0 },
-}
-
+/**
+ * Calls `@netlify/config/src/validate/validations` and extracts diagnostics.
+ *
+ * @param netlify_toml_string
+ * @returns
+ */
 export function netlify_toml_validator_get_diagnostics(
   netlify_toml_string: string
 ): lsp.Diagnostic[] {
@@ -26,7 +27,7 @@ export function netlify_toml_validator_get_diagnostics(
       range: range,
       message: err.message,
       severity: lsp.DiagnosticSeverity.Error,
-      source: '@netlify/config validation'
+      source: "@netlify/config validation",
     } as lsp.Diagnostic
   })
 }
@@ -223,4 +224,9 @@ function checkRequired({ value, required, propPath, prevPath, example }: any) {
 
   const message = `'${propPath.split(".").pop()}' is required.`
   return { kind: "RequiredValue", message, propPath }
+}
+
+const topOfFileRange: lsp.Range = {
+  start: { line: 0, character: 0 },
+  end: { line: 0, character: 0 },
 }

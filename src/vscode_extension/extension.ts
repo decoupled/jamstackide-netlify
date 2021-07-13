@@ -1,4 +1,4 @@
-import { VSCodeExtension } from "lambdragon"
+import { VSCodeExtension, keep } from "lambdragon"
 import { configure } from "mobx"
 import { join } from "path"
 import { language_server_build_target } from "src/language_server/language_server"
@@ -19,7 +19,7 @@ import { VERSION } from "./VERSION"
 const CODENAME = "n2021"
 
 // the build target for the extension
-export const netlify_vscode_extension_build_target = new VSCodeExtension({
+export const extension = new VSCodeExtension({
   main,
   activationEvents: ["*"],
   publisher: "decoupled",
@@ -38,13 +38,14 @@ export const netlify_vscode_extension_build_target = new VSCodeExtension({
     "auchenberg.vscode-browser-preview",
     "tamasfe.even-better-toml",
   ],
+  useLazyEvaluationSemantics: true,
 })
 
 const USE_LOCAL_CLI = false
 
 // the entrypoint
 function main() {
-  languages_meta.keep()
+  keep(languages_meta)
   return {
     async activate(ctx: vscode.ExtensionContext) {
       configure({ enforceActions: "never" })

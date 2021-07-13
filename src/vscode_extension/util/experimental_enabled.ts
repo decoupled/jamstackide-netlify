@@ -1,9 +1,15 @@
 import vscode from "vscode"
-import { VSCodeMeta } from "lambdragon"
+import { VSCodeMeta, keep } from "lambdragon"
 import { netlify_ids } from "../util/netlify_ids"
 
+/**
+ * checks whether the VSCode configuration
+ * 'netlify.experimental.enabled' === true
+ *
+ * @returns
+ */
 export function experimental_enabled(): boolean {
-  meta.keep()
+  keep(meta)
   return (
     vscode.workspace
       .getConfiguration()

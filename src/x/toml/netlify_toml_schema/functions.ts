@@ -15,6 +15,13 @@ export const functions = new jst.TypeW(() => ({
       type: "string",
       description: "Sets a custom directory for Netlify Functions",
       pattern: file_regex(),
+      "x-resolved-value-from-config": (opts) => {
+        const {
+          functionsDirectory: value,
+          functionsDirectoryOrigin: origin,
+        } = opts.config.config
+        return { value, origin }
+      },
     },
     node_bundler,
     external_node_modules,

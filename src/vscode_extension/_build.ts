@@ -2,11 +2,7 @@ import { crypto_filenameFriendlyHash } from "@decoupled/xlib"
 import { emptyDirSync } from "fs-extra"
 import { VSCE_TOKEN } from "src/secrets"
 import { degit_with_retries } from "x/degit/degit_with_retries"
-import { netlify_vscode_extension_build_target as extension } from "./extension"
-
-{
-  1 + 9
-}
+import { extension } from "./extension"
 
 {
   extension.dev.publish({ marketplaceAuthToken: VSCE_TOKEN })

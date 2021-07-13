@@ -1,59 +1,41 @@
-import { vscode_Uri_smartParse } from "@decoupled/xlib"
+import * as xlib from "@decoupled/xlib"
+import { keep, VSCodeCommand, VSCodeMeta } from "lambdragon"
 import vscode from "vscode"
-import { VSCodeCommand, VSCodeMeta } from "lambdragon"
 import { netlify_ids } from "../util/netlify_ids"
 import { when_clauses } from "../util/when_clauses"
 
 export class RightClickCommands {
   constructor(private wf: vscode.WorkspaceFolder) {
-    menusMeta.keep()
+    keep(menusMeta)
     add_redirect_cmd.register(async (maybeUri) => {
       if (maybeUri) {
-        const uri = vscode_Uri_smartParse(maybeUri)
+        const uri = xlib.vscode_Uri_smartParse(maybeUri)
         if (uri.fsPath.endsWith("netlify.toml")) {
           const editor = await vscode.window.showTextDocument(uri)
-          const snip = new vscode.SnippetString(redirect_snippet)
-          const line = lineForInsert(editor.document.getText()) + 1
-          const pos = line ? new vscode.Position(line, 0) : undefined
-          editor.insertSnippet(snip, pos)
+          const res = xlib.toml_path_to_insert_info(editor.document.getText(), {
+            path: ["redirects"],
+            hint: "arr-push",
+          })
+          if (!res) return
+          const { after, before, position } = res
+          const snip = new vscode.SnippetString(
+            "\n" + before + redirect_snippet + after + "\n"
+          )
+          editor.insertSnippet(snip, xlib.Position_iso.reverseGet(position))
         }
       }
     })
   }
 }
 
-function lineForInsert(str: string): number | undefined {
-  const lines = str.split("\n")
-  let state_saw_redirects = false
-  let state_last_line_with_content = 0
-  for (const [i, line] of lines.entries()) {
-    if (line.trim() === "[[redirects]]") {
-      state_saw_redirects = true
-    } else if (line.trim().startsWith("[")) {
-      if (state_saw_redirects) return state_last_line_with_content ?? i
-    } else if (line.trim().length > 0) {
-      state_last_line_with_content = i
-    }
-  }
-  // we reached the end
-  if (state_saw_redirects) {
-    return lines.length
-  }
-  return undefined
-}
-
-const redirect_snippet =
-  "\n" + // initial empty line on purpose
-  `
-[[redirects]]
+const redirect_snippet = `
 from = "\${1:/old-path}"
 to = "\${2:/new-path}"
 status = \${3:301}
 # force = false
 # query = {path = ":path"}
 # conditions = {Language = ["en"], Country = ["US"], Role = ["admin"]}
-`.trim() +
-  "\n"
+`.trim()
 
 const menusMeta = new VSCodeMeta(() => {
   function cc(group: string) {
@@ -136,10 +118,3 @@ export const add_edge_handler_cmd = new VSCodeCommand<
   title: "Add Edge Handler",
   category: "Netlify",
 })
-
-function isNetlifyTOML(maybeUri?: string | vscode.Uri): boolean {
-  try {
-    return vscode_Uri_smartParse(maybeUri!).toString().endsWith("netlify.toml")
-  } catch (e) {}
-  return false
-}

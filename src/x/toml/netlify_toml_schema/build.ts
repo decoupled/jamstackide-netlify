@@ -17,6 +17,13 @@ export const build = new jst.TypeW(() => ({
     publish: {
       type: "string",
       description: docs.build_publish_description,
+      "x-resolved-value-from-config": (opts) => {
+        const {
+          publish: value,
+          publishOrigin: origin,
+        } = opts.config.config.build
+        return { value, origin }
+      },
     },
     command: {
       type: "string",
