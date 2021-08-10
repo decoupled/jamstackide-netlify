@@ -2,6 +2,7 @@ import { lazy } from "@decoupled/xlib"
 import { Singleton } from "lambdragon"
 import { computed, makeObservable, observable } from "mobx"
 import { now } from "mobx-utils"
+import { netlify_ids } from "src/vscode_extension/util/netlify_ids"
 import vscode from "vscode"
 import { NetlifyGlobalConfig } from "../NetlifyGlobalConfig"
 import { netlify_oauth_config_netlifyvscode } from "../oauth/config/netlify_oauth_config_netlifyvscode"
@@ -13,12 +14,18 @@ const KEY = "NETLIFY_API_TOKEN_KEY"
 export class NetlifyOAuthManager implements Singleton {
   constructor(private ctx: vscode.ExtensionContext) {
     makeObservable(this)
-    vscode.commands.registerCommand(netlify_vsc_commands.login.command, () => {
-      this.login()
-    })
-    vscode.commands.registerCommand(netlify_vsc_commands.logout.command, () => {
-      this.logout()
-    })
+    vscode.commands.registerCommand(
+      netlify_ids.netlify.commands.login.$id,
+      () => {
+        this.login()
+      }
+    )
+    vscode.commands.registerCommand(
+      netlify_ids.netlify.commands.logout.$id,
+      () => {
+        this.logout()
+      }
+    )
   }
   // @observable private _authenticating = false
   // get authenticating() {

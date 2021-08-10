@@ -25,6 +25,7 @@ import { Debugging } from "../debugging/Debugging"
 import { TaploUpdateW } from "../../x/taplo/TaploUpdateW"
 import { RightClickCommands } from "../commands/RightClickCommands"
 import { NetlifyTOMLValidatorW } from "../../x/toml/netlify_toml_validator_vsc"
+import { Commands } from "../commands/Commands"
 
 export const autowire__impl = ___autowire__(
   "VSCodeProjectW",
@@ -45,6 +46,7 @@ export const autowire__impl = ___autowire__(
         "TaploUpdateW",
         "RightClickCommands",
         "NetlifyTOMLValidatorW",
+        "LoginCommand",
       ],
       impl: VSCodeProjectW,
     },
@@ -246,6 +248,13 @@ export const autowire__impl = ___autowire__(
       args: ["ExtensionContext"],
       impl: NetlifyTOMLValidatorW,
     },
+    {
+      out: "LoginCommand",
+      isConstructor: true,
+      isSingleton: true,
+      args: ["ExtensionContext", "NetlifyCLIWrapper"],
+      impl: Commands,
+    },
   ]
 )
 
@@ -263,7 +272,7 @@ function ___autowire__(t, o, rules) {
       if (this.overrides.has(t)) return this.overrides.get(t)
       if (this.parent) return this.parent.solve(t)
       const r = this.rules.find(({ out }) => out === t)
-      if (!r) throw new Error("not found")
+      if (!r) throw new Error("Autowire type not found: " + t)
       if (r.isSingleton)
         if (Ctx.singletonCache.has(t)) return Ctx.singletonCache.get(t)
 

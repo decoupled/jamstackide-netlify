@@ -3,6 +3,7 @@ import { RedirectsFileW } from "x/netlify/redirects_file/RedirectsFileW"
 import { TaploUpdateW } from "x/taplo/TaploUpdateW"
 import { NetlifyTOMLValidatorW } from "x/toml/netlify_toml_validator_vsc"
 import { CreateFunctionCommand } from "../commands/CreateFunctionCommand"
+import { Commands } from "../commands/Commands"
 import { RightClickCommands } from "../commands/RightClickCommands"
 import { Debugging } from "../debugging/Debugging"
 import { NetlifyLSPClientManager } from "../lsp_client/NetlifyLSPClientManager"
@@ -10,6 +11,9 @@ import { MagicURLsW } from "../magic_urls/magic_urls"
 import { TextEditorDecorations } from "../TextEditorDecorations"
 import { TreeviewModules } from "../treeview/TreeviewModules"
 
+/**
+ * this is the entrypoint for the extension
+ */
 export class VSCodeProjectW {
   constructor(
     // this is just a top-level constructor that
@@ -24,6 +28,7 @@ export class VSCodeProjectW {
     _debugging: Debugging,
     _taplo: TaploUpdateW,
     _rightClick: RightClickCommands,
-    _netlify_toml: NetlifyTOMLValidatorW
+    _netlify_toml: NetlifyTOMLValidatorW,
+    _commands: Commands
   ) {}
 }

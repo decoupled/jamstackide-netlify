@@ -14,6 +14,12 @@ export const netlify_ids = vscode_ids({
       add_edge_handler: {},
       develop_locally: {},
       debug: {},
+      debug_functions: {},
+      // old auth flow based on the netlify API
+      login: {},
+      logout: {},
+      // new auth flow that uses the CLI
+      login2: {},
     },
     views: {
       shortcuts: {},

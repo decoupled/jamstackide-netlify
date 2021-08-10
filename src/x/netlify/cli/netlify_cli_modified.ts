@@ -20,6 +20,9 @@ const repo = `decoupled/netlify-cli#${hash2}`
   console.log(rr)
 }
 
+/**
+ * Clones and installs a modified version of the CLI in a tmp folder.
+ */
 export async function netlify_cli_modified_install_vscode(
   ctx: vscode.ExtensionContext
 ) {

@@ -7,6 +7,12 @@ import { netlify_toml_json_schema_generate } from "x/toml/netlify_toml_schema/ne
   taplo_update_vscode_settings(dir)
 }
 
+/**
+ * This function will
+ * - Create JSON schema and store it in .netlify
+ * - Modify .vscode/settings.json#evenBetterToml.schema.associations
+ *   so it is used by Even Better TOML for netlify.toml files
+ */
 export function taplo_update_vscode_settings(dir: string) {
   const fff = ".netlify/netlify.toml.schema.json"
   // 1. create JSON schema and store it in .netlify

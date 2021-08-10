@@ -12,6 +12,7 @@ import {
 } from "./NetlifyCLIPath"
 import icon from "./static/netlify_vscode_logo.png"
 import { VERSION } from "./VERSION"
+import { vscode_window_createOutputChannel_defaultForExtension } from "@decoupled/xlib"
 
 /**
  * we'll publish under a codename for now
@@ -49,6 +50,12 @@ function main() {
   return {
     async activate(ctx: vscode.ExtensionContext) {
       configure({ enforceActions: "never" })
+      if (vscode.workspace.workspaceFolders.length !== 1) {
+        const out = vscode_window_createOutputChannel_defaultForExtension(ctx)
+        out.appendLine("Expected only one workspace")
+        return
+      }
+
       const clipath = USE_LOCAL_CLI
         ? NetlifyCLIPath_createDevTime()
         : NetlifyCLIPath_createForExtension(ctx)

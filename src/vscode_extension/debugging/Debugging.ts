@@ -1,28 +1,108 @@
-import { Singleton } from "lambdragon"
+import { Singleton, VSCodeCommand } from "lambdragon"
 import * as vscode from "vscode"
-import { VSCodeCommand } from "lambdragon"
+import { URLWatcher } from "x/http/URLWatcher"
 import { CWD } from "../di/CWD"
 import { NetlifyCLIPath } from "../NetlifyCLIPath"
 import { netlify_ids } from "../util/netlify_ids"
 
+const netlify_bin = "/Users/aldo/.nvm/versions/node/v14.4.0/bin/netlify"
+
 /**
+ *
+ *
  *
  */
 export class Debugging implements Singleton {
   constructor(private NetlifyCLIPath: NetlifyCLIPath, private cwd: CWD) {
     debug_cmd.register(async () => {
-      vscode.window.showInformationMessage("debugging!")
-      await this.fromCommand()
+      await this.examples__netlify_functions_basic_1__fullstack()
+    })
+    debug_functions_cmd.register(async () => {
+      await this.examples__netlify_functions_basic_1__functionsonly()
     })
     this.setupBreakpointsListener()
   }
 
-  private async fromCommand() {
-    // if debugger is running, do nothing
-    // start netlify-cli with debugging on
-    const cwd = this.cwd.x
-    const cmd = "netlfiy "
-    await this.startDebugSession()
+  private async examples__netlify_functions_basic_1__functionsonly() {
+    const serverConfig: vscode.DebugConfiguration = {
+      name: "Debug (Only Functions)",
+      type: "node",
+      request: "launch",
+      skipFiles: ["<node_internals>/**"],
+      program: "${workspaceFolder}/node_modules/.bin/netlify",
+      args: ["functions:serve"],
+      console: "integratedTerminal",
+    }
+    // const serverConfig: vscode.DebugConfiguration = {
+    //   type: "node",
+    //   request: "launch",
+    //   name: "Netlify Functions",
+    //   skipFiles: ["<node_internals>/**"],
+    //   // program: await this.NetlifyCLIPath.withFunctionsDebuggingSupport(),
+    //   program: netlify_bin,
+    //   args: ["functions:serve"],
+    //   // args: ["functions:serve"],
+    //   console: "integratedTerminal",
+    // }
+
+    await vscode.debug.startDebugging(undefined, serverConfig)
+  }
+
+  private async examples__netlify_functions_basic_1__fullstack() {
+    const serverConfig: vscode.DebugConfiguration = {
+      name: "Netlify Dev (Functions)",
+      type: "node",
+      request: "launch",
+      skipFiles: ["<node_internals>/**"],
+      program: "${workspaceFolder}/node_modules/.bin/netlify",
+      args: ["dev", "--inspect"],
+      console: "integratedTerminal",
+      env: { BROWSER: "none" },
+      // "serverReadyAction": {
+      //   "pattern": "Server now ready on (https?://[\w:.-]+)",
+      //   "uriFormat": "%s",
+      //   "action": "debugWithChrome"
+      // }
+    }
+    // const serverConfig: vscode.DebugConfiguration = {
+    //   type: "node",
+    //   request: "launch",
+    //   name: "Netlify Dev",
+    //   skipFiles: ["<node_internals>/**"],
+    //   // program: await this.NetlifyCLIPath.withFunctionsDebuggingSupport(),
+    //   program: netlify_bin,
+    //   args: ["dev", "--inspect"],
+    //   console: "integratedTerminal",
+    //   // does this prevent browser from opening automatically?
+    //   env: { BROWSER: "none" },
+    //   // resolveSourceMapLocations: [
+    //   //   // NOTE: your linter may think this property shouldn't be here
+    //   //   // yet it works for finding the source maps
+    //   //   "${workspaceFolder}/**",
+    //   //   "!**/node_modules/**",
+    //   // ],
+    // }
+
+    const url = `http://localhost:8888/`
+
+    await vscode.debug.startDebugging(undefined, serverConfig)
+
+    await new URLWatcher({
+      url,
+    }).waitForNextOK()
+
+    const clientConfig: vscode.DebugConfiguration = {
+      name: "Netlify Dev (Browser)",
+      type: "chrome",
+      request: "launch",
+      url,
+      webRoot: "${workspaceFolder}/public",
+      // sourceMapPathOverrides: {
+      //   "webpack:///*": "${workspaceRoot}/*",
+      // },
+    }
+
+    await vscode.debug.startDebugging(undefined, clientConfig)
   }
 
   private setupBreakpointsListener() {
@@ -49,7 +129,6 @@ export class Debugging implements Singleton {
 
   async startDebugSession() {
     const program = await this.NetlifyCLIPath.withFunctionsDebuggingSupport()
-    console.log(program)
     const config: vscode.DebugConfiguration = {
       type: "node",
       request: "launch",
@@ -91,7 +170,6 @@ export class Debugging implements Singleton {
     await vscode.debug.startDebugging(undefined, serverConfig)
   }
 }
-
 /*
     async function startDebugSession_old() {
       const useBranch = true
@@ -159,6 +237,12 @@ const example_config2 = {
 
 const debug_cmd = new VSCodeCommand({
   command: netlify_ids.netlify.commands.debug.$id,
-  title: "Debug Functions",
+  title: "Debug (Full Stack)",
+  category: "Netlify",
+})
+
+const debug_functions_cmd = new VSCodeCommand({
+  command: netlify_ids.netlify.commands.debug_functions.$id,
+  title: "Debug (Only Functions)",
   category: "Netlify",
 })

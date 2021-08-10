@@ -2,12 +2,6 @@
 
 WIP
 
-# Architecture
+# Contributing
 
-# netlify-cli
-
-Within the Netlify CLI
-
-# Features
-
-Semantic Validation of `netlify.toml`, `_headers` and `_redirects`
+This project uses the lambdragon build toolchain.

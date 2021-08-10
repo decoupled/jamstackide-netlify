@@ -58,7 +58,7 @@ function ___autowire__(t, o, rules) {
       if (this.overrides.has(t)) return this.overrides.get(t)
       if (this.parent) return this.parent.solve(t)
       const r = this.rules.find(({ out }) => out === t)
-      if (!r) throw new Error("not found")
+      if (!r) throw new Error("Autowire type not found: " + t)
       if (r.isSingleton)
         if (Ctx.singletonCache.has(t)) return Ctx.singletonCache.get(t)
 
