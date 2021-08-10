@@ -1,0 +1,9 @@
+- Features:
+  - Debugging
+    - Commands:
+      - `> Netlify: Debug (Full Stack)`
+      - `> Netlify: Debug (Functions)`
+- Frontend:
+  - Static HTML + JS
+- Functions:
+  - Plain JS
